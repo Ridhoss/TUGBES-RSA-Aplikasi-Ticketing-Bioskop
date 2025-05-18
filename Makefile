@@ -8,7 +8,7 @@ CFLAGS =
 LDFLAGS = 
 
 # file .c lain
-CFILE = 
+CFILE = functions/ADTList.c functions/ADTBioskop.c
 
 # Daftar file source code
 SRCS = main.c
