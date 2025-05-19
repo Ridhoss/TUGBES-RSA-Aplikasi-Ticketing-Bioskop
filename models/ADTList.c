@@ -1,8 +1,6 @@
-#include "../models/ADTList.h"
+#include "header/ADTList.h"
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "../models/ADTlist.h"
 
 boolean ListEmpty(List L) {
     return L.First == NULL && L.Last == NULL;

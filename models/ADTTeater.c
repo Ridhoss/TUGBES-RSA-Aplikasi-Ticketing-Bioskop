@@ -1,12 +1,8 @@
-#include "../models/ADTTeater.h"
+#include "header/ADTTeater.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "../models/ADTBioskop.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 address AlokasiTeater(TeaterInfo X) {
     TeaterInfo *newInfo = (TeaterInfo *)malloc(sizeof(TeaterInfo));
