@@ -81,8 +81,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "models/ADTBioskop.h"
-#include "models/ADTTeater.h"
+#include "models/header/ADTBioskop.h"
+#include "models/header/ADTTeater.h"
 
 void Menu() {
     printf("\n=== MENU TEATER ===\n");
