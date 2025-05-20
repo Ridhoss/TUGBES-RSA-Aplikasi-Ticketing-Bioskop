@@ -1,7 +1,7 @@
 #ifndef ADTList_h
 #define ADTList_h
 
-#include "boolean.h"
+#include "../../library/boolean.h"
 
 typedef void* infotype;
 typedef struct tElmtList *address;

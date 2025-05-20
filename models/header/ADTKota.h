@@ -1,7 +1,8 @@
 #ifndef ADTKota_h
 #define ADTKota_h
 
-#include "boolean.h"
+#include "../../library/boolean.h"
+
 #include "ADTList.h"
 
 typedef struct {

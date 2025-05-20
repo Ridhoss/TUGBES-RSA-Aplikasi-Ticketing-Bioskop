@@ -1,7 +1,8 @@
 #ifndef ADTBioskop_h
 #define ADTBioskop_h
 
-#include "boolean.h"
+#include "../../library/boolean.h"
+
 #include "ADTList.h"
 
 typedef struct {
