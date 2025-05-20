@@ -32,7 +32,8 @@ address SearchPrecBioskop(List L, int id) {
     address Prec = NULL;
     while (P != NULL) {
         BioskopInfo *info = (BioskopInfo *)P->info;
-        if (info->id == id) return Prec;
+        if (info->id == id) 
+        return Prec;
         Prec = P;
         P = P->next;
     }
