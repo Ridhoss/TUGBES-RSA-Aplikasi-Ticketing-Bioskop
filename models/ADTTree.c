@@ -59,9 +59,25 @@ address Search(address root, infotype searchinfo) {
 void DeleteAll(address node) {
     if (node == NULL) return;
 
+    address nextSibling = node->nb;
     DeleteAll(node->fs);
-    DeleteAll(node->nb);
     Dealokasi(node);
+    DeleteAll(nextSibling);
+}
+
+void DeleteAllKeepRoot(address node) {
+    if (node == NULL || node->fs == NULL) return;
+
+    address child = node->fs;
+    node->fs = NULL;
+
+    while (child != NULL) {
+        address next = child->nb;
+        child->nb = NULL;
+        child->pr = NULL;
+        DeleteAll(child);
+        child = next;
+    }
 }
 
 void DeleteNode(address *root, address delNode) {

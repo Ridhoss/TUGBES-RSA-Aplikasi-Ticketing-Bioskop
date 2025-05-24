@@ -30,5 +30,7 @@ address Search(address root, infotype searchinfo);
 
 void DeleteAll(address root);
 
+void DeleteAllKeepRoot(address node);
+
 void DeleteNode(address *root, address delNode);
 #endif
