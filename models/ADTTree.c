@@ -42,3 +42,60 @@ void AddChild(address parent, infotype childInfo) {
     }
 }
 
+address Search(address root, infotype searchinfo) {
+    if (root == NULL) return NULL;
+
+
+    if (strcmp(root->info, searchinfo) == 0) {
+        return root;
+    }
+    address found = Search(root->fs, searchinfo);
+    if (found != NULL) {
+        return found;
+    }
+    return Search(root->nb, searchinfo);
+}
+
+void DeleteAll(address node) {
+    if (node == NULL) return;
+
+    DeleteAll(node->fs);
+    DeleteAll(node->nb);
+    Dealokasi(node);
+}
+
+void DeleteNode(address *root, address delNode) {
+    if (delNode == NULL || root == NULL || *root == NULL) return;
+
+    if (*root == delNode) {
+        DeleteAll(*root);
+        *root = NULL;
+        return;
+    }
+
+    address parent = delNode->pr;
+    if (parent == NULL) return;
+
+    if (parent->fs == delNode) {
+        parent->fs = delNode->nb;
+        if (parent->fs != NULL) {
+            parent->fs->pr = parent;
+        }
+    } else {
+        address sibling = parent->fs;
+        while (sibling != NULL && sibling->nb != delNode) {
+            sibling = sibling->nb;
+        }
+        if (sibling != NULL) {
+            sibling->nb = delNode->nb;
+            if (sibling->nb != NULL) {
+                sibling->nb->pr = parent;
+            }
+        }
+    }
+
+    delNode->pr = NULL;
+    delNode->nb = NULL;
+
+    DeleteAll(delNode);
+}

@@ -26,4 +26,9 @@ address CreateTree(infotype rootInfo);
 
 void AddChild(address parent, infotype childInfo);
 
+address Search(address root, infotype searchinfo);
+
+void DeleteAll(address root);
+
+void DeleteNode(address *root, address delNode);
 #endif
