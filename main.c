@@ -14,41 +14,16 @@ void printTree(address node, int level) {
     printTree(node->nb, level);
 }
 
-// int main() {
-//     char rootName[100];
-//     printf("Masukkan nama root tree: ");
-//     inputString(rootName);
-
-//     address root = CreateTree(rootName);
-//     if (root == NULL) {
-//         printf("Gagal membuat tree.\n");
-//         return 1;
-//     }
-
-//     char childName[100];
-//     char pilihan;
-
-//     do {
-//         printf("Masukkan nama anak dari %s: ", root->info);
-//         inputString(childName);
-//         AddChild(root, childName);
-
-//         printf("Tambah anak lain? (y/n): ");
-//         scanf(" %c", &pilihan);
-//     } while (pilihan == 'y' || pilihan == 'Y');
-
-//     printf("\nTree yang dibuat:\n");
-//     printTree(root, 0);
-
-//     return 0;
-// }
 
 int main() {
     char rootName[100];
     printf("Masukkan nama root tree: ");
     inputString(rootName);
 
-    address root = CreateTree(rootName);
+    char* rootStr = (char*) malloc(strlen(rootName) + 1);
+    strcpy(rootStr, rootName);
+
+    address root = CreateTree((infotype)rootStr);
     if (root == NULL) {
         printf("Gagal membuat tree.\n");
         return 1;
@@ -59,7 +34,7 @@ int main() {
 
     do {
         printf("\nMenu:\n");
-        printf("1. Tambah anak\n");
+        printf("1. Tambah kota\n");
         printf("2. Hapus node tertentu\n");
         printf("3. Hapus seluruh tree\n");
         printf("4. Cetak tree\n");
@@ -69,7 +44,7 @@ int main() {
 
         switch (pilihan) {
             case '1': {
-                printf("Masukkan nama parent: ");
+                printf("Masukkan root: ");
                 inputString(parentName);
                 address parentNode = Search(root, parentName);
 
@@ -151,3 +126,33 @@ int main() {
     
     return 0;
 }
+
+
+// int main() {
+//     char rootName[100];
+//     printf("Masukkan nama root tree: ");
+//     inputString(rootName);
+
+//     address root = CreateTree(rootName);
+//     if (root == NULL) {
+//         printf("Gagal membuat tree.\n");
+//         return 1;
+//     }
+
+//     char childName[100];
+//     char pilihan;
+
+//     do {
+//         printf("Masukkan nama anak dari %s: ", root->info);
+//         inputString(childName);
+//         AddChild(root, childName);
+
+//         printf("Tambah anak lain? (y/n): ");
+//         scanf(" %c", &pilihan);
+//     } while (pilihan == 'y' || pilihan == 'Y');
+
+//     printf("\nTree yang dibuat:\n");
+//     printTree(root, 0);
+
+//     return 0;
+// }

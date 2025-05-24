@@ -6,7 +6,7 @@ address Alokasi(infotype X) {
     address P = (address) malloc(sizeof(Node));
     if (P != NULL) {
         P->id = currentId++;
-        strcpy(P->info, X);
+        P->info = X;
         P->pr = NULL;
         P->fs = NULL;
         P->nb = NULL;

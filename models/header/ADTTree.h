@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-typedef char infotype[100]; 
+typedef void* infotype;
 
 typedef struct tNode* address;
 typedef struct tNode {
