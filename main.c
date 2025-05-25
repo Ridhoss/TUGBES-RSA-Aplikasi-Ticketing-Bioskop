@@ -2,6 +2,7 @@
 #include <string.h>
 #include "models/header/ADTTree.h"
 #include "models/header/ADTKota.h"
+#include "views/header/views.h"
 
 int main() {
     char* rootStr = (char*) malloc(strlen("Head") + 1);
@@ -18,7 +19,7 @@ int main() {
 
     do {
         printf("\nMenu:\n");
-        printf("1. Tambah kota\n");
+        printf("1. Manipulasi Kota\n");
         printf("2. Tambah child\n");
         printf("3. Hapus node tertentu\n");
         printf("4. Hapus seluruh tree\n");
@@ -29,10 +30,7 @@ int main() {
 
         switch (pilihan) {
             case '1': {
-                printf("Masukkan nama kota baru: ");
-                inputString(childName);
-
-                TambahKota(root, childName);
+                HalamanManipulasiKota(root);
 
                 break;
             }
@@ -89,7 +87,7 @@ int main() {
                 break;
         }
     
-    } while (pilihan != '5');
+    } while (pilihan != '6');
     
     if (root != NULL) {
         DeleteAll(root);
