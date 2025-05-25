@@ -33,4 +33,9 @@ void DeleteAll(address root);
 void DeleteAllKeepRoot(address node);
 
 void DeleteNode(address *root, address delNode);
+
+void printTree(address node, int level);
+
+void inputString(char* buffer);
+
 #endif

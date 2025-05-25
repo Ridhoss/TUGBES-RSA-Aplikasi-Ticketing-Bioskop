@@ -1,29 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include "models/header/ADTTree.h"
-
-void inputString(char* buffer) {
-    scanf(" %[^\n]", buffer);
-}
-
-void printTree(address node, int level) {
-    if (node == NULL) return;
-    for (int i = 0; i < level; i++) printf("  ");
-    printf("- %s\n", node->info);
-    printTree(node->fs, level + 1);
-    printTree(node->nb, level);
-}
-
+#include "models/header/ADTKota.h"
 
 int main() {
-    char rootName[100];
-    printf("Masukkan nama root tree: ");
-    inputString(rootName);
-
-    char* rootStr = (char*) malloc(strlen(rootName) + 1);
-    strcpy(rootStr, rootName);
-
+    char* rootStr = (char*) malloc(strlen("Head") + 1);
+    strcpy(rootStr, "Head");
     address root = CreateTree((infotype)rootStr);
+
     if (root == NULL) {
         printf("Gagal membuat tree.\n");
         return 1;
@@ -35,44 +19,32 @@ int main() {
     do {
         printf("\nMenu:\n");
         printf("1. Tambah kota\n");
-        printf("2. Hapus node tertentu\n");
-        printf("3. Hapus seluruh tree\n");
-        printf("4. Cetak tree\n");
-        printf("5. Keluar\n");
+        printf("2. Tambah child\n");
+        printf("3. Hapus node tertentu\n");
+        printf("4. Hapus seluruh tree\n");
+        printf("5. Cetak tree\n");
+        printf("6. Keluar\n");
         printf("Pilih opsi (1-5): ");
         scanf(" %c", &pilihan);
 
         switch (pilihan) {
             case '1': {
-                printf("Masukkan root: ");
-                inputString(parentName);
-                address parentNode = Search(root, parentName);
-
-                if (parentNode == NULL) {
-
-                    printf("Parent %s tidak ditemukan. Apakah ingin membuat parent baru? (y/n): ", parentName);
-
-                    char pilihParentBaru;
-                    scanf(" %c", &pilihParentBaru);
-
-                    if (pilihParentBaru == 'y' || pilihParentBaru == 'Y') {
-                        AddChild(root, parentName);
-                        parentNode = Search(root, parentName);
-                        if (parentNode == NULL) {
-                            printf("Gagal membuat parent baru %s.\n", parentName);
-                            break;
-                        }
-                    } else {
-                        break;
-                    }
-                }
-                printf("Masukkan nama anak dari %s: ", parentName);
+                printf("Masukkan nama kota baru: ");
                 inputString(childName);
-                AddChild(parentNode, childName);
-                printf("Anak berhasil ditambahkan.\n");
+
+                TambahKota(root, childName);
+
                 break;
             }
             case '2': {
+                printf("Masukkan nama kota yang ingin ditambahkan sebagai anak dari %s: ", root->info);
+                inputString(childName);
+
+                TambahKota(root, childName);
+
+                break;
+            }
+            case '3': {
                 if (root->fs == NULL) {
                     printf("Tree kosong.\n");
                     break;
@@ -90,7 +62,7 @@ int main() {
                 printf("Node %s berhasil dihapus.\n", delNodeName);
                 break;
             }
-            case '3': {
+            case '4': {
                 if (root->fs == NULL) {
                     printf("Tree sudah kosong.\n");
                 } else {
@@ -99,7 +71,7 @@ int main() {
                 }
                 break;
             }
-            case '4': {
+            case '5': {
                 if (root->fs == NULL) {
                     printf("Tree kosong.\n");
                 } else {
@@ -108,7 +80,7 @@ int main() {
                 }
                 break;
             }
-            case '5': {
+            case '6': {
                 printf("Keluar dari program.\n");
                 break;
             }

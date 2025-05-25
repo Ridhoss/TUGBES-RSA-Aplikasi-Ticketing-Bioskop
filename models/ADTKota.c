@@ -14,55 +14,69 @@ address AlokasiKota(KotaInfo X) {
 
 void DeAlokasiKota(address P) {
     free(P->info);
-    DeAlokasi(P);
+    Dealokasi(P);
 }
 
 
-address SearchKota(List L, int id) {
-    address P = L.First;
-    while (P != NULL) {
-        KotaInfo *info = (KotaInfo *)P->info;
-        if (info->id == id) return P;
-        P = P->next;
+void TambahKota(address root, char namaKota[100]) {
+    if (root == NULL) {
+        printf("Root tidak ditemukan.\n");
+        return;
     }
-    return NULL;
-}
 
+    KotaInfo kotaBaru;
+    strcpy(kotaBaru.nama, namaKota);
 
-void InsKota(List *L, KotaInfo X) {
-    address P = AlokasiKota(X);
-    if (P != NULL) {
-        InsLast(L, (infotype)P->info);
+    address nodeBaru = AlokasiKota(kotaBaru);
+    if (nodeBaru == NULL) {
+        printf("Gagal mengalokasikan node kota.\n");
+        return;
     }
+
+    AddChild(root, nodeBaru->info);
+
+    printf("Kota '%s' berhasil ditambahkan.\n", kotaBaru.nama);
 }
 
-void DelPKota(List *L, int id) {
-    address P = SearchKota(*L, id);
-    if (P != NULL) {
-        address Prec = SearchPrecKota(*L, id);
-        if (Prec == NULL) {
-            KotaInfo dummy;
-            DelFirstKota(L, &dummy);
-        } else {
-            Prec->next = P->next;
-            DeAlokasiKota(P);
-        }
-    }
-}
 
-void DelAllKota(List *L) {
-    KotaInfo temp;
-    while (!ListEmpty(*L)) {
-        DelFirstKota(L, &temp);
-    }
-}
+// address SearchKota(List L, int id) {
+//     address P = L.First;
+//     while (P != NULL) {
+//         KotaInfo *info = (KotaInfo *)P->info;
+//         if (info->id == id) return P;
+//         P = P->next;
+//     }
+//     return NULL;
+// }
 
-void PrintKota(List L) {
-    address P = L.First;
-    printf("Daftar Kota:\n");
-    while (P != NULL) {
-        KotaInfo *info = (KotaInfo *)P->info;
-        printf("ID: %d | Nama: %s\n", info->id, info->nama);
-        P = P->next;
-    }
-}
+
+// void DelPKota(List *L, int id) {
+//     address P = SearchKota(*L, id);
+//     if (P != NULL) {
+//         address Prec = SearchPrecKota(*L, id);
+//         if (Prec == NULL) {
+//             KotaInfo dummy;
+//             DelFirstKota(L, &dummy);
+//         } else {
+//             Prec->next = P->next;
+//             DeAlokasiKota(P);
+//         }
+//     }
+// }
+
+// void DelAllKota(List *L) {
+//     KotaInfo temp;
+//     while (!ListEmpty(*L)) {
+//         DelFirstKota(L, &temp);
+//     }
+// }
+
+// void PrintKota(List L) {
+//     address P = L.First;
+//     printf("Daftar Kota:\n");
+//     while (P != NULL) {
+//         KotaInfo *info = (KotaInfo *)P->info;
+//         printf("ID: %d | Nama: %s\n", info->id, info->nama);
+//         P = P->next;
+//     }
+// }

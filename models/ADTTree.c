@@ -14,8 +14,8 @@ address Alokasi(infotype X) {
     return P;
 }
 
-
 void Dealokasi(address P) {
+    free(P->info);
     free(P);
 }
 
@@ -114,4 +114,16 @@ void DeleteNode(address *root, address delNode) {
     delNode->nb = NULL;
 
     DeleteAll(delNode);
+}
+
+void printTree(address node, int level) {
+    if (node == NULL) return;
+    for (int i = 0; i < level; i++) printf("  ");
+    printf("- %s\n", node->info);
+    printTree(node->fs, level + 1);
+    printTree(node->nb, level);
+}
+
+void inputString(char* buffer) {
+    scanf(" %[^\n]", buffer);
 }

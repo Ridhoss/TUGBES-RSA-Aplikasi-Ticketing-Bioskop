@@ -12,13 +12,13 @@ typedef struct {
 address AlokasiKota(KotaInfo X);
 void DeAlokasiKota(address P);
 
-void InsKota(List *L, KotaInfo X);
+void TambahKota(address root, char namaKota[100]);
 
-address SearchKota(List L, int id);
+// address SearchKota(List L, int id);
 
-void DelPKota(List *L, int id);
-void DelAllKota(List *L);
+// void DelPKota(List *L, int id);
+// void DelAllKota(List *L);
 
-void PrintKota(List L);
+// void PrintKota(List L); 
 
 #endif
