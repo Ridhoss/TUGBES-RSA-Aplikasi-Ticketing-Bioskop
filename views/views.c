@@ -10,11 +10,12 @@ void HalamanManipulasiKota(address root) {
         printf("\n==== Manipulasi Kota ====\n");
         printf("Pilihlah Menu Berikut : \n");
         printf("1. Tambah Kota\n");
-        printf("2. Hapus Kota\n");
-        printf("3. Hapus Semua Kota\n");
-        printf("4. Cari Kota\n");
-        printf("5. Print Kota\n");
-        printf("6. Kembali Ke Menu Utama\n");
+        printf("2. Ubah Informasi Kota\n");
+        printf("3. Hapus Kota\n");
+        printf("4. Hapus Semua Kota\n");
+        printf("5. Cari Kota\n");
+        printf("6. Print Kota\n");
+        printf("7. Kembali Ke Menu Utama\n");
         printf("Pilih : ");
         scanf("%d", &pil);
         while (getchar() != '\n');
@@ -31,13 +32,19 @@ void HalamanManipulasiKota(address root) {
 
             break;
           case 2:
+            printf("Masukkan nama node yang ingin diubah: ");
+            InputString(namaKota);
+          
+
+            break;
+          case 3:
             printf("Masukkan nama node yang ingin dihapus: ");
             InputString(namaKota);
 
             DeleteKota(root, namaKota);
 
             break;
-          case 3: {
+          case 4: {
             char confirm;
 
             printf("Apakah Anda yakin ingin menghapus semua kota? (y/n): ");
@@ -52,7 +59,7 @@ void HalamanManipulasiKota(address root) {
 
             break;
           }
-          case 4:
+          case 5:
             printf("Masukkan nama kota yang ingin dicari: ");
             InputString(namaKota);
 
@@ -66,11 +73,11 @@ void HalamanManipulasiKota(address root) {
             }
 
             break;
-          case 5:
+          case 6:
             PrintKota(root, 0);
 
             break;
-          case 6:
+          case 7:
             running = 0;
 
             break;
