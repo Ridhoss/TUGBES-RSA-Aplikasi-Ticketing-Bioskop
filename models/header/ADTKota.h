@@ -14,6 +14,8 @@ void DeAlokasiKota(address P);
 
 void TambahKota(address root, const char* namaKota);
 
+void UbahKota(address node, KotaInfo dataBaru);
+
 void DeleteKota(address root, const char* namaKota);
 void DeleteAllKota(address root);
 

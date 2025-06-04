@@ -37,6 +37,15 @@ void TambahKota(address root, const char* namaKota) {
     printf("Kota '%s' berhasil ditambahkan.\n", kotaBaru.nama);
 }
 
+void UbahKota(address node, KotaInfo dataBaru) {
+    KotaInfo* newInfo = (KotaInfo*) malloc(sizeof(KotaInfo));
+
+    if (newInfo != NULL) {
+        *newInfo = dataBaru;
+        UbahNode(node, (infotype)newInfo);
+    }
+}
+
 void DeleteKota(address root, const char* namaKota) {
     if (IsTreeEmpty(root)) {
         printf("Tree kosong.\n");
@@ -85,6 +94,6 @@ void PrintKota(address node, int level) {
     }
     
     printf("\nDaftar Kota :\n");
-    
+
     PrintChildrenOnly(node, level);
 }

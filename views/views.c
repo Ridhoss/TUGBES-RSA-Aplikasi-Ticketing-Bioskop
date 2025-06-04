@@ -31,12 +31,27 @@ void HalamanManipulasiKota(address root) {
             TambahKota(root, namaKota);
 
             break;
-          case 2:
+          case 2: {
+            KotaInfo dataBaru;
+
             printf("Masukkan nama node yang ingin diubah: ");
             InputString(namaKota);
-          
+
+            address pilihNode = SearchKota(root, namaKota);
+
+            if (pilihNode != NULL) {
+                printf("Masukkan nama kota baru: ");
+                InputString(dataBaru.nama);
+
+                UbahKota(pilihNode, dataBaru);
+
+                printf("Nama kota berhasil diubah!\n");
+            } else {
+                printf("Kota dengan nama tersebut tidak ditemukan.\n");
+            }
 
             break;
+          }
           case 3:
             printf("Masukkan nama node yang ingin dihapus: ");
             InputString(namaKota);

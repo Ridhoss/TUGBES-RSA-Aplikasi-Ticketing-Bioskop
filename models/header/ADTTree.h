@@ -34,6 +34,8 @@ void AddChild(address parent, infotype childInfo);
 
 address Search(address root, infotype searchinfo, CompareFunc cmp);
 
+void UbahNode(address node, infotype newInfo);
+
 void DeleteAll(address root);
 
 void DeleteAllKeepRoot(address node);

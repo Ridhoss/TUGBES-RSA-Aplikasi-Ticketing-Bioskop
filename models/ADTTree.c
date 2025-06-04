@@ -61,6 +61,12 @@ address Search(address root, infotype searchinfo, CompareFunc cmp) {
     return Search(root->nb, searchinfo, cmp);
 }
 
+void UbahNode(address node, infotype newInfo) {
+    if (node != NULL) {
+        node->info = newInfo;
+    }
+}
+
 void DeleteAll(address node) {
     if (node == NULL) return;
 
