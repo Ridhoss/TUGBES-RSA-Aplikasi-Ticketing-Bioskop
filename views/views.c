@@ -28,6 +28,12 @@ void HalamanManipulasiKota(address root) {
             printf("Masukkan nama kota baru: ");
             InputString(namaKota);
 
+            while(SearchKota(root, namaKota) != NULL) {
+                printf("Kota dengan nama '%s' sudah ada\n", namaKota);
+                printf("Masukan nama kota baru: ");
+                InputString(namaKota);
+            }
+
             TambahKotaBaru(root, namaKota);
 
             break;
@@ -42,6 +48,12 @@ void HalamanManipulasiKota(address root) {
             if (pilihNode != NULL) {
                 printf("Masukkan nama kota baru: ");
                 InputString(dataBaru.nama);
+
+                while(SearchKota(root, dataBaru.nama) != NULL) {
+                    printf("Kota dengan nama '%s' sudah ada\n", dataBaru.nama);
+                    printf("Masukan nama kota baru: ");
+                    InputString(dataBaru.nama);
+                }
 
                 UbahKota(pilihNode, dataBaru);
 

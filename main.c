@@ -14,6 +14,8 @@ int main() {
         return 1;
     }
 
+    LoadKota(root);
+
     char parentName[100], childName[100];
     char pilihan;
 
@@ -39,7 +41,6 @@ int main() {
                 break;
             }
             case '3': {
-
 
                 break;
             }
@@ -69,33 +70,3 @@ int main() {
     
     return 0;
 }
-
-
-// int main() {
-//     char rootName[100];
-//     printf("Masukkan nama root tree: ");
-//     inputString(rootName);
-
-//     address root = CreateTree(rootName);
-//     if (root == NULL) {
-//         printf("Gagal membuat tree.\n");
-//         return 1;
-//     }
-
-//     char childName[100];
-//     char pilihan;
-
-//     do {
-//         printf("Masukkan nama anak dari %s: ", root->info);
-//         inputString(childName);
-//         AddChild(root, childName);
-
-//         printf("Tambah anak lain? (y/n): ");
-//         scanf(" %c", &pilihan);
-//     } while (pilihan == 'y' || pilihan == 'Y');
-
-//     printf("\nTree yang dibuat:\n");
-//     printTree(root, 0);
-
-//     return 0;
-// }

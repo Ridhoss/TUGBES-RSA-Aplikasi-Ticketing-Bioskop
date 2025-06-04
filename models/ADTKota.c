@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+// modul modul operasi file
+
 void SimpanKotaKeFile(const KotaInfo* kota) {
     FILE* file = fopen("database/kota.txt", "a");
     if (file != NULL) {
@@ -104,6 +106,26 @@ void HapusKotaKeFile(const char* namaKota) {
     printf("Kota '%s' berhasil dihapus.\n", namaKota);
 }
 
+void LoadKota(address root) {
+    FILE* file = fopen("database/kota.txt", "r");
+    if (!file) {
+        printf("File kota.txt tidak ditemukan atau gagal dibuka.\n");
+        return;
+    }
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+
+        TambahKota(root, buffer);
+    }
+
+    fclose(file);
+}
+
+
+// modul modul utama
+
 address AlokasiKota(KotaInfo X) {
     KotaInfo *newInfo = (KotaInfo *)malloc(sizeof(KotaInfo));
     if (newInfo != NULL) {
@@ -147,7 +169,6 @@ void TambahKotaBaru(address root, const char* namaKota) {
 
     printf("Kota '%s' berhasil ditambahkan dan disimpan ke file.\n", namaKota);
 }
-
 
 void UbahKota(address node, KotaInfo dataBaru) {
     KotaInfo* newInfo = (KotaInfo*) malloc(sizeof(KotaInfo));
