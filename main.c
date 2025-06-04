@@ -22,8 +22,8 @@ int main() {
     do {
         printf("\nMenu:\n");
         printf("1. Manipulasi Kota\n");
-        printf("2. -\n");
-        printf("3. -\n");
+        printf("2. Manipulasi Bioskop\n");
+        printf("3. Manipulasi Teater\n");
         printf("4. -\n");
         printf("5. -\n");
         printf("6. Keluar\n");

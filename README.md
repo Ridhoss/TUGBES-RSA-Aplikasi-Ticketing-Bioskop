@@ -16,7 +16,7 @@
 
 2. Install Extension
     - C/C++ Extension Pack : Microsoft
-    - C/C+++ Compile Run : danielpinto8zz6
+    - C/C++ Compile Run : danielpinto8zz6
 
 3. Jika menggunakan VsCode GCC, compile menggunakan :
 ```bash
@@ -33,5 +33,15 @@ mingw32-make
 ```
 
 ### Menggunakan DevC++
+1. Instal Dev C++ Embarcadero versi 6.3 di komputer anda
+```bash
+https://sourceforge.net/projects/embarcadero-devcpp/
+```
 
-(AKAN SEGERA DICOBA!)
+2. Buat Project Command Line Baru
+
+3. Import file main.c ke dalam project, import juga folder dan file .c lainnya satu persatu kedalam project
+
+4. Compile Project
+
+5. Jika sudah berhasil, maka jalankan project
