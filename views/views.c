@@ -28,7 +28,7 @@ void HalamanManipulasiKota(address root) {
             printf("Masukkan nama kota baru: ");
             InputString(namaKota);
 
-            TambahKota(root, namaKota);
+            TambahKotaBaru(root, namaKota);
 
             break;
           case 2: {

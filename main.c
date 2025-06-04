@@ -20,10 +20,10 @@ int main() {
     do {
         printf("\nMenu:\n");
         printf("1. Manipulasi Kota\n");
-        printf("2. Tambah child\n");
-        printf("3. Hapus node tertentu\n");
-        printf("4. Hapus seluruh tree\n");
-        printf("5. Cetak tree\n");
+        printf("2. -\n");
+        printf("3. -\n");
+        printf("4. -\n");
+        printf("5. -\n");
         printf("6. Keluar\n");
         printf("Pilih opsi (1-5): ");
         scanf(" %c", &pilihan);
@@ -35,10 +35,6 @@ int main() {
                 break;
             }
             case '2': {
-                printf("Masukkan nama kota yang ingin ditambahkan sebagai anak dari %s: ", root->info);
-                InputString(childName);
-
-                TambahKota(root, childName);
 
                 break;
             }
@@ -48,12 +44,7 @@ int main() {
                 break;
             }
             case '4': {
-                if (root->fs == NULL) {
-                    printf("Tree sudah kosong.\n");
-                } else {
-                    DeleteAllKeepRoot(root);
-                    printf("Seluruh tree berhasil dihapus.\n");
-                }
+
                 break;
             }
             case '5': {

@@ -9,10 +9,13 @@ typedef struct {
     char nama[100];
 } KotaInfo;
 
+void SimpanKotaKeFile(const KotaInfo* kota);
+
 address AlokasiKota(KotaInfo X);
 void DeAlokasiKota(address P);
 
 void TambahKota(address root, const char* namaKota);
+void TambahKotaBaru(address root, const char* namaKota);
 
 void UbahKota(address node, KotaInfo dataBaru);
 

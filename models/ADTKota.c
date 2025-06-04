@@ -3,6 +3,107 @@
 #include <stdlib.h>
 #include <string.h>
 
+void SimpanKotaKeFile(const KotaInfo* kota) {
+    FILE* file = fopen("database/kota.txt", "a");
+    if (file != NULL) {
+        fprintf(file, "%s\n", kota->nama);
+        fclose(file);
+    } else {
+        printf("Gagal membuka file untuk menyimpan data kota.\n");
+    }
+}
+
+int SearchKotaFile(const char* namaKota) {
+    FILE* file = fopen("database/kota.txt", "r");
+    if (!file) return 0;
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+        if (strcmp(buffer, namaKota) == 0) {
+            fclose(file);
+            return 1;
+        }
+    }
+
+    fclose(file);
+    return 0;
+}
+
+void EditKotaKeFile(const char* namaLama, const char* namaBaru) {
+    if (!SearchKotaFile(namaLama)) {
+        printf("Kota '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", namaLama);
+        return;
+    }
+
+    FILE* file = fopen("database/kota.txt", "r");
+    if (!file) {
+        printf("Gagal membuka file untuk membaca data kota.\n");
+        return;
+    }
+
+    char buffer[256];
+    FILE* temp = fopen("database/temp.txt", "w");
+    if (!temp) {
+        printf("Gagal membuka file sementara.\n");
+        fclose(file);
+        return;
+    }
+
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+        if (strcmp(buffer, namaLama) == 0) {
+            fprintf(temp, "%s\n", namaBaru);
+        } else {
+            fprintf(temp, "%s\n", buffer);
+        }
+    }
+
+    fclose(file);
+    fclose(temp);
+
+    remove("database/kota.txt");
+    rename("database/temp.txt", "database/kota.txt");
+
+    printf("Kota '%s' berhasil diubah menjadi '%s'.\n", namaLama, namaBaru);
+}
+
+void HapusKotaKeFile(const char* namaKota) {
+    if (!SearchKotaFile(namaKota)) {
+        printf("Kota '%s' tidak ditemukan. Tidak dapat menghapus.\n", namaKota);
+        return;
+    }
+
+    FILE* file = fopen("database/kota.txt", "r");
+    if (!file) {
+        printf("Gagal membuka file untuk membaca data kota.\n");
+        return;
+    }
+
+    char buffer[256];
+    FILE* temp = fopen("database/temp.txt", "w");
+    if (!temp) {
+        printf("Gagal membuka file sementara.\n");
+        fclose(file);
+        return;
+    }
+
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+        if (strcmp(buffer, namaKota) != 0) {
+            fprintf(temp, "%s\n", buffer);
+        }
+    }
+
+    fclose(file);
+    fclose(temp);
+
+    remove("database/kota.txt");
+    rename("database/temp.txt", "database/kota.txt");
+
+    printf("Kota '%s' berhasil dihapus.\n", namaKota);
+}
+
 address AlokasiKota(KotaInfo X) {
     KotaInfo *newInfo = (KotaInfo *)malloc(sizeof(KotaInfo));
     if (newInfo != NULL) {
@@ -37,12 +138,29 @@ void TambahKota(address root, const char* namaKota) {
     printf("Kota '%s' berhasil ditambahkan.\n", kotaBaru.nama);
 }
 
+void TambahKotaBaru(address root, const char* namaKota) {
+    TambahKota(root, namaKota);
+
+    KotaInfo kota;
+    strcpy(kota.nama, namaKota);
+    SimpanKotaKeFile(&kota);
+
+    printf("Kota '%s' berhasil ditambahkan dan disimpan ke file.\n", namaKota);
+}
+
+
 void UbahKota(address node, KotaInfo dataBaru) {
     KotaInfo* newInfo = (KotaInfo*) malloc(sizeof(KotaInfo));
 
     if (newInfo != NULL) {
+        KotaInfo* oldInfo = (KotaInfo*) node->info;
+        char namaLama[100];
+        strcpy(namaLama, oldInfo->nama);
+
         *newInfo = dataBaru;
         UbahNode(node, (infotype)newInfo);
+
+        EditKotaKeFile(namaLama, dataBaru.nama);
     }
 }
 
@@ -58,6 +176,8 @@ void DeleteKota(address root, const char* namaKota) {
         printf("Node %s tidak ditemukan.\n", namaKota);
         return;
     }
+
+    HapusKotaKeFile(namaKota);
 
     DeleteNode(&root, delNode);
 
