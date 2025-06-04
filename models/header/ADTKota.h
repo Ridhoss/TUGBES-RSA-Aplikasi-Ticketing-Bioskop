@@ -13,6 +13,7 @@ void SimpanKotaKeFile(const KotaInfo* kota);
 int SearchKotaFile(const char* namaKota);
 void EditKotaKeFile(const char* namaLama, const char* namaBaru);
 void HapusKotaKeFile(const char* namaKota);
+void KosongkanFileKota();
 void LoadKota(address root);
 
 address AlokasiKota(KotaInfo X);

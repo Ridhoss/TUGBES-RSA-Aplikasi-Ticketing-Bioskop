@@ -3,8 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+
 // modul modul operasi file
 
+// Deskripsi : Prosedur untuk menyimpan data kota ke file
 void SimpanKotaKeFile(const KotaInfo* kota) {
     FILE* file = fopen("database/kota.txt", "a");
     if (file != NULL) {
@@ -15,6 +18,8 @@ void SimpanKotaKeFile(const KotaInfo* kota) {
     }
 }
 
+// Deskripsi : fungsi untuk mencari kota dalam file
+// IS/FS : input namakota dan mengembalikan 1 jika ditemukan, 0 jika tidak
 int SearchKotaFile(const char* namaKota) {
     FILE* file = fopen("database/kota.txt", "r");
     if (!file) return 0;
@@ -32,6 +37,7 @@ int SearchKotaFile(const char* namaKota) {
     return 0;
 }
 
+// Deskripsi : Prosedur untuk mengedit nama kota dalam file
 void EditKotaKeFile(const char* namaLama, const char* namaBaru) {
     if (!SearchKotaFile(namaLama)) {
         printf("Kota '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", namaLama);
@@ -70,6 +76,7 @@ void EditKotaKeFile(const char* namaLama, const char* namaBaru) {
     printf("Kota '%s' berhasil diubah menjadi '%s'.\n", namaLama, namaBaru);
 }
 
+// Deskripsi : Prosedur untuk menghapus kota dari file
 void HapusKotaKeFile(const char* namaKota) {
     if (!SearchKotaFile(namaKota)) {
         printf("Kota '%s' tidak ditemukan. Tidak dapat menghapus.\n", namaKota);
@@ -106,6 +113,18 @@ void HapusKotaKeFile(const char* namaKota) {
     printf("Kota '%s' berhasil dihapus.\n", namaKota);
 }
 
+// Deskripsi : Prosedur untuk mengosongkan file kota.txt
+void KosongkanFileKota() {
+    FILE* file = fopen("database/kota.txt", "w");
+    if (file != NULL) {
+        fclose(file);
+        printf("File kota.txt berhasil dikosongkan.\n");
+    } else {
+        printf("Gagal mengosongkan file kota.txt.\n");
+    }
+}
+
+// Deskripsi : Prosedur untuk memuat data kota dari file
 void LoadKota(address root) {
     FILE* file = fopen("database/kota.txt", "r");
     if (!file) {
@@ -124,8 +143,13 @@ void LoadKota(address root) {
 }
 
 
+
+
+
 // modul modul utama
 
+// Deskripsi : Fungsi untuk Alokasi memori KotaInfo
+// IS/FS : Alokasi memori untuk KotaInfo dan mengembalikan address
 address AlokasiKota(KotaInfo X) {
     KotaInfo *newInfo = (KotaInfo *)malloc(sizeof(KotaInfo));
     if (newInfo != NULL) {
@@ -135,11 +159,13 @@ address AlokasiKota(KotaInfo X) {
     return NULL;
 }
 
+// Deskripsi : Prosedur untuk Dealokasi memori KotaInfo
 void DeAlokasiKota(address P) {
     free(P->info);
     Dealokasi(P);
 }
 
+// Deskripsi : Prosedur untuk menambah kota ke dalam tree
 void TambahKota(address root, const char* namaKota) {
     if (root == NULL) {
         printf("Root tidak ditemukan.\n");
@@ -160,6 +186,7 @@ void TambahKota(address root, const char* namaKota) {
     printf("Kota '%s' berhasil ditambahkan.\n", kotaBaru.nama);
 }
 
+// Deskripsi : Prosedur untuk menambah kota baru dan menyimpannya ke file
 void TambahKotaBaru(address root, const char* namaKota) {
     TambahKota(root, namaKota);
 
@@ -170,6 +197,8 @@ void TambahKotaBaru(address root, const char* namaKota) {
     printf("Kota '%s' berhasil ditambahkan dan disimpan ke file.\n", namaKota);
 }
 
+
+// Deskripsi : Prosedur untuk mengubah nama kota pada node
 void UbahKota(address node, KotaInfo dataBaru) {
     KotaInfo* newInfo = (KotaInfo*) malloc(sizeof(KotaInfo));
 
@@ -185,6 +214,7 @@ void UbahKota(address node, KotaInfo dataBaru) {
     }
 }
 
+// Deskripsi : Prosedur untuk menghapus kota dari tree dan file
 void DeleteKota(address root, const char* namaKota) {
     if (IsTreeEmpty(root)) {
         printf("Tree kosong.\n");
@@ -205,6 +235,7 @@ void DeleteKota(address root, const char* namaKota) {
     printf("Node %s berhasil dihapus.\n", namaKota);
 }
 
+// Deskripsi : Prosedur untuk menghapus semua kota dari tree
 void DeleteAllKota(address root) {
     if (IsTreeEmpty(root)) {
         printf("Tree kosong.\n");
@@ -212,8 +243,11 @@ void DeleteAllKota(address root) {
     }
 
     DeleteAllKeepRoot(root);
+    KosongkanFileKota();
 }
 
+// Deskripsi : Fungsi untuk membandingkan dua kota berdasarkan nama
+// IS/FS :  Mengembalikan nilai negatif jika a < b, 0 jika a == b, dan positif jika a > b
 int CompareKota(infotype a, infotype b) {
     KotaInfo* kota1 = (KotaInfo*) a;
     KotaInfo* kota2 = (KotaInfo*) b;
@@ -221,6 +255,8 @@ int CompareKota(infotype a, infotype b) {
     return strcmp(kota1->nama, kota2->nama);
 }
 
+// Deskripsi : Fungsi untuk mencari kota berdasarkan nama
+// IS/FS : Mengembalikan address dari node yang ditemukan, atau NULL jika tidak ditemukan
 address SearchKota(address root, const char* namaKota) {
     KotaInfo target;
     strcpy(target.nama, namaKota);
@@ -228,6 +264,7 @@ address SearchKota(address root, const char* namaKota) {
     return Search(root, (infotype)&target, CompareKota);
 }
 
+// Deskripsi : Prosedur untuk mencetak daftar kota
 void PrintKota(address node, int level) {
     if (IsTreeEmpty(node)) {
         printf("Tree kosong.\n");
