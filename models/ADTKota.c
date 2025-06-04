@@ -17,7 +17,6 @@ void DeAlokasiKota(address P) {
     Dealokasi(P);
 }
 
-
 void TambahKota(address root, const char* namaKota) {
     if (root == NULL) {
         printf("Root tidak ditemukan.\n");
@@ -54,6 +53,15 @@ void DeleteKota(address root, const char* namaKota) {
     DeleteNode(&root, delNode);
 
     printf("Node %s berhasil dihapus.\n", namaKota);
+}
+
+void DeleteAllKota(address root) {
+    if (IsTreeEmpty(root)) {
+        printf("Tree kosong.\n");
+        return;
+    }
+
+    DeleteAllKeepRoot(root);
 }
 
 int CompareKota(infotype a, infotype b) {
