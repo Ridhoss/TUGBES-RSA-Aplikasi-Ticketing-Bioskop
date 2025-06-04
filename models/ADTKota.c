@@ -18,7 +18,7 @@ void DeAlokasiKota(address P) {
 }
 
 
-void TambahKota(address root, char namaKota[100]) {
+void TambahKota(address root, const char* namaKota) {
     if (root == NULL) {
         printf("Root tidak ditemukan.\n");
         return;
@@ -38,9 +38,27 @@ void TambahKota(address root, char namaKota[100]) {
     printf("Kota '%s' berhasil ditambahkan.\n", kotaBaru.nama);
 }
 
+void DeleteKota(address root, const char* namaKota) {
+    if (IsTreeEmpty(root)) {
+        printf("Tree kosong.\n");
+        return;
+    }
+
+    address delNode = SearchKota(root, namaKota);
+    
+    if (delNode == NULL) {
+        printf("Node %s tidak ditemukan.\n", namaKota);
+        return;
+    }
+
+    DeleteNode(&root, delNode);
+
+    printf("Node %s berhasil dihapus.\n", namaKota);
+}
+
 int CompareKota(infotype a, infotype b) {
-    KotaInfo* kota1 = (KotaInfo*)a;
-    KotaInfo* kota2 = (KotaInfo*)b;
+    KotaInfo* kota1 = (KotaInfo*) a;
+    KotaInfo* kota2 = (KotaInfo*) b;
 
     return strcmp(kota1->nama, kota2->nama);
 }
@@ -51,46 +69,3 @@ address SearchKota(address root, const char* namaKota) {
 
     return Search(root, (infotype)&target, CompareKota);
 }
-
-
-// address SearchKota(List L, int id) {
-//     address P = L.First;
-//     while (P != NULL) {
-//         KotaInfo *info = (KotaInfo *)P->info;
-//         if (info->id == id) return P;
-//         P = P->next;
-//     }
-//     return NULL;
-// }
-
-
-// void DelPKota(List *L, int id) {
-//     address P = SearchKota(*L, id);
-//     if (P != NULL) {
-//         address Prec = SearchPrecKota(*L, id);
-//         if (Prec == NULL) {
-//             KotaInfo dummy;
-//             DelFirstKota(L, &dummy);
-//         } else {
-//             Prec->next = P->next;
-//             DeAlokasiKota(P);
-//         }
-//     }
-// }
-
-// void DelAllKota(List *L) {
-//     KotaInfo temp;
-//     while (!ListEmpty(*L)) {
-//         DelFirstKota(L, &temp);
-//     }
-// }
-
-// void PrintKota(List L) {
-//     address P = L.First;
-//     printf("Daftar Kota:\n");
-//     while (P != NULL) {
-//         KotaInfo *info = (KotaInfo *)P->info;
-//         printf("ID: %d | Nama: %s\n", info->id, info->nama);
-//         P = P->next;
-//     }
-// }

@@ -43,21 +43,8 @@ int main() {
                 break;
             }
             case '3': {
-                if (root->fs == NULL) {
-                    printf("Tree kosong.\n");
-                    break;
-                }
-                printf("Masukkan nama node yang ingin dihapus: ");
-                char delNodeName[100];  
-                inputString(delNodeName);
 
-                address delNode = Search(root, delNodeName, CompareKota);
-                if (delNode == NULL) {
-                    printf("Node %s tidak ditemukan.\n", delNodeName);
-                    break;
-                }
-                DeleteNode(&root, delNode);
-                printf("Node %s berhasil dihapus.\n", delNodeName);
+
                 break;
             }
             case '4': {

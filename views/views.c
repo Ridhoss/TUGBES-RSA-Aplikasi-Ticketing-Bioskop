@@ -10,9 +10,11 @@ void HalamanManipulasiKota(address root) {
         printf("\n==== Manipulasi Kota ====\n");
         printf("Pilihlah Menu Berikut : \n");
         printf("1. Tambah Kota\n");
-        printf("2. Cari Kota\n");
-        printf("3. Print Kota\n");
-        printf("4. Kembali Ke Menu Utama\n");
+        printf("2. Hapus Kota\n");
+        printf("3. Hapus Semua Kota\n");
+        printf("4. Cari Kota\n");
+        printf("5. Print Kota\n");
+        printf("6. Kembali Ke Menu Utama\n");
         printf("Pilih : ");
         scanf("%d", &pil);
         while (getchar() != '\n');
@@ -29,10 +31,21 @@ void HalamanManipulasiKota(address root) {
 
             break;
           case 2:
+            printf("Masukkan nama node yang ingin dihapus: ");
+            inputString(namaKota);
+
+            DeleteKota(root, namaKota);
+
+            break;
+          case 3:
+
+            break;
+          case 4:
             printf("Masukkan nama kota yang ingin dicari: ");
             inputString(namaKota);
 
             address hasilCari = SearchKota(root, namaKota);
+            
             if (hasilCari != NULL) {
                 KotaInfo* kota = (KotaInfo*)hasilCari->info;
                 printf("Kota ditemukan: %s\n", kota->nama);
@@ -41,10 +54,10 @@ void HalamanManipulasiKota(address root) {
             }
 
             break;
-          case 3:
+          case 5:
 
             break;
-          case 4:
+          case 6:
             running = 0;
             break;
           default:

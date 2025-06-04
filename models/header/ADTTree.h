@@ -6,6 +6,8 @@
 #include <stdbool.h>
 #include <string.h>
 
+#include "../../library/boolean.h"
+
 typedef void* infotype;
 
 typedef struct tNode* address;
@@ -20,6 +22,8 @@ typedef struct tNode {
 typedef int (*CompareFunc)(infotype a, infotype b);
 
 // === FUNGSI DASAR ===
+boolean IsTreeEmpty(address root);
+
 address Alokasi(infotype X);
 
 void Dealokasi(address P);

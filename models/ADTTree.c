@@ -2,6 +2,10 @@
 
 static int currentId = 1;
 
+boolean IsTreeEmpty(address root) {
+    return (root == NULL || root->fs == NULL);
+}
+
 address Alokasi(infotype X) {
     address P = (address) malloc(sizeof(Node));
     if (P != NULL) {
