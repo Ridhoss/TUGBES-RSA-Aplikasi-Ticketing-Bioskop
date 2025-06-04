@@ -10,7 +10,7 @@ void HalamanManipulasiKota(address root) {
         printf("\n==== Manipulasi Kota ====\n");
         printf("Pilihlah Menu Berikut : \n");
         printf("1. Tambah Kota\n");
-        printf("2. Hapus Kota\n");
+        printf("2. Cari Kota\n");
         printf("3. Print Kota\n");
         printf("4. Kembali Ke Menu Utama\n");
         printf("Pilih : ");
@@ -29,6 +29,16 @@ void HalamanManipulasiKota(address root) {
 
             break;
           case 2:
+            printf("Masukkan nama kota yang ingin dicari: ");
+            inputString(namaKota);
+
+            address hasilCari = SearchKota(root, namaKota);
+            if (hasilCari != NULL) {
+                KotaInfo* kota = (KotaInfo*)hasilCari->info;
+                printf("Kota ditemukan: %s\n", kota->nama);
+            } else {
+                printf("Kota dengan nama '%s' tidak ditemukan.\n", namaKota);
+            }
 
             break;
           case 3:
@@ -36,7 +46,9 @@ void HalamanManipulasiKota(address root) {
             break;
           case 4:
             running = 0;
-
+            break;
+          default:
+            printf("Pilihan tidak valid, coba lagi.\n");
             break;
         }
     }

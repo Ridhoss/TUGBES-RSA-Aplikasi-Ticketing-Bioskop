@@ -17,6 +17,8 @@ typedef struct tNode {
     address nb;
 } Node;
 
+typedef int (*CompareFunc)(infotype a, infotype b);
+
 // === FUNGSI DASAR ===
 address Alokasi(infotype X);
 
@@ -26,7 +28,7 @@ address CreateTree(infotype rootInfo);
 
 void AddChild(address parent, infotype childInfo);
 
-address Search(address root, infotype searchinfo);
+address Search(address root, infotype searchinfo, CompareFunc cmp);
 
 void DeleteAll(address root);
 

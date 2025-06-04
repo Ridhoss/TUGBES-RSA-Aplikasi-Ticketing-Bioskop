@@ -38,6 +38,20 @@ void TambahKota(address root, char namaKota[100]) {
     printf("Kota '%s' berhasil ditambahkan.\n", kotaBaru.nama);
 }
 
+int CompareKota(infotype a, infotype b) {
+    KotaInfo* kota1 = (KotaInfo*)a;
+    KotaInfo* kota2 = (KotaInfo*)b;
+
+    return strcmp(kota1->nama, kota2->nama);
+}
+
+address SearchKota(address root, const char* namaKota) {
+    KotaInfo target;
+    strcpy(target.nama, namaKota);
+
+    return Search(root, (infotype)&target, CompareKota);
+}
+
 
 // address SearchKota(List L, int id) {
 //     address P = L.First;

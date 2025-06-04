@@ -42,18 +42,19 @@ void AddChild(address parent, infotype childInfo) {
     }
 }
 
-address Search(address root, infotype searchinfo) {
+address Search(address root, infotype searchinfo, CompareFunc cmp) {
     if (root == NULL) return NULL;
 
-
-    if (strcmp(root->info, searchinfo) == 0) {
+    if (cmp(root->info, searchinfo) == 0) {
         return root;
     }
-    address found = Search(root->fs, searchinfo);
+
+    address found = Search(root->fs, searchinfo, cmp);
     if (found != NULL) {
         return found;
     }
-    return Search(root->nb, searchinfo);
+
+    return Search(root->nb, searchinfo, cmp);
 }
 
 void DeleteAll(address node) {

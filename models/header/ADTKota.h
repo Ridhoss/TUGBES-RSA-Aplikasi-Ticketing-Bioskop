@@ -14,6 +14,9 @@ void DeAlokasiKota(address P);
 
 void TambahKota(address root, char namaKota[100]);
 
+int CompareKota(infotype a, infotype b);
+address SearchKota(address root, const char* namaKota);
+
 // address SearchKota(List L, int id);
 
 // void DelPKota(List *L, int id);

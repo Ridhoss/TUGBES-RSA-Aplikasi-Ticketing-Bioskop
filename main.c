@@ -51,7 +51,7 @@ int main() {
                 char delNodeName[100];  
                 inputString(delNodeName);
 
-                address delNode = Search(root, delNodeName);
+                address delNode = Search(root, delNodeName, CompareKota);
                 if (delNode == NULL) {
                     printf("Node %s tidak ditemukan.\n", delNodeName);
                     break;
