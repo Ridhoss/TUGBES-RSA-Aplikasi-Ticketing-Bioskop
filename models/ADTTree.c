@@ -2,10 +2,16 @@
 
 static int currentId = 1;
 
+// Deskripsi : Melakukan Cek Apakah Tree Kosong
+// IS : menerima address root dari tree
+// FS : mengembalikan true jika tree kosong, false jika tidak
 boolean IsTreeEmpty(address root) {
     return (root == NULL || root->fs == NULL);
 }
 
+// Deskripsi : Alokasi Memori untuk Node Baru
+// IS : menerima infotype X yang akan disimpan dalam node
+// FS : mengembalikan address dari node yang dialokasikan, atau NULL jika alokasi gagal
 address Alokasi(infotype X) {
     address P = (address) malloc(sizeof(Node));
     if (P != NULL) {
@@ -18,15 +24,24 @@ address Alokasi(infotype X) {
     return P;
 }
 
+// Deskripsi : Dealokasi Memori untuk Node
+// IS : menerima address P yang berisi node yang akan di-dealokasi
+// FS : menghapus alokasi memori dari node P
 void Dealokasi(address P) {
     free(P->info);
     free(P);
 }
 
+// Deskripsi : Membuat Tree Baru dengan Node Root
+// IS : menerima infotype rootInfo yang akan menjadi informasi pada node root
+// FS : mengembalikan address dari node root yang baru dibuat, atau NULL jika alokasi gagal
 address CreateTree(infotype rootInfo) {
     return Alokasi(rootInfo);
 }
 
+// Deskripsi : Menambahkan Node Sebagai Anak dari Node Parent
+// IS : menerima address parent dan infotype childInfo yang akan disimpan pada node anak
+// FS : menambahkan node anak ke dalam tree sebagai anak dari parent
 void AddChild(address parent, infotype childInfo) {
     if (parent == NULL) return;
 
@@ -46,6 +61,9 @@ void AddChild(address parent, infotype childInfo) {
     }
 }
 
+// Deskripsi : Prosedur untuk Mencari Node dalam Tree
+// IS : menerima address root, infotype searchinfo yang akan dicari, dan fungsi pembanding cmp
+// FS : mengembalikan address dari node yang sesuai dengan searchinfo, atau NULL jika tidak ditemukan
 address Search(address root, infotype searchinfo, CompareFunc cmp) {
     if (root == NULL) return NULL;
 
@@ -61,12 +79,18 @@ address Search(address root, infotype searchinfo, CompareFunc cmp) {
     return Search(root->nb, searchinfo, cmp);
 }
 
+// Deskripsi : Prosedur untuk Mengubah Informasi pada Node
+// IS : menerima address node yang akan diubah dan infotype newInfo yang akan disimpan pada node
+// FS : mengubah informasi pada node dengan newInfo
 void UbahNode(address node, infotype newInfo) {
     if (node != NULL) {
         node->info = newInfo;
     }
 }
 
+// Deskripsi : Prosedur untuk Menghapus Semua Node dalam Tree
+// IS : menerima address node yang akan dihapus
+// FS : menghapus semua node dalam tree, termasuk node itu sendiri
 void DeleteAll(address node) {
     if (node == NULL) return;
 
@@ -76,6 +100,9 @@ void DeleteAll(address node) {
     DeleteAll(nextSibling);
 }
 
+// Deskripsi : Prosedur untuk Menghapus Semua Node dalam Tree, kecuali Root
+// IS : menerima address node yang akan dihapus, tetapi tetap menyimpan root
+// FS : menghapus semua node dalam tree, kecuali root node itu sendiri
 void DeleteAllKeepRoot(address node) {
     if (node == NULL || node->fs == NULL) return;
 
@@ -91,6 +118,9 @@ void DeleteAllKeepRoot(address node) {
     }
 }
 
+// Deskripsi : Prosedur untuk Menghapus Node Tertentu dari Tree
+// IS : menerima address root dari tree dan address delNode yang akan dihapus
+// FS : menghapus node delNode dari tree, termasuk semua anak dan saudara dari delNode
 void DeleteNode(address *root, address delNode) {
     if (delNode == NULL || root == NULL || *root == NULL) return;
 
@@ -127,6 +157,9 @@ void DeleteNode(address *root, address delNode) {
     DeleteAll(delNode);
 }
 
+// Deskripsi : Prosedur untuk Mencetak Tree
+// IS : menerima address node yang akan dicetak dan level untuk indentasi
+// FS : mencetak informasi dari node dan semua anaknya dengan indentasi sesuai level
 void PrintTree(address node, int level) {
     if (node == NULL) return;
     for (int i = 0; i < level; i++) printf("  ");
@@ -135,6 +168,9 @@ void PrintTree(address node, int level) {
     PrintTree(node->nb, level);
 }
 
+// Deskripsi : Prosedur untuk Mencetak Hanya Anak dari Node Tertentu
+// IS : menerima address node yang akan dicetak dan level untuk indentasi
+// FS : mencetak informasi dari semua anak node tersebut dengan indentasi sesuai level
 void PrintChildrenOnly(address node, int level) {
     if (node == NULL || node->fs == NULL) return;
 
@@ -147,6 +183,9 @@ void PrintChildrenOnly(address node, int level) {
     }
 }
 
+// Deskripsi : Prosedur untuk Membaca Input String
+// IS : menerima buffer untuk menyimpan input string
+// FS : membaca input string dari stdin hingga newline
 void InputString(char* buffer) {
     scanf(" %[^\n]", buffer);
 }

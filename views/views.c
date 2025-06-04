@@ -1,5 +1,8 @@
 #include "header/views.h"
 
+// Deskripsi : Halaman untuk manipulasi kota
+// IS : menerima address root dari tree kota
+// FS : menampilkan menu manipulasi kota, termasuk tambah, ubah, hapus, cari, dan print kota
 void HalamanManipulasiKota(address root) {
     char namaKota[100];
 
