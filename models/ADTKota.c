@@ -77,3 +77,14 @@ address SearchKota(address root, const char* namaKota) {
 
     return Search(root, (infotype)&target, CompareKota);
 }
+
+void PrintKota(address node, int level) {
+    if (IsTreeEmpty(node)) {
+        printf("Tree kosong.\n");
+        return;
+    }
+    
+    printf("\nDaftar Kota :\n");
+    
+    PrintChildrenOnly(node, level);
+}

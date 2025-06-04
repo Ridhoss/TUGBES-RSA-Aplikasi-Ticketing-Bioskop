@@ -21,7 +21,7 @@ typedef struct tNode {
 
 typedef int (*CompareFunc)(infotype a, infotype b);
 
-// === FUNGSI DASAR ===
+
 boolean IsTreeEmpty(address root);
 
 address Alokasi(infotype X);
@@ -40,8 +40,10 @@ void DeleteAllKeepRoot(address node);
 
 void DeleteNode(address *root, address delNode);
 
-void printTree(address node, int level);
+void PrintTree(address node, int level);
 
-void inputString(char* buffer);
+void PrintChildrenOnly(address node, int level);
+
+void InputString(char* buffer);
 
 #endif

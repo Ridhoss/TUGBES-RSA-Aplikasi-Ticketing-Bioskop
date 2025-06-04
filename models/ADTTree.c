@@ -121,14 +121,26 @@ void DeleteNode(address *root, address delNode) {
     DeleteAll(delNode);
 }
 
-void printTree(address node, int level) {
+void PrintTree(address node, int level) {
     if (node == NULL) return;
     for (int i = 0; i < level; i++) printf("  ");
     printf("- %s\n", node->info);
-    printTree(node->fs, level + 1);
-    printTree(node->nb, level);
+    PrintTree(node->fs, level + 1);
+    PrintTree(node->nb, level);
 }
 
-void inputString(char* buffer) {
+void PrintChildrenOnly(address node, int level) {
+    if (node == NULL || node->fs == NULL) return;
+
+    address child = node->fs;
+    while (child != NULL) {
+        for (int i = 0; i < level; i++) printf("  ");
+        printf("- %s\n", child->info);
+        PrintTree(child->fs, level + 1);
+        child = child->nb;
+    }
+}
+
+void InputString(char* buffer) {
     scanf(" %[^\n]", buffer);
 }

@@ -36,7 +36,7 @@ int main() {
             }
             case '2': {
                 printf("Masukkan nama kota yang ingin ditambahkan sebagai anak dari %s: ", root->info);
-                inputString(childName);
+                InputString(childName);
 
                 TambahKota(root, childName);
 
@@ -57,12 +57,7 @@ int main() {
                 break;
             }
             case '5': {
-                if (root->fs == NULL) {
-                    printf("Tree kosong.\n");
-                } else {
-                    printf("\nTree saat ini:\n");
-                    printTree(root, 0);
-                }
+
                 break;
             }
             case '6': {

@@ -20,4 +20,6 @@ void DeleteAllKota(address root);
 int CompareKota(infotype a, infotype b);
 address SearchKota(address root, const char* namaKota);
 
+void PrintKota(address node, int level);
+
 #endif

@@ -25,14 +25,14 @@ void HalamanManipulasiKota(address root) {
         {
           case 1:
             printf("Masukkan nama kota baru: ");
-            inputString(namaKota);
+            InputString(namaKota);
 
             TambahKota(root, namaKota);
 
             break;
           case 2:
             printf("Masukkan nama node yang ingin dihapus: ");
-            inputString(namaKota);
+            InputString(namaKota);
 
             DeleteKota(root, namaKota);
 
@@ -54,7 +54,7 @@ void HalamanManipulasiKota(address root) {
           }
           case 4:
             printf("Masukkan nama kota yang ingin dicari: ");
-            inputString(namaKota);
+            InputString(namaKota);
 
             address hasilCari = SearchKota(root, namaKota);
 
@@ -67,13 +67,16 @@ void HalamanManipulasiKota(address root) {
 
             break;
           case 5:
+            PrintKota(root, 0);
 
             break;
           case 6:
             running = 0;
+
             break;
           default:
             printf("Pilihan tidak valid, coba lagi.\n");
+
             break;
         }
     }
