@@ -22,7 +22,7 @@ int main() {
     do {
         printf("\nMenu:\n");
         printf("1. Manipulasi Kota\n");
-        printf("2. -\n");
+        printf("2. Manipulasi Bioskop\n");
         printf("3. -\n");
         printf("4. -\n");
         printf("5. -\n");
@@ -37,7 +37,7 @@ int main() {
                 break;
             }
             case '2': {
-
+                HalamanManipulasiBioskop(root);
                 break;
             }
             case '3': {

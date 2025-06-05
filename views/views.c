@@ -115,3 +115,74 @@ void HalamanManipulasiKota(address root) {
         }
     }
 }
+
+void HalamanManipulasiBioskop(address root) {
+    char namaKota[100];
+    char namaBioskop[100];
+    int pil;
+    int running = 1;
+
+    PrintKota(root, 0);
+
+    printf("Masukkan nama kota yang ingin dimanipulasi bioskopnya: ");
+    InputString(namaKota);
+
+    address nodeKota = SearchKota(root, namaKota);
+    if (nodeKota == NULL) {
+        printf("Kota '%s' tidak ditemukan.\n", namaKota);
+        return;
+    }
+
+    while (running) {
+        printf("\n==== Manipulasi Bioskop (Kota: %s) ====\n", namaKota);
+        printf("1. Tambah Bioskop\n");
+        printf("2. Ubah Informasi Bioskop\n");
+        printf("3. Hapus Bioskop\n");
+        printf("4. Hapus Semua Bioskop\n");
+        printf("5. Cari Bioskop\n");
+        printf("6. Print Bioskop\n");
+        printf("7. Kembali ke Menu Utama\n");
+        printf("Pilih: ");
+        scanf("%d", &pil);
+        while (getchar() != '\n');
+
+        printf("\n=============================\n");
+
+        switch (pil) {
+            case 1:
+                printf("Masukkan nama bioskop baru: ");
+                InputString(namaBioskop);
+                TambahBioskop(nodeKota, namaBioskop);
+
+                break;
+            case 2:
+                // Komentar
+                printf("[Belum diimplementasikan: Ubah Bioskop]\n");
+                break;
+ 
+            case 3:
+                // printf("Masukkan nama bioskop yang ingin dihapus: ");
+                // InputString(namaBioskop);
+                // DeleteBioskop(nodeKota, namaBioskop);
+                break;
+
+            case 4:
+                break;
+
+            case 5:
+                break;
+
+            case 6:
+                // PrintBioskop(nodeKota, 0);
+                break;
+
+            case 7:
+                running = 0;
+                break;
+
+            default:
+                printf("Pilihan tidak valid.\n");
+                break;
+        }
+    }
+}
