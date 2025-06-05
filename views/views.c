@@ -153,6 +153,13 @@ void HalamanManipulasiBioskop(address root) {
                 printf("Masukkan nama bioskop baru: ");
                 InputString(namaBioskop);
                 TambahBioskop(nodeKota, namaBioskop);
+                
+                while (SearchBioskop(nodeKota, namaBioskop) != NULL) {
+                    printf("Bioskop dengan nama '%s' sudah ada.\n", namaBioskop);
+                    printf("Masukkan nama bioskop baru: ");
+                    InputString(namaBioskop);
+                }
+                TambahBioskopBaru(nodeKota, namaBioskop);
 
                 break;
             case 2:
@@ -180,7 +187,7 @@ void HalamanManipulasiBioskop(address root) {
                 break;
 
             default:
-                printf("Pilihan tidak valid.\n");
+                printf("Pilihan tidak valid, silahkan coba lagi\n");
                 break;
         }
     }
