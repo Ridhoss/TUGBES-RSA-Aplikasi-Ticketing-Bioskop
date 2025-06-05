@@ -35,3 +35,14 @@ void TambahBioskop(address kota, const char* namaBioskop) {
     AddChild(kota, node->info);
     printf("Bioskop '%s' berhasil ditambahkan.\n", namaBioskop);
 }
+
+void PrintBioskop(address node, int level) {
+    if (IsTreeEmpty(node)) {
+        printf("Tree kosong.\n");
+        return;
+    }
+    
+    printf("\nDaftar Bioskop :\n");
+
+    PrintChildrenOnly(node, level);
+}

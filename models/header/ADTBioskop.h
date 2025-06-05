@@ -14,6 +14,6 @@ address AlokasiBioskop(BioskopInfo X);
 void DeAlokasiBioskop(address P);
 
 void TambahBioskop(address kota, const char* namaBioskop);
-
+void PrintBioskop(address nodeKota, int level);
 
 #endif

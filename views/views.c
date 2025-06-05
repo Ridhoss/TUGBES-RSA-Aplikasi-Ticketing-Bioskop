@@ -156,7 +156,6 @@ void HalamanManipulasiBioskop(address root) {
 
                 break;
             case 2:
-                // Komentar
                 printf("[Belum diimplementasikan: Ubah Bioskop]\n");
                 break;
  
@@ -173,7 +172,7 @@ void HalamanManipulasiBioskop(address root) {
                 break;
 
             case 6:
-                // PrintBioskop(nodeKota, 0);
+                PrintBioskop(nodeKota, 0);
                 break;
 
             case 7:
