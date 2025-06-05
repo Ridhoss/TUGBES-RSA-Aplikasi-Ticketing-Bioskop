@@ -5,6 +5,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+// modul-modul operasi file
+
+// Deskripsi : Prosedur untuk menyimpan data bioskop ke file
+// IS : menerima pointer ke BioskopInfo
+// FS : menyimpan nama bioskop dan kota ke dalam file "database/bioskop.txt"
 void SimpanBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop) {
     FILE* file = fopen("database/bioskop.txt", "a");
     if (file != NULL) {
@@ -15,6 +20,12 @@ void SimpanBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop) {
     }
 }
 
+
+//modul-modul utama
+
+// Deskripsi : Fungsi untuk Alokasi memori BioskopInfo
+// IS : menerima BioskopInfo X
+// FS : mengembalikan address baru yang berisi alokasi memori untuk BioskopInfo
 address AlokasiBioskop(BioskopInfo X) {
     BioskopInfo* info = (BioskopInfo*) malloc(sizeof(BioskopInfo));
     if (info) {
@@ -24,6 +35,9 @@ address AlokasiBioskop(BioskopInfo X) {
     return NULL;
 }
 
+// Deskripsi : Prosedur untuk Dealokasi memori BioskopInfo
+// IS : menerima address P yang berisi BioskopInfo
+// FS : menghapus alokasi memori BioskopInfo yang ada pada address P
 void DeAlokasiBioskop(address P) {
     if (P != NULL) {
         free(P->info);
@@ -31,6 +45,9 @@ void DeAlokasiBioskop(address P) {
     }
 }
 
+// Deskripsi : Prosedur untuk menambah bioskop ke dalam kota
+// IS : menerima address kota dan namaBioskop sebagai string
+// FS : menambah node baru bioskop menjadi anak dari node kota dalam tree
 void TambahBioskop(address kota, const char* namaBioskop) {
     if (kota == NULL) return;
 
@@ -42,10 +59,15 @@ void TambahBioskop(address kota, const char* namaBioskop) {
         printf("Gagal mengalokasikan node bioskop.\n");
         return;
     }
+
     AddChild(kota, node->info);
+    
     printf("Bioskop '%s' berhasil ditambahkan.\n", namaBioskop);
 }
 
+// Deskripsi : Prosedur untuk menambah bioskop baru dan menyimpannya ke file
+// IS : menerima address kota dan namaBioskop sebagai string
+// FS : node bioskop ditambahkan ke tree sebagai anak dari node kota, lalu disimpan ke file
 void TambahBioskopBaru(address kota, const char* namaBioskop) {
     TambahBioskop(kota, namaBioskop);
 
@@ -58,6 +80,9 @@ void TambahBioskopBaru(address kota, const char* namaBioskop) {
     printf("Bioskop '%s' berhasil ditambahkan dan disimpan ke file.\n", namaBioskop);
 }
 
+// Deskripsi : Fungsi untuk membandingkan dua bioskop berdasarkan nama
+// IS : menerima dua infotype yang berisi BioskopInfo
+// FS : mengembalikan nilai negatif jika a < b, 0 jika a == b, dan positif jika a > b
 int CompareBioskop(infotype a, infotype b) {
     BioskopInfo* bioskop1 = (BioskopInfo*) a;
     BioskopInfo* bioskop2 = (BioskopInfo*) b;
@@ -65,6 +90,9 @@ int CompareBioskop(infotype a, infotype b) {
     return strcmp(bioskop1->nama, bioskop2->nama);
 }
 
+// Deskripsi : Fungsi untuk mencari bioskop berdasarkan nama
+// IS : menerima address kota dan namaBioskop sebagai string
+// FS : mengembalikan address dari node yang sesuai, atau NULL jika tidak ditemukan
 address SearchBioskop(address kota, const char* namaBioskop) {
     BioskopInfo target;
     strcpy(target.nama, namaBioskop);
@@ -72,6 +100,9 @@ address SearchBioskop(address kota, const char* namaBioskop) {
     return Search(kota, (infotype)&target, CompareBioskop);
 }
 
+// Deskripsi : Prosedur untuk mencetak daftar bioskop
+// IS : menerima address kota dan level untuk indentasi
+// FS : mencetak daftar bioskop yang ada pada kota 
 void PrintBioskop(address node, int level) {
     if (IsTreeEmpty(node)) {
         printf("Tree kosong.\n");
