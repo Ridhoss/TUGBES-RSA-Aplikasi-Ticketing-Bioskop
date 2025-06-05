@@ -178,7 +178,7 @@ void PrintChildrenOnly(address node, int level) {
     while (child != NULL) {
         for (int i = 0; i < level; i++) printf("  ");
         printf("- %s\n", child->info);
-        PrintTree(child->fs, level + 1);
+        // PrintTree(child->fs, level + 1);
         child = child->nb;
     }
 }

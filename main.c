@@ -37,7 +37,7 @@ int main() {
                 break;
             }
             case '2': {
-
+                HalamanManipulasiBioskop(root);
                 break;
             }
             case '3': {

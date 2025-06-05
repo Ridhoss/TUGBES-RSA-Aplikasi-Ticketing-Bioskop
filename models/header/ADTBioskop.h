@@ -3,12 +3,17 @@
 
 #include "../../library/boolean.h"
 
-#include "ADTList.h"
+#include "ADTKota.h"
+#include "ADTTree.h"
 
 typedef struct {
-    int id;
     char nama[100];
 } BioskopInfo;
 
+address AlokasiBioskop(BioskopInfo X);
+void DeAlokasiBioskop(address P);
+
+void TambahBioskop(address kota, const char* namaBioskop);
+void PrintBioskop(address nodeKota, int level);
 
 #endif
