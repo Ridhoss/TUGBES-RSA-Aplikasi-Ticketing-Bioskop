@@ -135,7 +135,7 @@ void HalamanManipulasiBioskop(address root) {
         return;
     }
 
-    // LoadBioskop(nodeKota);
+    LoadBioskop(nodeKota);
 
     while (running) {
         printf("\n==== Manipulasi Bioskop (Kota: %s) ====\n", namaKota);
@@ -189,31 +189,31 @@ void HalamanManipulasiBioskop(address root) {
             }
  
             case 3:
-                // printf("Masukkan nama bioskop yang ingin dihapus: ");
-                // InputString(namaBioskop);
+                printf("Masukkan nama bioskop yang ingin dihapus: ");
+                InputString(namaBioskop);
 
-                // if (SearchBioskop(nodeKota, namaBioskop) != NULL) {
-                //     DeleteBioskop(nodeKota, namaBioskop);
-                //     printf("Bioskop '%s' berhasil dihapus.\n", namaBioskop);
-                // } else {
-                //     printf("Bioskop '%s' tidak ditemukan.\n", namaBioskop);
-                // }
-                // break;
+                if (SearchBioskop(nodeKota, namaBioskop) != NULL) {
+                    DeleteBioskop(nodeKota, namaBioskop);
+                    printf("Bioskop '%s' berhasil dihapus.\n", namaBioskop);
+                } else {
+                    printf("Bioskop '%s' tidak ditemukan.\n", namaBioskop);
+                }
+                break;
 
                 break;
             case 4:
-                // printf("Apakah Anda yakin ingin menghapus semua bioskop dari kota ini? (y/n): ");
-                // char konfirmasi;
-                // scanf(" %c", &konfirmasi);
-                // while (getchar() != '\n');
+                printf("Apakah Anda yakin ingin menghapus semua bioskop dari kota ini? (y/n): ");
+                char konfirmasi;
+                scanf(" %c", &konfirmasi);
+                while (getchar() != '\n');
 
-                // if (konfirmasi == 'y' || konfirmasi == 'Y') {
-                //     DeleteAllBioskop(nodeKota);
-                //     printf("Semua bioskop berhasil dihapus dari kota '%s'.\n", namaKota);
-                // } else {
-                //     printf("Penghapusan dibatalkan.\n");
-                // }
-                // break;
+                if (konfirmasi == 'y' || konfirmasi == 'Y') {
+                    DeleteAllBioskop(nodeKota);
+                    printf("Semua bioskop berhasil dihapus dari kota '%s'.\n", namaKota);
+                } else {
+                    printf("Penghapusan dibatalkan.\n");
+                }
+                break;
 
                 break;
             case 5:

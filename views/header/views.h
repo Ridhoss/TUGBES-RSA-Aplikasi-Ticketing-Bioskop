@@ -12,7 +12,7 @@
 
 void HalamanManipulasiKota(address root);
 void HalamanManipulasiBioskop(address root);
-void HalamanManipulasiTeater(address nodeBioskop);
+// void HalamanManipulasiTeater(address nodeBioskop);
 
 
 
