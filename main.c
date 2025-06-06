@@ -14,7 +14,7 @@ int main() {
         return 1;
     }
 
-    LoadKota(root);
+    // LoadKota(root);
 
     char parentName[100], childName[100];
     char pilihan;
