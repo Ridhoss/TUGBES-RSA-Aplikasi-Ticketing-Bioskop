@@ -22,4 +22,8 @@ void SimpanBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop);
 int CompareBioskop(infotype a, infotype b);
 address SearchBioskop(address kota, const char* namaBioskop);
 
+int SearchBioskopFile(const char* namaKota, const char* namaBioskop);
+void EditBioskopKeFile(const char* namaKota, const char* namaLama, const char* namaBaru);
+void UbahBioskop(address node, BioskopInfo dataBaru);
+
 #endif

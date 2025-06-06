@@ -20,6 +20,48 @@ void SimpanBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop) {
     }
 }
 
+int SearchBioskopFile(const char* namaKota, const char* namaBioskop) {
+    FILE* file = fopen("database/bioskop.txt", "r");
+    if (!file) return 0;
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+        char* kota = strtok(buffer, "|");
+        char* bioskop = strtok(NULL, "|");
+        if (kota && bioskop && strcmp(kota, namaKota) == 0 && strcmp(bioskop, namaBioskop) == 0) {
+            fclose(file);
+            return 1;
+        }
+    }
+    fclose(file);
+    return 0;
+}
+
+// Mengedit nama bioskop dalam file
+void EditBioskopKeFile(const char* namaKota, const char* namaLama, const char* namaBaru) {
+    FILE* file = fopen("database/bioskop.txt", "r");
+    FILE* temp = fopen("database/temp.txt", "w");
+    if (!file || !temp) return;
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+
+        char kota[100], bioskop[100];
+        sscanf(buffer, "%[^|]|%[^\n]", kota, bioskop);
+
+        if (strcmp(kota, namaKota) == 0 && strcmp(bioskop, namaLama) == 0)
+            fprintf(temp, "%s|%s\n", kota, namaBaru);
+        else
+            fprintf(temp, "%s\n", buffer);
+    }
+
+    fclose(file);
+    fclose(temp);
+    remove("database/bioskop.txt");
+    rename("database/temp.txt", "database/bioskop.txt");
+}
 
 //modul-modul utama
 
@@ -89,6 +131,21 @@ int CompareBioskop(infotype a, infotype b) {
 
     return strcmp(bioskop1->nama, bioskop2->nama);
 }
+
+void UbahBioskop(address node, BioskopInfo dataBaru) {
+    BioskopInfo* newInfo = (BioskopInfo*) malloc(sizeof(BioskopInfo));
+    if (newInfo) {
+        BioskopInfo* oldInfo = (BioskopInfo*) node->info;
+        char namaLama[100];
+        strcpy(namaLama, oldInfo->nama);
+        *newInfo = dataBaru;
+        UbahNode(node, (infotype)newInfo);
+        KotaInfo* kInfo = (KotaInfo*) node->pr->info;
+        EditBioskopKeFile(kInfo->nama, namaLama, dataBaru.nama);
+    }
+}
+
+
 
 // Deskripsi : Fungsi untuk mencari bioskop berdasarkan nama
 // IS : menerima address kota dan namaBioskop sebagai string

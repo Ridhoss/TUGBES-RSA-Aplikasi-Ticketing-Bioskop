@@ -122,7 +122,6 @@ void HalamanManipulasiBioskop(address root) {
     int pil;
     int running = 1;
 
-    PrintKota(root, 0);
 
     printf("Masukkan nama kota yang ingin dimanipulasi bioskopnya: ");
     InputString(namaKota);
@@ -133,6 +132,8 @@ void HalamanManipulasiBioskop(address root) {
         return;
     }
 
+    // LoadBioskop(nodeKota);
+
     while (running) {
         printf("\n==== Manipulasi Bioskop (Kota: %s) ====\n", namaKota);
         printf("1. Tambah Bioskop\n");
@@ -141,7 +142,8 @@ void HalamanManipulasiBioskop(address root) {
         printf("4. Hapus Semua Bioskop\n");
         printf("5. Cari Bioskop\n");
         printf("6. Print Bioskop\n");
-        printf("7. Kembali ke Menu Utama\n");
+        printf("7. Manipulasi Teater\n");
+        printf("8. Kembali ke Menu Utama\n");
         printf("Pilih: ");
         scanf("%d", &pil);
         while (getchar() != '\n');
@@ -152,7 +154,6 @@ void HalamanManipulasiBioskop(address root) {
             case 1:
                 printf("Masukkan nama bioskop baru: ");
                 InputString(namaBioskop);
-                TambahBioskop(nodeKota, namaBioskop);
                 
                 while (SearchBioskop(nodeKota, namaBioskop) != NULL) {
                     printf("Bioskop dengan nama '%s' sudah ada.\n", namaBioskop);
@@ -163,19 +164,60 @@ void HalamanManipulasiBioskop(address root) {
 
                 break;
             case 2:
-                printf("[Belum diimplementasikan: Ubah Bioskop]\n");
+               {
+                printf("Masukkan nama bioskop yang ingin diubah: ");
+                InputString(namaBioskop);
+
+                address nodeBioskop = SearchBioskop(nodeKota, namaBioskop);
+                if (nodeBioskop == NULL) {
+                    printf("Bioskop '%s' tidak ditemukan.\n", namaBioskop);
+                } else {
+                    char namaBaru[100];
+                    printf("Masukkan nama bioskop baru: ");
+                    InputString(namaBaru);
+
+                    BioskopInfo dataBaru;
+                    strcpy(dataBaru.nama, namaBaru);
+                    UbahBioskop(nodeBioskop, dataBaru);
+                    printf("Bioskop berhasil diubah menjadi '%s'.\n", namaBaru);
+                }
                 break;
+            }
  
             case 3:
                 // printf("Masukkan nama bioskop yang ingin dihapus: ");
                 // InputString(namaBioskop);
-                // DeleteBioskop(nodeKota, namaBioskop);
-                break;
+
+                // if (SearchBioskop(nodeKota, namaBioskop) != NULL) {
+                //     DeleteBioskop(nodeKota, namaBioskop);
+                //     printf("Bioskop '%s' berhasil dihapus.\n", namaBioskop);
+                // } else {
+                //     printf("Bioskop '%s' tidak ditemukan.\n", namaBioskop);
+                // }
+                // break;
 
             case 4:
-                break;
+                // printf("Apakah Anda yakin ingin menghapus semua bioskop dari kota ini? (y/n): ");
+                // char konfirmasi;
+                // scanf(" %c", &konfirmasi);
+                // while (getchar() != '\n');
+
+                // if (konfirmasi == 'y' || konfirmasi == 'Y') {
+                //     DeleteAllBioskop(nodeKota);
+                //     printf("Semua bioskop berhasil dihapus dari kota '%s'.\n", namaKota);
+                // } else {
+                //     printf("Penghapusan dibatalkan.\n");
+                // }
+                // break;
 
             case 5:
+                printf("Masukkan nama bioskop yang ingin dicari: ");
+                InputString(namaBioskop);
+                if (SearchBioskop(nodeKota, namaBioskop) != NULL) {
+                    printf("Bioskop '%s' ditemukan di kota '%s'.\n", namaBioskop, namaKota);
+                } else {
+                    printf("Bioskop '%s' tidak ditemukan di kota '%s'.\n", namaBioskop, namaKota);
+                }
                 break;
 
             case 6:
@@ -183,6 +225,19 @@ void HalamanManipulasiBioskop(address root) {
                 break;
 
             case 7:
+                printf("Masukkan nama bioskop yang ingin dimanipulasi teaterya: ");
+                InputString(namaBioskop);
+                
+                address nodeBioskop = SearchBioskop(nodeKota, namaBioskop);
+                if (nodeBioskop == NULL) {
+                    printf("Bioskop '%s' tidak ditemukan.\n", namaBioskop);
+                } else {
+                    HalamanManipulasiTeater(nodeBioskop); 
+                }
+
+                break;
+
+            case 8:
                 running = 0;
                 break;
 
@@ -192,3 +247,50 @@ void HalamanManipulasiBioskop(address root) {
         }
     }
 }
+
+// void HalamanManipulasiTeater(address nodeBioskop) {
+//     if (nodeBioskop == NULL) {
+//         printf("Bioskop tidak valid.\n");
+//         return;
+//     }
+
+//     int pil;
+//     int running = 1;
+
+//     while (running) {
+//         printf("\n==== Menu Manipulasi Teater ====\n");
+//         printf("1. Tambah Teater\n");
+//         printf("2. Ubah Informasi Teater\n");
+//         printf("3. Hapus Teater\n");
+//         printf("4. Cari Teater\n");
+//         printf("5. Tampilkan Semua Teater\n");
+//         printf("6. Kembali ke Menu Bioskop\n");
+//         printf("Pilih: ");
+//         scanf("%d", &pil);
+//         while (getchar() != '\n');
+
+//         switch (pil) {
+//             case 1:
+//                 // Tambah Teater
+//                 break;
+//             case 2:
+//                 // Ubah Informasi Teater
+//                 break;
+//             case 3:
+//                 // Hapus Teater
+//                 break;
+//             case 4:
+//                 // Cari Teater
+//                 break;
+//             case 5:
+//                 // Tampilkan Semua Teater
+//                 break;
+//             case 6:
+//                 running = 0;
+//                 break;
+//             default:
+//                 printf("Pilihan tidak valid, silahkan coba lagi\n");
+//                 break;
+//         }
+//     }
+// }

@@ -14,7 +14,7 @@ int main() {
         return 1;
     }
 
-    LoadKota(root);
+    // LoadKota(root);
 
     char parentName[100], childName[100];
     char pilihan;
@@ -27,7 +27,7 @@ int main() {
         printf("4. -\n");
         printf("5. -\n");
         printf("6. Keluar\n");
-        printf("Pilih opsi (1-5): ");
+        printf("Pilih opsi (1-6): ");
         scanf(" %c", &pilihan);
 
         switch (pilihan) {
