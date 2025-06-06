@@ -2,9 +2,15 @@
 
 // modul-modul operasi file
 
-// void SimpanTeaterKeFile(const char* namaBioskop, const TeaterInfo* teater) {
-
-// }
+void SimpanTeaterKeFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teater) {
+    FILE* file = fopen("database/teater.txt", "a");
+    if (file != NULL) {
+        fprintf(file, "%s|%s|%s|%d\n", namaKota, namaBioskop, teater->nama, teater->jumlahKursi);
+        fclose(file);
+    } else {
+        printf("Gagal menyimpan teater ke file.\n");
+    }
+}
 
 // int SearchTeaterFile(const char* namaBioskop, const char* namaTeater) {
 
@@ -22,9 +28,33 @@
 
 // }
 
-// void LoadTeater(address root){
+void LoadTeater(address root) {
+    FILE* file = fopen("database/teater.txt", "r");
+    if (!file) return;
 
-// }
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+
+        char* kotaNama = strtok(buffer, "|");
+        char* bioskopNama = strtok(NULL, "|");
+        char* teaterNama = strtok(NULL, "|");
+        char* jumlahKursiStr = strtok(NULL, "|");
+        int jumlahKursi = atoi(jumlahKursiStr);
+
+        if (kotaNama && bioskopNama && teaterNama && jumlahKursi) {
+            address kota = SearchKota(root, kotaNama);
+            if (kota != NULL) {
+              address bioskop = SearchBioskop(kota, bioskopNama);
+              if (bioskop != NULL) {
+                TambahTeater(bioskop, teaterNama, jumlahKursi);
+              }
+            }
+        }
+    }
+
+    fclose(file);
+}
 
 
 //modul-modul utama
@@ -70,9 +100,19 @@ void TambahTeater(address bioskop, const char* namaTeater, int jumlahKursi) {
     printf("Teater '%s' berhasil ditambahkan.\n", namaTeater);
 }
 
-// void TambahTeaterBaru(address bioskop, const char* namaTeater) {
+void TambahTeaterBaru(address kota, address bioskop, const char* namaTeater, int jumlahKursi) {
+    TambahTeater(bioskop, namaTeater, jumlahKursi);
 
-// }
+    TeaterInfo teater;
+    strcpy(teater.nama, namaTeater);
+    teater.jumlahKursi = jumlahKursi;
+
+    KotaInfo* kInfo = (KotaInfo*) kota->info;
+    BioskopInfo* bInfo = (BioskopInfo*) bioskop->info;
+    SimpanTeaterKeFile(kInfo->nama, bInfo->nama, &teater);
+
+    printf("Teater '%s' berhasil ditambahkan dan disimpan ke file.\n", namaTeater);
+}
 
 // void UbahTeater(address node, TeaterInfo dataBaru) {
 
@@ -94,6 +134,13 @@ void TambahTeater(address bioskop, const char* namaTeater, int jumlahKursi) {
 
 // }
 
-// void PrintTeater(address node, int level) {
+void PrintTeater(address node, int level) {
+    if (IsTreeEmpty(node)) {
+        printf("Tree kosong.\n");
+        return;
+    }
+    
+    printf("\nDaftar Teater :\n");
 
-// }
+    PrintChildrenOnly(node, level);
+}

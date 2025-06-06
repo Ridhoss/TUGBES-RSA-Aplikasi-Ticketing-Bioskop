@@ -2,6 +2,8 @@
 #include <string.h>
 #include "models/header/ADTTree.h"
 #include "models/header/ADTKota.h"
+#include "models/header/ADTBioskop.h"
+#include "models/header/ADTTeater.h"
 #include "views/header/views.h"
 
 int main() {
@@ -16,6 +18,7 @@ int main() {
 
     LoadKota(root);
     LoadBioskop(root);
+    LoadTeater(root);
 
     char parentName[100], childName[100];
     char pilihan;

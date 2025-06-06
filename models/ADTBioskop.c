@@ -24,6 +24,7 @@ int SearchBioskopFile(const char* namaKota, const char* namaBioskop) {
         buffer[strcspn(buffer, "\n")] = 0;
         char* kota = strtok(buffer, "|");
         char* bioskop = strtok(NULL, "|");
+        
         if (kota && bioskop && strcmp(kota, namaKota) == 0 && strcmp(bioskop, namaBioskop) == 0) {
             fclose(file);
             return 1;
@@ -177,15 +178,19 @@ void TambahBioskopBaru(address kota, const char* namaBioskop) {
 void UbahBioskop(address node, BioskopInfo dataBaru) {
     BioskopInfo* newInfo = (BioskopInfo*) malloc(sizeof(BioskopInfo));
     if (newInfo) {
+    
         BioskopInfo* oldInfo = (BioskopInfo*) node->info;
         char namaLama[100];
         strcpy(namaLama, oldInfo->nama);
+
         *newInfo = dataBaru;
         UbahNode(node, (infotype)newInfo);
+
         KotaInfo* kInfo = (KotaInfo*) node->pr->info;
         EditBioskopKeFile(kInfo->nama, namaLama, dataBaru.nama);
     }
 }
+
 // Deskripsi : Prosedur untuk menghapus bioskop dari kota
 // IS : menerima address kota dan namaBioskop sebagai string
 // FS : menghapus node bioskop dari tree dan juga dari file
@@ -201,7 +206,6 @@ void DeleteBioskop(address kota, const char* namaBioskop) {
 
     DeleteNode(&kota, node);
 }
-
 
 // Deskripsi : Prosedur untuk menghapus semua bioskop dari kota
 // IS : menerima address kota
