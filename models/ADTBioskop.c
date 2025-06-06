@@ -96,6 +96,22 @@ void KosongkanFileBioskop() {
     }
 }
 
+void LoadBioskop(address kota) {
+    KotaInfo* kInfo = (KotaInfo*) kota->info;
+    FILE* file = fopen("database/bioskop.txt", "r");
+    if (!file) return;
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+        char* kotaNama = strtok(buffer, "|");
+        char* bioskopNama = strtok(NULL, "|");
+        if (kotaNama && bioskopNama && strcmp(kotaNama, kInfo->nama) == 0) {
+            TambahBioskop(kota, bioskopNama);
+        }
+    }
+    fclose(file);
+}
 
 //modul-modul utama
 
@@ -156,15 +172,6 @@ void TambahBioskopBaru(address kota, const char* namaBioskop) {
     printf("Bioskop '%s' berhasil ditambahkan dan disimpan ke file.\n", namaBioskop);
 }
 
-// Deskripsi : Fungsi untuk membandingkan dua bioskop berdasarkan nama
-// IS : menerima dua infotype yang berisi BioskopInfo
-// FS : mengembalikan nilai negatif jika a < b, 0 jika a == b, dan positif jika a > b
-int CompareBioskop(infotype a, infotype b) {
-    BioskopInfo* bioskop1 = (BioskopInfo*) a;
-    BioskopInfo* bioskop2 = (BioskopInfo*) b;
-
-    return strcmp(bioskop1->nama, bioskop2->nama);
-}
 
 void UbahBioskop(address node, BioskopInfo dataBaru) {
     BioskopInfo* newInfo = (BioskopInfo*) malloc(sizeof(BioskopInfo));
@@ -206,9 +213,18 @@ void DeleteAllBioskop(address kota) {
 
     DeleteAllKeepRoot(kota->fs);
     KosongkanFileBioskop(kota->info);
-   
+    
 }
 
+// Deskripsi : Fungsi untuk membandingkan dua bioskop berdasarkan nama
+// IS : menerima dua infotype yang berisi BioskopInfo
+// FS : mengembalikan nilai negatif jika a < b, 0 jika a == b, dan positif jika a > b
+int CompareBioskop(infotype a, infotype b) {
+    BioskopInfo* bioskop1 = (BioskopInfo*) a;
+    BioskopInfo* bioskop2 = (BioskopInfo*) b;
+
+    return strcmp(bioskop1->nama, bioskop2->nama);
+}
 
 // Deskripsi : Fungsi untuk mencari bioskop berdasarkan nama
 // IS : menerima address kota dan namaBioskop sebagai string

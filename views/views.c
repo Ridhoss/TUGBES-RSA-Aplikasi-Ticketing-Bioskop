@@ -132,7 +132,7 @@ void HalamanManipulasiBioskop(address root) {
         return;
     }
 
-    // LoadBioskop(nodeKota);
+    LoadBioskop(nodeKota);
 
     while (running) {
         printf("\n==== Manipulasi Bioskop (Kota: %s) ====\n", namaKota);

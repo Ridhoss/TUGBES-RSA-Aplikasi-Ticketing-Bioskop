@@ -31,5 +31,5 @@ void KosongkanFileBioskop();
 
 void DeleteBioskop(address kota, const char* namaBioskop);
 void DeleteAllBioskop(address kota);
-
+void LoadBioskop(address nodeKota);
 #endif
