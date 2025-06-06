@@ -27,94 +27,94 @@ void HalamanManipulasiKota(address root) {
 
         switch (pil)
         {
-          case 1:
-            printf("Masukkan nama kota baru: ");
-            InputString(namaKota);
-
-            while(SearchKota(root, namaKota) != NULL) {
-                printf("Kota dengan nama '%s' sudah ada\n", namaKota);
-                printf("Masukan nama kota baru: ");
-                InputString(namaKota);
-            }
-
-            TambahKotaBaru(root, namaKota);
-
-            break;
-          case 2: {
-            KotaInfo dataBaru;
-
-            printf("Masukkan nama node yang ingin diubah: ");
-            InputString(namaKota);
-
-            address pilihNode = SearchKota(root, namaKota);
-
-            if (pilihNode != NULL) {
+            case 1:
                 printf("Masukkan nama kota baru: ");
-                InputString(dataBaru.nama);
+                InputString(namaKota);
 
-                while(SearchKota(root, dataBaru.nama) != NULL) {
-                    printf("Kota dengan nama '%s' sudah ada\n", dataBaru.nama);
+                while(SearchKota(root, namaKota) != NULL) {
+                    printf("Kota dengan nama '%s' sudah ada\n", namaKota);
                     printf("Masukan nama kota baru: ");
-                    InputString(dataBaru.nama);
+                    InputString(namaKota);
                 }
 
-                UbahKota(pilihNode, dataBaru);
+                TambahKotaBaru(root, namaKota);
 
-                printf("Nama kota berhasil diubah!\n");
-            } else {
-                printf("Kota dengan nama tersebut tidak ditemukan.\n");
+                break;
+            case 2: {
+                KotaInfo dataBaru;
+
+                printf("Masukkan nama node yang ingin diubah: ");
+                InputString(namaKota);
+
+                address pilihNode = SearchKota(root, namaKota);
+
+                if (pilihNode != NULL) {
+                    printf("Masukkan nama kota baru: ");
+                    InputString(dataBaru.nama);
+
+                    while(SearchKota(root, dataBaru.nama) != NULL) {
+                        printf("Kota dengan nama '%s' sudah ada\n", dataBaru.nama);
+                        printf("Masukan nama kota baru: ");
+                        InputString(dataBaru.nama);
+                    }
+
+                    UbahKota(pilihNode, dataBaru);
+
+                    printf("Nama kota berhasil diubah!\n");
+                } else {
+                    printf("Kota dengan nama tersebut tidak ditemukan.\n");
+                }
+
+                break;
             }
+            case 3:
+                printf("Masukkan nama node yang ingin dihapus: ");
+                InputString(namaKota);
 
-            break;
-          }
-          case 3:
-            printf("Masukkan nama node yang ingin dihapus: ");
-            InputString(namaKota);
+                DeleteKota(root, namaKota);
 
-            DeleteKota(root, namaKota);
+                break;
+            case 4: {
+                char confirm;
 
-            break;
-          case 4: {
-            char confirm;
+                printf("Apakah Anda yakin ingin menghapus semua kota? (y/n): ");
+                scanf(" %c", &confirm);
 
-            printf("Apakah Anda yakin ingin menghapus semua kota? (y/n): ");
-            scanf(" %c", &confirm);
+                if (confirm == 'y' || confirm == 'Y') {
+                    DeleteAllKota(root);
+                    printf("Semua kota berhasil dihapus.\n");
+                } else {
+                    printf("Batal Menghapus.\n");
+                }
 
-            if (confirm == 'y' || confirm == 'Y') {
-                DeleteAllKota(root);
-                printf("Semua kota berhasil dihapus.\n");
-            } else {
-                printf("Batal Menghapus.\n");
+                break;
             }
+            case 5:
+                printf("Masukkan nama kota yang ingin dicari: ");
+                InputString(namaKota);
 
-            break;
-          }
-          case 5:
-            printf("Masukkan nama kota yang ingin dicari: ");
-            InputString(namaKota);
+                address hasilCari = SearchKota(root, namaKota);
 
-            address hasilCari = SearchKota(root, namaKota);
+                if (hasilCari != NULL) {
+                    KotaInfo* kota = (KotaInfo*)hasilCari->info;
+                    printf("Kota ditemukan: %s\n", kota->nama);
+                } else {
+                    printf("Kota dengan nama '%s' tidak ditemukan.\n", namaKota);
+                }
 
-            if (hasilCari != NULL) {
-                KotaInfo* kota = (KotaInfo*)hasilCari->info;
-                printf("Kota ditemukan: %s\n", kota->nama);
-            } else {
-                printf("Kota dengan nama '%s' tidak ditemukan.\n", namaKota);
-            }
+                break;
+            case 6:
+                PrintKota(root, 0);
 
-            break;
-          case 6:
-            PrintKota(root, 0);
+                break;
+            case 7:
+                running = 0;
 
-            break;
-          case 7:
-            running = 0;
+                break;
+            default:
+                printf("Pilihan tidak valid, coba lagi.\n");
 
-            break;
-          default:
-            printf("Pilihan tidak valid, coba lagi.\n");
-
-            break;
+                break;
         }
     }
 }
@@ -166,8 +166,7 @@ void HalamanManipulasiBioskop(address root) {
                 TambahBioskopBaru(nodeKota, namaBioskop);
 
                 break;
-            case 2:
-               {
+            case 2: {
                 printf("Masukkan nama bioskop yang ingin diubah: ");
                 InputString(namaBioskop);
 
@@ -188,7 +187,6 @@ void HalamanManipulasiBioskop(address root) {
 
                 break;
             }
- 
             case 3:
                 printf("Masukkan nama bioskop yang ingin dihapus: ");
                 InputString(namaBioskop);

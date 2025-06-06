@@ -16,6 +16,7 @@ int main() {
         return 1;
     }
 
+    // Load data dari database
     LoadKota(root);
     LoadBioskop(root);
     LoadTeater(root);
