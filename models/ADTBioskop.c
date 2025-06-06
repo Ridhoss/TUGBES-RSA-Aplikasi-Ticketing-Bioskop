@@ -63,6 +63,40 @@ void EditBioskopKeFile(const char* namaKota, const char* namaLama, const char* n
     rename("database/temp.txt", "database/bioskop.txt");
 }
 
+void HapusBioskopKeFile(const char* namaKota, const char* namaBioskop) {
+    FILE* file = fopen("database/bioskop.txt", "r");
+    FILE* temp = fopen("database/temp.txt", "w");
+    if (!file || !temp) return;
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+
+        char kota[100], bioskop[100];
+        sscanf(buffer, "%[^|]|%[^\n]", kota, bioskop);
+
+        // Tulis kembali hanya jika bukan yang ingin dihapus
+        if (!(strcmp(kota, namaKota) == 0 && strcmp(bioskop, namaBioskop) == 0))
+            fprintf(temp, "%s\n", buffer);
+    }
+
+    fclose(file);
+    fclose(temp);
+    remove("database/bioskop.txt");
+    rename("database/temp.txt", "database/bioskop.txt");
+}
+
+void KosongkanFileBioskop() {
+    FILE* file = fopen("database/bioskop.txt", "w");
+    if (file != NULL) {
+        fclose(file);
+        printf("File Bioskop.txt berhasil dikosongkan.\n");
+    } else {
+        printf("Gagal mengosongkan file kota.txt.\n");
+    }
+}
+
+
 //modul-modul utama
 
 // Deskripsi : Fungsi untuk Alokasi memori BioskopInfo
@@ -144,7 +178,36 @@ void UbahBioskop(address node, BioskopInfo dataBaru) {
         EditBioskopKeFile(kInfo->nama, namaLama, dataBaru.nama);
     }
 }
+// Deskripsi : Prosedur untuk menghapus bioskop dari kota
+// IS : menerima address kota dan namaBioskop sebagai string
+// FS : menghapus node bioskop dari tree dan juga dari file
+void DeleteBioskop(address kota, const char* namaBioskop) {
+    address node = SearchBioskop(kota, namaBioskop);
+    if (!node) {
+        printf("Bioskop tidak ditemukan.\n");
+        return;
+    }
 
+    KotaInfo* kInfo = (KotaInfo*) kota->info;
+    HapusBioskopKeFile(kInfo->nama, namaBioskop);
+
+    DeleteNode(&kota, node);
+}
+
+
+// Deskripsi : Prosedur untuk menghapus semua bioskop dari kota
+// IS : menerima address kota
+// FS : menghapus semua node bioskop dari tree dan juga mengosongkan file bioskop
+void DeleteAllBioskop(address kota) {
+    if (kota == NULL) {
+        printf("Kota tidak valid atau kosong.\n");
+        return;
+    }
+
+    DeleteAllKeepRoot(kota->fs);
+    KosongkanFileBioskop(kota->info);
+   
+}
 
 
 // Deskripsi : Fungsi untuk mencari bioskop berdasarkan nama

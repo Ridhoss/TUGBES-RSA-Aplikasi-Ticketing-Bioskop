@@ -26,4 +26,10 @@ int SearchBioskopFile(const char* namaKota, const char* namaBioskop);
 void EditBioskopKeFile(const char* namaKota, const char* namaLama, const char* namaBaru);
 void UbahBioskop(address node, BioskopInfo dataBaru);
 
+void HapusBioskopKeFile(const char* namaKota, const char* namaBioskop);
+void KosongkanFileBioskop();
+
+void DeleteBioskop(address kota, const char* namaBioskop);
+void DeleteAllBioskop(address kota);
+
 #endif
