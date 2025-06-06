@@ -1,9 +1,4 @@
 #include "header/ADTKota.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-
 
 // modul modul operasi file
 

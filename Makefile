@@ -8,7 +8,7 @@ CFLAGS =
 LDFLAGS = 
 
 # file .c lain
-CFILE = models/ADTTree.c views/views.c models/ADTKota.c models/ADTBioskop.c
+CFILE = models/ADTTree.c views/views.c models/ADTKota.c models/ADTBioskop.c models/ADTTeater.c
 
 # Daftar file source code
 SRCS = main.c

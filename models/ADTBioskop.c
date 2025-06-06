@@ -1,9 +1,4 @@
 #include "header/ADTBioskop.h"
-#include "header/ADTTree.h"
-#include "header/ADTKota.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 // modul-modul operasi file
 
@@ -96,22 +91,28 @@ void KosongkanFileBioskop() {
     }
 }
 
-void LoadBioskop(address kota) {
-    KotaInfo* kInfo = (KotaInfo*) kota->info;
+void LoadBioskop(address root) {
     FILE* file = fopen("database/bioskop.txt", "r");
     if (!file) return;
 
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
+
         char* kotaNama = strtok(buffer, "|");
         char* bioskopNama = strtok(NULL, "|");
-        if (kotaNama && bioskopNama && strcmp(kotaNama, kInfo->nama) == 0) {
-            TambahBioskop(kota, bioskopNama);
+
+        if (kotaNama && bioskopNama) {
+            address kota = SearchKota(root, kotaNama);
+            if (kota != NULL) {
+                TambahBioskop(kota, bioskopNama);
+            }
         }
     }
+
     fclose(file);
 }
+
 
 //modul-modul utama
 

@@ -9,10 +9,11 @@
 #include "../../models/header/ADTTree.h"
 #include "../../models/header/ADTKota.h"
 #include "../../models/header/ADTBioskop.h"
+#include "../../models/header/ADTTeater.h"
 
 void HalamanManipulasiKota(address root);
 void HalamanManipulasiBioskop(address root);
-// void HalamanManipulasiTeater(address nodeBioskop);
+void HalamanManipulasiTeater(address root, address nodeBioskop);
 
 
 

@@ -125,6 +125,7 @@ void HalamanManipulasiBioskop(address root) {
     int pil;
     int running = 1;
 
+    PrintKota(root, 0);
 
     printf("Masukkan nama kota yang ingin dimanipulasi bioskopnya: ");
     InputString(namaKota);
@@ -134,8 +135,6 @@ void HalamanManipulasiBioskop(address root) {
         printf("Kota '%s' tidak ditemukan.\n", namaKota);
         return;
     }
-
-    LoadBioskop(nodeKota);
 
     while (running) {
         printf("\n==== Manipulasi Bioskop (Kota: %s) ====\n", namaKota);
@@ -198,7 +197,6 @@ void HalamanManipulasiBioskop(address root) {
                 } else {
                     printf("Bioskop '%s' tidak ditemukan.\n", namaBioskop);
                 }
-                break;
 
                 break;
             case 4:
@@ -213,7 +211,6 @@ void HalamanManipulasiBioskop(address root) {
                 } else {
                     printf("Penghapusan dibatalkan.\n");
                 }
-                break;
 
                 break;
             case 5:
@@ -231,6 +228,8 @@ void HalamanManipulasiBioskop(address root) {
 
                 break;
             case 7:
+                PrintBioskop(nodeKota, 0);
+
                 printf("Masukkan nama bioskop yang ingin dimanipulasi teaterya: ");
                 InputString(namaBioskop);
                 
@@ -255,16 +254,18 @@ void HalamanManipulasiBioskop(address root) {
 }
 
 void HalamanManipulasiTeater(address root, address nodeBioskop) {
+    char namaTeater[100];
+    int jumlahKursi;
+    int pil;
+    int running = 1;
+
     if (nodeBioskop == NULL) {
         printf("Bioskop tidak valid.\n");
         return;
     }
 
-    int pil;
-    int running = 1;
-
     while (running) {
-        printf("\n==== Menu Manipulasi Teater ====\n");
+        printf("\n==== Menu Manipulasi Teater Bioskop %s ====\n", nodeBioskop->info);
         printf("1. Tambah Teater\n");
         printf("2. Ubah Informasi Teater\n");
         printf("3. Hapus Teater\n");
@@ -278,24 +279,38 @@ void HalamanManipulasiTeater(address root, address nodeBioskop) {
         switch (pil) {
             case 1:
                 // Tambah Teater
+                printf("Masukan Nama Teater : ");
+                InputString(namaTeater);
+
+                printf("Masukan Jumlah Kursi di Teater : ");
+                scanf("%d", &jumlahKursi);
+
+                TambahTeater(nodeBioskop, namaTeater, jumlahKursi);
+
                 break;
             case 2:
                 // Ubah Informasi Teater
+
                 break;
             case 3:
                 // Hapus Teater
+                
                 break;
             case 4:
                 // Cari Teater
+
                 break;
             case 5:
                 // Tampilkan Semua Teater
+
                 break;
             case 6:
                 running = 0;
+
                 break;
             default:
                 printf("Pilihan tidak valid, silahkan coba lagi\n");
+
                 break;
         }
     }

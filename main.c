@@ -14,7 +14,8 @@ int main() {
         return 1;
     }
 
-    // LoadKota(root);
+    LoadKota(root);
+    LoadBioskop(root);
 
     char parentName[100], childName[100];
     char pilihan;
@@ -55,10 +56,12 @@ int main() {
             }
             case '6': {
                 printf("Keluar dari program.\n");
+                
                 break;
             }
             default:
                 printf("Pilihan tidak valid.\n");
+
                 break;
         }
     
