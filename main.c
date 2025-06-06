@@ -23,11 +23,11 @@ int main() {
         printf("\nMenu:\n");
         printf("1. Manipulasi Kota\n");
         printf("2. Manipulasi Bioskop\n");
-        printf("3. Manipulasi Teater\n");
+        printf("3. Manipulasi Film\n");
         printf("4. -\n");
         printf("5. -\n");
         printf("6. Keluar\n");
-        printf("Pilih opsi (1-5): ");
+        printf("Pilih opsi (1-6): ");
         scanf(" %c", &pilihan);
 
         switch (pilihan) {
@@ -38,6 +38,7 @@ int main() {
             }
             case '2': {
                 HalamanManipulasiBioskop(root);
+
                 break;
             }
             case '3': {

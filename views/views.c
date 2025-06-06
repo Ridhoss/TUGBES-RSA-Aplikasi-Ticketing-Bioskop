@@ -144,7 +144,8 @@ void HalamanManipulasiBioskop(address root) {
         printf("4. Hapus Semua Bioskop\n");
         printf("5. Cari Bioskop\n");
         printf("6. Print Bioskop\n");
-        printf("7. Kembali ke Menu Utama\n");
+        printf("7. Manipulation Teater\n");
+        printf("8. Kembali ke Menu Utama\n");
         printf("Pilih: ");
         scanf("%d", &pil);
         while (getchar() != '\n');
@@ -160,30 +161,35 @@ void HalamanManipulasiBioskop(address root) {
                 break;
             case 2:
                 printf("[Belum diimplementasikan: Ubah Bioskop]\n");
+
                 break;
- 
+
             case 3:
                 // printf("Masukkan nama bioskop yang ingin dihapus: ");
                 // InputString(namaBioskop);
                 // DeleteBioskop(nodeKota, namaBioskop);
-                break;
 
+                break;
             case 4:
-                break;
 
+                break;
             case 5:
-                break;
 
+                break;
             case 6:
                 PrintBioskop(nodeKota, 0);
-                break;
 
+                break;
             case 7:
-                running = 0;
-                break;
 
+                break;
+            case 8:
+                running = 0;
+
+                break;
             default:
                 printf("Pilihan tidak valid.\n");
+                
                 break;
         }
     }
