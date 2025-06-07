@@ -188,3 +188,41 @@ void HalamanManipulasiBioskop(address root) {
         }
     }
 }
+
+void HalamanRegister(Akun *akun, int role){
+    char password_check[50];
+
+    printf("== Registrasi Akun Baru ==\n");
+
+    // Username
+    printf("Masukkan Username: ");
+    scanf("%49s", akun->username);
+
+    // Password + konfirmasi
+    for (;;) {
+        printf("Masukkan Password: ");
+        scanf("%49s", akun->password);
+
+        printf("Konfirmasi Password: ");
+        scanf("%49s", password_check);
+
+        if (strcmp(akun->password, password_check) == 0) {
+            break;
+        }
+        printf("Konfirmasi Password Salah! Silakan coba lagi.\n");
+    }
+
+    // Phone
+    printf("Masukkan Nomor Telepon: ");
+    scanf("%15s", akun->phone);
+
+    // Alamat, hanya input jika role bukan 2 (admin)
+    if (role != 2) {
+        printf("Masukkan Alamat: ");
+        getchar();
+        fgets(akun->alamat, sizeof(akun->alamat), stdin);
+        akun->alamat[strcspn(akun->alamat, "\n")] = '\0'; // hapus newline
+    } else {
+        strcpy(akun->alamat, "null");
+    }
+}

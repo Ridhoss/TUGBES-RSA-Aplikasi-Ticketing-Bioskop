@@ -9,10 +9,11 @@
 #include "../../models/header/ADTTree.h"
 #include "../../models/header/ADTKota.h"
 #include "../../models/header/ADTBioskop.h"
+#include "../../models/header/Auth.h"
 
 void HalamanManipulasiKota(address root);
 void HalamanManipulasiBioskop(address root);
-
+void HalamanRegister(Akun *akun, int role);
 
 
 #endif

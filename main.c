@@ -2,9 +2,11 @@
 #include <string.h>
 #include "models/header/ADTTree.h"
 #include "models/header/ADTKota.h"
+#include "models/header/Auth.h"
 #include "views/header/views.h"
 
 int main() {
+    DaftarAkun(1);
     char* rootStr = (char*) malloc(strlen("Head") + 1);
     strcpy(rootStr, "Head");
     address root = CreateTree((infotype)rootStr);
