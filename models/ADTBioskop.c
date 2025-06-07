@@ -15,27 +15,37 @@ void SimpanBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop) {
     }
 }
 
-int SearchBioskopFile(const char* namaKota, const char* namaBioskop) {
+int SearchBioskopFile(const char* namaKota, const char* namaBioskop, const BioskopInfo* bioskop) {
     FILE* file = fopen("database/bioskop.txt", "r");
     if (!file) return 0;
 
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
-        char* kota = strtok(buffer, "|");
-        char* bioskop = strtok(NULL, "|");
+
+        char* kotaNama = strtok(buffer, "|");
+        char* bioskopNama = strtok(NULL, "|");
         
-        if (kota && bioskop && strcmp(kota, namaKota) == 0 && strcmp(bioskop, namaBioskop) == 0) {
-            fclose(file);
-            return 1;
+        if (kotaNama && bioskopNama) {
+            if (strcmp(kotaNama, namaKota) == 0 &&
+                strcmp(bioskopNama, namaBioskop) == 0 &&
+                strcmp(bioskopNama, bioskop->nama) == 0) {
+
+                fclose(file);
+                return 1; 
+            }
         }
     }
     fclose(file);
     return 0;
 }
 
-// Mengedit nama bioskop dalam file
-void EditBioskopKeFile(const char* namaKota, const char* namaLama, const char* namaBaru) {
+void EditBioskopKeFile(const char* namaKota, const char* namaBioskop, const BioskopInfo* bioskop, const BioskopInfo* bioskopLama) {
+    if (!SearchBioskopFile(namaKota, namaBioskop, bioskopLama)) {
+        printf("Bioskop '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", bioskopLama->nama);
+        return;
+    }
+
     FILE* file = fopen("database/bioskop.txt", "r");
     FILE* temp = fopen("database/temp.txt", "w");
     if (!file || !temp) return;
@@ -44,13 +54,18 @@ void EditBioskopKeFile(const char* namaKota, const char* namaLama, const char* n
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char kota[100], bioskop[100];
-        sscanf(buffer, "%[^|]|%[^\n]", kota, bioskop);
+        char kotaNama[100], bioskopNama[100];
+        sscanf(buffer, "%[^|]|%[^\n]", kotaNama, bioskopNama);
 
-        if (strcmp(kota, namaKota) == 0 && strcmp(bioskop, namaLama) == 0)
-            fprintf(temp, "%s|%s\n", kota, namaBaru);
-        else
+        if (strcmp(kotaNama, namaKota) == 0 &&
+            strcmp(bioskopNama, namaBioskop) == 0 &&
+            strcmp(bioskopNama, bioskopLama->nama) == 0) {
+
+            fprintf(temp, "%s|%s\n", namaKota, bioskop->nama);
+        } else {
+
             fprintf(temp, "%s\n", buffer);
+        }
     }
 
     fclose(file);
@@ -71,7 +86,6 @@ void HapusBioskopKeFile(const char* namaKota, const char* namaBioskop) {
         char kota[100], bioskop[100];
         sscanf(buffer, "%[^|]|%[^\n]", kota, bioskop);
 
-        // Tulis kembali hanya jika bukan yang ingin dihapus
         if (!(strcmp(kota, namaKota) == 0 && strcmp(bioskop, namaBioskop) == 0))
             fprintf(temp, "%s\n", buffer);
     }
@@ -176,20 +190,26 @@ void TambahBioskopBaru(address kota, const char* namaBioskop) {
 
 
 void UbahBioskop(address node, BioskopInfo dataBaru) {
+    BioskopInfo* oldInfo = (BioskopInfo*) node->info;
     BioskopInfo* newInfo = (BioskopInfo*) malloc(sizeof(BioskopInfo));
 
-    if (newInfo) {
-        BioskopInfo* oldInfo = (BioskopInfo*) node->info;
-        char namaLama[100];
-        strcpy(namaLama, oldInfo->nama);
+   if (!newInfo) return;
 
-        *newInfo = dataBaru;
-        UbahNode(node, (infotype)newInfo);
+    *newInfo = dataBaru;
+    UbahNode(node, (infotype)newInfo);
 
-        KotaInfo* kInfo = (KotaInfo*) node->pr->info;
-        EditBioskopKeFile(kInfo->nama, namaLama, dataBaru.nama);
+    BioskopInfo bioskopLama;
+    strcpy(bioskopLama.nama, oldInfo->nama);
+
+    address nodeKota = node->pr;
+
+    if (nodeKota) {
+        KotaInfo* kInfo = (KotaInfo*) nodeKota->info;
+
+        EditBioskopKeFile(kInfo->nama, oldInfo->nama, newInfo, &bioskopLama);
     }
 
+    printf("Informasi bioskop berhasil diubah.\n");
 }
 
 // Deskripsi : Prosedur untuk menghapus bioskop dari kota
