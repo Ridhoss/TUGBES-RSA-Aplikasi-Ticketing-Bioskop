@@ -78,12 +78,47 @@ void EditTeaterKeFile(const char* namaKota, const char* namaBioskop, const Teate
     rename("database/temp.txt", "database/teater.txt");
 }
 
-void HapusTeaterKeFile(const char* namaBioskop, const char* namaTeater) {
+void HapusTeaterKeFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teaterLama) {
+    if (!SearchTeaterFile(namaKota, namaBioskop, teaterLama)) {
+        printf("Teater '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", teaterLama->nama);
+        return;
+    }
 
+    FILE* file = fopen("database/teater.txt", "r");
+    FILE* temp = fopen("database/temp.txt", "w");
+    if (!file || !temp) return;
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+
+        char kotaNama[100], bioskopNama[100], teaterNama[100];
+        int jmlKursi;
+        sscanf(buffer, "%[^|]|%[^|]|%[^|]|%d", kotaNama, bioskopNama, teaterNama, &jmlKursi);
+
+        if (!(strcmp(kotaNama, namaKota) == 0 &&
+            strcmp(bioskopNama, namaBioskop) == 0 &&
+            strcmp(teaterNama, teaterLama->nama) == 0 &&
+            jmlKursi == teaterLama->jumlahKursi)) {
+
+            fprintf(temp, "%s\n", buffer);
+        }
+    }
+
+    fclose(file);
+    fclose(temp);
+    remove("database/teater.txt");
+    rename("database/temp.txt", "database/teater.txt");
 }
 
 void KosongkanFileTeater() {
-
+    FILE* file = fopen("database/teater.txt", "w");
+    if (file != NULL) {
+        fclose(file);
+        printf("File teater.txt berhasil dikosongkan.\n");
+    } else {
+        printf("Gagal mengosongkan file teater.txt.\n");
+    }
 }
 
 void LoadTeater(address root) {
@@ -103,10 +138,10 @@ void LoadTeater(address root) {
         if (kotaNama && bioskopNama && teaterNama && jumlahKursi) {
             address kota = SearchKota(root, kotaNama);
             if (kota != NULL) {
-              address bioskop = SearchBioskop(kota, bioskopNama);
-              if (bioskop != NULL) {
-                TambahTeater(bioskop, teaterNama, jumlahKursi);
-              }
+                address bioskop = SearchBioskop(kota, bioskopNama);
+                if (bioskop != NULL) {
+                    TambahTeater(bioskop, teaterNama, jumlahKursi);
+                }
             }
         }
     }

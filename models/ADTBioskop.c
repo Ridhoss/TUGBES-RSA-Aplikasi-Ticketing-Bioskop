@@ -86,9 +86,9 @@ void KosongkanFileBioskop() {
     FILE* file = fopen("database/bioskop.txt", "w");
     if (file != NULL) {
         fclose(file);
-        printf("File Bioskop.txt berhasil dikosongkan.\n");
+        printf("File bioskop.txt berhasil dikosongkan.\n");
     } else {
-        printf("Gagal mengosongkan file kota.txt.\n");
+        printf("Gagal mengosongkan file bioskop.txt.\n");
     }
 }
 
@@ -189,7 +189,7 @@ void UbahBioskop(address node, BioskopInfo dataBaru) {
         KotaInfo* kInfo = (KotaInfo*) node->pr->info;
         EditBioskopKeFile(kInfo->nama, namaLama, dataBaru.nama);
     }
-    
+
 }
 
 // Deskripsi : Prosedur untuk menghapus bioskop dari kota

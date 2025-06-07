@@ -16,8 +16,9 @@ typedef struct {
 } TeaterInfo;
 
 void SimpanTeaterKeFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teater);
+int SearchTeaterFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teater);
 void EditTeaterKeFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teater, const TeaterInfo* teaterLama);
-// void HapusTeaterKeFile(const char* namaBioskop, const char* namaTeater);
+void HapusTeaterKeFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teaterLama);
 // void KosongkanFileTeater();
 void LoadTeater(address root);
 
