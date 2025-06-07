@@ -17,7 +17,7 @@ typedef struct {
 void SimpanBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop);
 int SearchBioskopFile(const char* namaKota, const char* namaBioskop, const BioskopInfo* bioskop);
 void EditBioskopKeFile(const char* namaKota, const char* namaBioskop, const BioskopInfo* bioskop, const BioskopInfo* bioskopLama);
-void HapusBioskopKeFile(const char* namaKota, const char* namaBioskop);
+void HapusBioskopKeFile(const char* namaKota, const char* namaBioskop, const BioskopInfo* bioskopLama);
 void KosongkanFileBioskop();
 void LoadBioskop(address root);
 

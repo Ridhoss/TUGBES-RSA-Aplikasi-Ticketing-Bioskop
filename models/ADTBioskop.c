@@ -74,7 +74,12 @@ void EditBioskopKeFile(const char* namaKota, const char* namaBioskop, const Bios
     rename("database/temp.txt", "database/bioskop.txt");
 }
 
-void HapusBioskopKeFile(const char* namaKota, const char* namaBioskop) {
+void HapusBioskopKeFile(const char* namaKota, const char* namaBioskop, const BioskopInfo* bioskopLama) {
+    if (!SearchBioskopFile(namaKota, namaBioskop, bioskopLama)) {
+        printf("Bioskop '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", bioskopLama->nama);
+        return;
+    }
+    
     FILE* file = fopen("database/bioskop.txt", "r");
     FILE* temp = fopen("database/temp.txt", "w");
     if (!file || !temp) return;
@@ -83,11 +88,14 @@ void HapusBioskopKeFile(const char* namaKota, const char* namaBioskop) {
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char kota[100], bioskop[100];
-        sscanf(buffer, "%[^|]|%[^\n]", kota, bioskop);
+        char kotaNama[100], bioskopNama[100];
+        sscanf(buffer, "%[^|]|%[^\n]", kotaNama, bioskopNama);
 
-        if (!(strcmp(kota, namaKota) == 0 && strcmp(bioskop, namaBioskop) == 0))
+        if (!(strcmp(kotaNama, namaKota) == 0 && 
+              strcmp(bioskopNama, bioskopLama->nama) == 0)) {
+
             fprintf(temp, "%s\n", buffer);
+        }
     }
 
     fclose(file);
@@ -216,16 +224,22 @@ void UbahBioskop(address node, BioskopInfo dataBaru) {
 // IS : menerima address kota dan namaBioskop sebagai string
 // FS : menghapus node bioskop dari tree dan juga dari file
 void DeleteBioskop(address kota, const char* namaBioskop) {
+
     address node = SearchBioskop(kota, namaBioskop);
+
     if (!node) {
         printf("Bioskop tidak ditemukan.\n");
         return;
     }
 
+    BioskopInfo* bioskopLama = (BioskopInfo*) node->info;
     KotaInfo* kInfo = (KotaInfo*) kota->info;
-    HapusBioskopKeFile(kInfo->nama, namaBioskop);
+    
+    HapusBioskopKeFile(kInfo->nama, namaBioskop, bioskopLama);
 
     DeleteNode(&kota, node);
+    
+    // printf("Bioskop '%s' berhasil dihapus.\n", namaBioskop);
 }
 
 // Deskripsi : Prosedur untuk menghapus semua bioskop dari kota
@@ -238,8 +252,7 @@ void DeleteAllBioskop(address kota) {
     }
 
     DeleteAllKeepRoot(kota->fs);
-    KosongkanFileBioskop(kota->info);
-    
+    KosongkanFileBioskop(kota->info); 
 }
 
 // Deskripsi : Fungsi untuk membandingkan dua bioskop berdasarkan nama

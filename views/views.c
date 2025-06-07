@@ -122,6 +122,7 @@ void HalamanManipulasiKota(address root) {
 void HalamanManipulasiBioskop(address root) {
     char namaKota[100];
     char namaBioskop[100];
+
     int pil;
     int running = 1;
 
@@ -153,7 +154,8 @@ void HalamanManipulasiBioskop(address root) {
 
         printf("\n=============================\n");
 
-        switch (pil) {
+        switch (pil) 
+        {
             case 1:
                 printf("Masukkan nama bioskop baru: ");
                 InputString(namaBioskop);
@@ -163,6 +165,7 @@ void HalamanManipulasiBioskop(address root) {
                     printf("Masukkan nama bioskop baru: ");
                     InputString(namaBioskop);
                 }
+                
                 TambahBioskopBaru(nodeKota, namaBioskop);
 
                 break;
