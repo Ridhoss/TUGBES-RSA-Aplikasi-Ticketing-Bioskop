@@ -239,7 +239,6 @@ void DeleteBioskop(address kota, const char* namaBioskop) {
 
     DeleteNode(&kota, node);
     
-    // printf("Bioskop '%s' berhasil dihapus.\n", namaBioskop);
 }
 
 // Deskripsi : Prosedur untuk menghapus semua bioskop dari kota

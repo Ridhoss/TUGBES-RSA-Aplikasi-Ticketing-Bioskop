@@ -165,27 +165,32 @@ void HalamanManipulasiBioskop(address root) {
                     printf("Masukkan nama bioskop baru: ");
                     InputString(namaBioskop);
                 }
-                
+
                 TambahBioskopBaru(nodeKota, namaBioskop);
 
                 break;
             case 2: {
+                BioskopInfo dataBaru;
+                
                 printf("Masukkan nama bioskop yang ingin diubah: ");
                 InputString(namaBioskop);
 
                 address nodeBioskop = SearchBioskop(nodeKota, namaBioskop);
 
-                if (nodeBioskop == NULL) {
-                    printf("Bioskop '%s' tidak ditemukan.\n", namaBioskop);
-                } else {
-                    char namaBaru[100];
+                if (nodeBioskop != NULL) {
                     printf("Masukkan nama bioskop baru: ");
-                    InputString(namaBaru);
+                    InputString(dataBaru.nama);
 
-                    BioskopInfo dataBaru;
-                    strcpy(dataBaru.nama, namaBaru);
+                    while(SearchBioskop(nodeKota, dataBaru.nama) != NULL) {
+                        printf("Bioskop dengan nama '%s' sudah ada\n", dataBaru.nama);
+                        printf("Masukan nama bioskop baru: ");
+                        InputString(dataBaru.nama);
+                    }
+
                     UbahBioskop(nodeBioskop, dataBaru);
-                    printf("Bioskop berhasil diubah menjadi '%s'.\n", namaBaru);
+
+                } else {
+                    printf("Bioskop dengan nama tersebut tidak ditemukan.\n");
                 }
 
                 break;
@@ -194,26 +199,21 @@ void HalamanManipulasiBioskop(address root) {
                 printf("Masukkan nama bioskop yang ingin dihapus: ");
                 InputString(namaBioskop);
 
-                if (SearchBioskop(nodeKota, namaBioskop) != NULL) {
-                    DeleteBioskop(nodeKota, namaBioskop);
-                    printf("Bioskop '%s' berhasil dihapus.\n", namaBioskop);
-                } else {
-                    printf("Bioskop '%s' tidak ditemukan.\n", namaBioskop);
-                }
+                DeleteBioskop(nodeKota, namaBioskop);
 
                 break;
             case 4: {
-                char konfirmasi;
+                char confirm;
 
                 printf("Apakah Anda yakin ingin menghapus semua bioskop dari kota ini? (y/n): ");
-                scanf(" %c", &konfirmasi);
+                scanf(" %c", &confirm);
                 while (getchar() != '\n');
 
-                if (konfirmasi == 'y' || konfirmasi == 'Y') {
+                if (confirm == 'y' || confirm == 'Y') {
                     DeleteAllBioskop(nodeKota);
                     printf("Semua bioskop berhasil dihapus dari kota '%s'.\n", namaKota);
                 } else {
-                    printf("Penghapusan dibatalkan.\n");
+                    printf("Batal Menghapus.\n");
                 }
 
                 break;
@@ -222,10 +222,13 @@ void HalamanManipulasiBioskop(address root) {
                 printf("Masukkan nama bioskop yang ingin dicari: ");
                 InputString(namaBioskop);
 
-                if (SearchBioskop(nodeKota, namaBioskop) != NULL) {
-                    printf("Bioskop '%s' ditemukan di kota '%s'.\n", namaBioskop, namaKota);
+                address hasilCari = SearchBioskop(nodeKota, namaBioskop);
+
+                if (hasilCari != NULL) {
+                    BioskopInfo* bioskop = (BioskopInfo*)hasilCari->info;
+                    printf("Bioskop ditemukan: %s di kota %s\n", bioskop->nama, namaKota);
                 } else {
-                    printf("Bioskop '%s' tidak ditemukan di kota '%s'.\n", namaBioskop, namaKota);
+                    printf("Bioskop dengan nama '%s' tidak ditemukan.\n", namaBioskop);
                 }
 
                 break;
