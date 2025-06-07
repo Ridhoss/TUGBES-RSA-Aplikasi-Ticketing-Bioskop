@@ -12,21 +12,79 @@ void SimpanTeaterKeFile(const char* namaKota, const char* namaBioskop, const Tea
     }
 }
 
-// int SearchTeaterFile(const char* namaBioskop, const char* namaTeater) {
+int SearchTeaterFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teater) {
+    FILE* file = fopen("database/teater.txt", "r");
+    if (!file) return 0;
 
-// }
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
 
-// void EditTeaterKeFile(const char* namaBioskop, const char* namaLama, const char* namaBaru) {
+        char* kotaNama = strtok(buffer, "|");
+        char* bioskopNama = strtok(NULL, "|");
+        char* teaterNama = strtok(NULL, "|");
+        char* jumlahKursiStr = strtok(NULL, "|");
+        
+        if (kotaNama && bioskopNama && teaterNama && jumlahKursiStr) {
+            int jumlahKursi = atoi(jumlahKursiStr);
 
-// }
+            if (strcmp(kotaNama, namaKota) == 0 &&
+                strcmp(bioskopNama, namaBioskop) == 0 &&
+                strcmp(teaterNama, teater->nama) == 0 &&
+                jumlahKursi == teater->jumlahKursi) {
 
-// void HapusTeaterKeFile(const char* namaBioskop, const char* namaTeater) {
+                fclose(file);
+                return 1;
+            }
+        }
+    }
+    fclose(file);
+    return 0;
+}
 
-// }
+void EditTeaterKeFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teater, const TeaterInfo* teaterLama) {
+    if (!SearchTeaterFile(namaKota, namaBioskop, teaterLama)) {
+        printf("Teater '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", teaterLama->nama);
+        return;
+    }
 
-// void KosongkanFileTeater() {
+    FILE* file = fopen("database/teater.txt", "r");
+    FILE* temp = fopen("database/temp.txt", "w");
+    if (!file || !temp) return;
 
-// }
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+
+        char kotaNama[100], bioskopNama[100], teaterNama[100];
+        int jmlKursi;
+        sscanf(buffer, "%[^|]|%[^|]|%[^|]|%d", kotaNama, bioskopNama, teaterNama, &jmlKursi);
+
+        if (strcmp(kotaNama, namaKota) == 0 &&
+            strcmp(bioskopNama, namaBioskop) == 0 &&
+            strcmp(teaterNama, teaterLama->nama) == 0 &&
+            jmlKursi == teaterLama->jumlahKursi) {
+
+            fprintf(temp, "%s|%s|%s|%d\n", namaKota, namaBioskop, teater->nama, teater->jumlahKursi);
+        } else {
+
+            fprintf(temp, "%s\n", buffer);
+        }
+    }
+
+    fclose(file);
+    fclose(temp);
+    remove("database/teater.txt");
+    rename("database/temp.txt", "database/teater.txt");
+}
+
+void HapusTeaterKeFile(const char* namaBioskop, const char* namaTeater) {
+
+}
+
+void KosongkanFileTeater() {
+
+}
 
 void LoadTeater(address root) {
     FILE* file = fopen("database/teater.txt", "r");
@@ -114,9 +172,31 @@ void TambahTeaterBaru(address kota, address bioskop, const char* namaTeater, int
     printf("Teater '%s' berhasil ditambahkan dan disimpan ke file.\n", namaTeater);
 }
 
-// void UbahTeater(address node, TeaterInfo dataBaru) {
+void UbahTeater(address node, TeaterInfo dataBaru) {
+    TeaterInfo* oldInfo = (TeaterInfo*) node->info;
+    TeaterInfo* newInfo = (TeaterInfo*) malloc(sizeof(TeaterInfo));
 
-// }
+    if (!newInfo) return;
+
+    *newInfo = dataBaru;
+    UbahNode(node, (infotype)newInfo);
+
+    TeaterInfo teaterLama;
+    strcpy(teaterLama.nama, oldInfo->nama);
+    teaterLama.jumlahKursi = oldInfo->jumlahKursi;
+
+    address nodeBioskop = node->pr;
+    address nodeKota = nodeBioskop ? nodeBioskop->pr : NULL;
+
+    if (nodeBioskop && nodeKota) {
+        BioskopInfo* bInfo = (BioskopInfo*) nodeBioskop->info;
+        KotaInfo* kInfo = (KotaInfo*) nodeKota->info;
+
+        EditTeaterKeFile(kInfo->nama, bInfo->nama, newInfo, &teaterLama);
+    }
+
+    printf("Informasi teater berhasil diubah.\n");
+}
 
 // void DeleteTeater(address bioskop, const char* namaTeater) {
   
@@ -126,13 +206,19 @@ void TambahTeaterBaru(address kota, address bioskop, const char* namaTeater, int
 
 // }
 
-// int CompareTeater(infotype a, infotype b) {
+int CompareTeater(infotype a, infotype b) {
+    TeaterInfo* teater1 = (TeaterInfo*) a;
+    TeaterInfo* teater2 = (TeaterInfo*) b;
 
-// }
+    return strcmp(teater1->nama, teater2->nama);
+}
 
-// address SearchTeater(address bioskop, const char* namaTeater) {
+address SearchTeater(address bioskop, const char* namaTeater) {
+    TeaterInfo target;
+    strcpy(target.nama, namaTeater);
 
-// }
+    return Search(bioskop, (infotype)&target, CompareTeater);
+}
 
 void PrintTeater(address node, int level) {
     if (IsTreeEmpty(node)) {

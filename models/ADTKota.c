@@ -50,14 +50,14 @@ void EditKotaKeFile(const char* namaLama, const char* namaBaru) {
         return;
     }
 
-    char buffer[256];
     FILE* temp = fopen("database/temp.txt", "w");
     if (!temp) {
         printf("Gagal membuka file sementara.\n");
         fclose(file);
         return;
     }
-
+    
+    char buffer[256];
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
         if (strcmp(buffer, namaLama) == 0) {

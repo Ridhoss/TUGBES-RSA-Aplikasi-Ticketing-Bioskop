@@ -177,8 +177,8 @@ void TambahBioskopBaru(address kota, const char* namaBioskop) {
 
 void UbahBioskop(address node, BioskopInfo dataBaru) {
     BioskopInfo* newInfo = (BioskopInfo*) malloc(sizeof(BioskopInfo));
+
     if (newInfo) {
-    
         BioskopInfo* oldInfo = (BioskopInfo*) node->info;
         char namaLama[100];
         strcpy(namaLama, oldInfo->nama);
@@ -189,6 +189,7 @@ void UbahBioskop(address node, BioskopInfo dataBaru) {
         KotaInfo* kInfo = (KotaInfo*) node->pr->info;
         EditBioskopKeFile(kInfo->nama, namaLama, dataBaru.nama);
     }
+    
 }
 
 // Deskripsi : Prosedur untuk menghapus bioskop dari kota

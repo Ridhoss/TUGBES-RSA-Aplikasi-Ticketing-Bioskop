@@ -292,6 +292,25 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                 break;
             case 2:
                 // Ubah Informasi Teater
+                PrintTeater(nodeBioskop, 0);
+
+                printf("Masukkan Nama Teater yang Ingin Diubah: ");
+                InputString(namaTeater);
+
+                address nodeTeater = SearchTeater(nodeBioskop, namaTeater);
+                if (!nodeTeater) {
+                    printf("Teater dengan nama '%s' tidak ditemukan.\n", namaTeater);
+                    break;
+                }
+
+                TeaterInfo dataBaru;
+                printf("Masukkan Nama Teater Baru: ");
+                InputString(dataBaru.nama);
+
+                printf("Masukkan Jumlah Kursi Baru: ");
+                scanf("%d", &dataBaru.jumlahKursi);
+
+                UbahTeater(nodeTeater, dataBaru);
 
                 break;
             case 3:
@@ -299,7 +318,18 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                 
                 break;
             case 4:
-                // Cari Teater
+                // Cari Teater                
+                printf("Masukkan teater yang ingin dicari: ");
+                InputString(namaTeater);
+
+                address hasilCari = SearchTeater(root, namaTeater);
+
+                if (hasilCari != NULL) {
+                    TeaterInfo* teater = (TeaterInfo*)hasilCari->info;
+                    printf("Teater ditemukan: %s\n", teater->nama);
+                } else {
+                    printf("Teater dengan nama '%s' tidak ditemukan.\n", namaTeater);
+                }
 
                 break;
             case 5:
