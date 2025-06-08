@@ -15,7 +15,7 @@ void SimpanBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop) {
     }
 }
 
-int SearchBioskopFile(const char* namaKota, const char* namaBioskop, const BioskopInfo* bioskop) {
+int SearchBioskopFile(const char* namaKota, const BioskopInfo* bioskop) {
     FILE* file = fopen("database/bioskop.txt", "r");
     if (!file) return 0;
 
@@ -28,7 +28,6 @@ int SearchBioskopFile(const char* namaKota, const char* namaBioskop, const Biosk
         
         if (kotaNama && bioskopNama) {
             if (strcmp(kotaNama, namaKota) == 0 &&
-                strcmp(bioskopNama, namaBioskop) == 0 &&
                 strcmp(bioskopNama, bioskop->nama) == 0) {
 
                 fclose(file);
@@ -40,8 +39,8 @@ int SearchBioskopFile(const char* namaKota, const char* namaBioskop, const Biosk
     return 0;
 }
 
-void EditBioskopKeFile(const char* namaKota, const char* namaBioskop, const BioskopInfo* bioskop, const BioskopInfo* bioskopLama) {
-    if (!SearchBioskopFile(namaKota, namaBioskop, bioskopLama)) {
+void EditBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop, const BioskopInfo* bioskopLama) {
+    if (!SearchBioskopFile(namaKota, bioskopLama)) {
         printf("Bioskop '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", bioskopLama->nama);
         return;
     }
@@ -58,7 +57,6 @@ void EditBioskopKeFile(const char* namaKota, const char* namaBioskop, const Bios
         sscanf(buffer, "%[^|]|%[^\n]", kotaNama, bioskopNama);
 
         if (strcmp(kotaNama, namaKota) == 0 &&
-            strcmp(bioskopNama, namaBioskop) == 0 &&
             strcmp(bioskopNama, bioskopLama->nama) == 0) {
 
             fprintf(temp, "%s|%s\n", namaKota, bioskop->nama);
@@ -74,8 +72,8 @@ void EditBioskopKeFile(const char* namaKota, const char* namaBioskop, const Bios
     rename("database/temp.txt", "database/bioskop.txt");
 }
 
-void HapusBioskopKeFile(const char* namaKota, const char* namaBioskop, const BioskopInfo* bioskopLama) {
-    if (!SearchBioskopFile(namaKota, namaBioskop, bioskopLama)) {
+void HapusBioskopKeFile(const char* namaKota, const BioskopInfo* bioskopLama) {
+    if (!SearchBioskopFile(namaKota, bioskopLama)) {
         printf("Bioskop '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", bioskopLama->nama);
         return;
     }
@@ -214,7 +212,7 @@ void UbahBioskop(address node, BioskopInfo dataBaru) {
     if (nodeKota) {
         KotaInfo* kInfo = (KotaInfo*) nodeKota->info;
 
-        EditBioskopKeFile(kInfo->nama, oldInfo->nama, newInfo, &bioskopLama);
+        EditBioskopKeFile(kInfo->nama, newInfo, &bioskopLama);
     }
 
     printf("Informasi bioskop berhasil diubah.\n");
@@ -223,35 +221,39 @@ void UbahBioskop(address node, BioskopInfo dataBaru) {
 // Deskripsi : Prosedur untuk menghapus bioskop dari kota
 // IS : menerima address kota dan namaBioskop sebagai string
 // FS : menghapus node bioskop dari tree dan juga dari file
-void DeleteBioskop(address kota, const char* namaBioskop) {
+void DeleteBioskop(address bioskop) {
+    if (bioskop == NULL) return;
 
-    address node = SearchBioskop(kota, namaBioskop);
+    BioskopInfo* oldInfo = (BioskopInfo*) bioskop->info;
 
-    if (!node) {
-        printf("Bioskop tidak ditemukan.\n");
-        return;
+    BioskopInfo bioskopLama;
+    strcpy(bioskopLama.nama, oldInfo->nama);
+
+    address nodeKota = bioskop->pr;
+
+    if (nodeKota) {
+        KotaInfo* kInfo = (KotaInfo*) nodeKota->info;
+        HapusBioskopKeFile(kInfo->nama, &bioskopLama);
     }
 
-    BioskopInfo* bioskopLama = (BioskopInfo*) node->info;
-    KotaInfo* kInfo = (KotaInfo*) kota->info;
-    
-    HapusBioskopKeFile(kInfo->nama, namaBioskop, bioskopLama);
+    DeleteNode(&nodeKota, bioskop);
 
-    DeleteNode(&kota, node);
-    
+    printf("Bioskop '%s' berhasil dihapus.\n", bioskopLama.nama);
 }
 
 // Deskripsi : Prosedur untuk menghapus semua bioskop dari kota
 // IS : menerima address kota
 // FS : menghapus semua node bioskop dari tree dan juga mengosongkan file bioskop
 void DeleteAllBioskop(address kota) {
-    if (kota == NULL) {
+   if (IsTreeEmpty(kota)) {
         printf("Kota tidak valid atau kosong.\n");
         return;
     }
 
-    DeleteAllKeepRoot(kota->fs);
-    KosongkanFileBioskop(kota->info); 
+    DeleteAllKeepRoot(kota);
+    KosongkanFileBioskop(); 
+   
+   
 }
 
 // Deskripsi : Fungsi untuk membandingkan dua bioskop berdasarkan nama

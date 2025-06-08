@@ -15,9 +15,9 @@ typedef struct {
 } BioskopInfo;
 
 void SimpanBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop);
-int SearchBioskopFile(const char* namaKota, const char* namaBioskop, const BioskopInfo* bioskop);
-void EditBioskopKeFile(const char* namaKota, const char* namaBioskop, const BioskopInfo* bioskop, const BioskopInfo* bioskopLama);
-void HapusBioskopKeFile(const char* namaKota, const char* namaBioskop, const BioskopInfo* bioskopLama);
+int SearchBioskopFile(const char* namaKota, const BioskopInfo* bioskop);
+void EditBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop, const BioskopInfo* bioskopLama);
+void HapusBioskopKeFile(const char* namaKota, const BioskopInfo* bioskopLama);
 void KosongkanFileBioskop();
 void LoadBioskop(address root);
 
@@ -29,7 +29,7 @@ void TambahBioskopBaru(address kota, const char* namaBioskop);
 
 void UbahBioskop(address node, BioskopInfo dataBaru);
 
-void DeleteBioskop(address kota, const char* namaBioskop);
+void DeleteBioskop(address bioskop);
 void DeleteAllBioskop(address kota);
 
 int CompareBioskop(infotype a, infotype b);

@@ -138,6 +138,7 @@ void HalamanManipulasiBioskop(address root) {
         return;
     }
 
+    PrintBioskop(nodeKota, 0);
     while (running) {
         printf("\n==== Manipulasi Bioskop (Kota: %s) ====\n", namaKota);
         printf("1. Tambah Bioskop\n");
@@ -195,13 +196,20 @@ void HalamanManipulasiBioskop(address root) {
 
                 break;
             }
-            case 3:
+            case 3: {
                 printf("Masukkan nama bioskop yang ingin dihapus: ");
                 InputString(namaBioskop);
 
-                DeleteBioskop(nodeKota, namaBioskop);
+                address hasilCari = SearchBioskop(nodeKota, namaBioskop);
+                if (!hasilCari) {
+                    printf("Bioskop dengan nama '%s' tidak ditemukan.\n", namaBioskop);
+                    break;
+                }
+
+                DeleteBioskop(hasilCari);
 
                 break;
+            }
             case 4: {
                 char confirm;
 
