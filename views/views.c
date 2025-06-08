@@ -277,9 +277,10 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
         printf("1. Tambah Teater\n");
         printf("2. Ubah Informasi Teater\n");
         printf("3. Hapus Teater\n");
-        printf("4. Cari Teater\n");
-        printf("5. Tampilkan Semua Teater\n");
-        printf("6. Kembali ke Menu Bioskop\n");
+        printf("4. Hapus Semua Teater\n");
+        printf("5. Cari Teater\n");
+        printf("6. Tampilkan Semua Teater\n");
+        printf("7. Kembali ke Menu Bioskop\n");
         printf("Pilih: ");
         scanf("%d", &pil);
         while (getchar() != '\n');
@@ -296,7 +297,7 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                 TambahTeaterBaru(nodeKota, nodeBioskop, namaTeater, jumlahKursi);
 
                 break;
-            case 2:
+            case 2: {
                 // Ubah Informasi Teater
                 PrintTeater(nodeBioskop, 0);
 
@@ -319,11 +320,42 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                 UbahTeater(nodeTeater, dataBaru);
 
                 break;
-            case 3:
+            }
+            case 3: {
                 // Hapus Teater
-                
+                PrintTeater(nodeBioskop, 0);
+
+                printf("Masukkan Nama Teater yang Ingin Dihapus: ");
+                InputString(namaTeater);
+
+                address nodeTeater = SearchTeater(nodeBioskop, namaTeater);
+                if (!nodeTeater) {
+                    printf("Teater dengan nama '%s' tidak ditemukan.\n", namaTeater);
+                    break;
+                }
+
+                DeleteTeater(nodeTeater);
+
                 break;
-            case 4:
+            }
+            case 4: {
+                // Hapus Semua Teater
+                char konfirmasi;
+
+                printf("Apakah Anda yakin ingin menghapus semua data teater dari bioskop ini? (y/n): ");
+                scanf(" %c", &konfirmasi);
+                while (getchar() != '\n');
+
+                if (konfirmasi == 'y' || konfirmasi == 'Y') {
+                    DeleteAllTeater(nodeBioskop);
+                    printf("Semua teater berhasil dihapus.\n");
+                } else {
+                    printf("Penghapusan dibatalkan.\n");
+                }
+
+                break;
+            }
+            case 5:
                 // Cari Teater                
                 printf("Masukkan teater yang ingin dicari: ");
                 InputString(namaTeater);
@@ -338,12 +370,12 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                 }
 
                 break;
-            case 5:
+            case 6:
                 // Tampilkan Semua Teater
                 PrintTeater(nodeBioskop, 0);
 
                 break;
-            case 6:
+            case 7:
                 running = 0;
 
                 break;

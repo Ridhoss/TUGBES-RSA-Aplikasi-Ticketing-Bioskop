@@ -30,8 +30,8 @@ void TambahTeaterBaru(address kota, address bioskop, const char* namaTeater, int
 
 void UbahTeater(address node, TeaterInfo dataBaru);
 
-// void DeleteTeater(address bioskop, const char* namaTeater);
-// void DeleteAllTeater(address bioskop);
+void DeleteTeater(address teater);
+void DeleteAllTeater(address bioskop);
 
 int CompareTeater(infotype a, infotype b);
 address SearchTeater(address bioskop, const char* namaTeater);

@@ -230,16 +230,42 @@ void UbahTeater(address node, TeaterInfo dataBaru) {
         EditTeaterKeFile(kInfo->nama, bInfo->nama, newInfo, &teaterLama);
     }
 
-    printf("Informasi teater berhasil diubah.\n");
+    printf("Teater '%s' berhasil diubah dan disimpan ke file.\n", teaterLama.nama);
 }
 
-// void DeleteTeater(address bioskop, const char* namaTeater) {
-  
-// }
+void DeleteTeater(address teater) {
+    if (teater == NULL) return;
 
-// void DeleteAllTeater(address bioskop) {
+    TeaterInfo* oldInfo = (TeaterInfo*) teater->info;
 
-// }
+    TeaterInfo teaterLama;
+    strcpy(teaterLama.nama, oldInfo->nama);
+    teaterLama.jumlahKursi = oldInfo->jumlahKursi;
+
+    address nodeBioskop = teater->pr;
+    address nodeKota = nodeBioskop ? nodeBioskop->pr : NULL;
+
+    if (nodeBioskop && nodeKota) {
+        BioskopInfo* bInfo = (BioskopInfo*) nodeBioskop->info;
+        KotaInfo* kInfo = (KotaInfo*) nodeKota->info;
+
+        HapusTeaterKeFile(kInfo->nama, bInfo->nama, &teaterLama);
+    }
+
+    DeleteNode(&nodeBioskop, teater);
+
+    printf("Teater '%s' berhasil dihapus.\n", teaterLama.nama);
+}
+
+void DeleteAllTeater(address bioskop) {
+    if (IsTreeEmpty(bioskop)) {
+        printf("Biioskop tidak valid atau kosong.\n");
+        return;
+    }
+
+    DeleteAllKeepRoot(bioskop);
+    KosongkanFileTeater();
+}
 
 int CompareTeater(infotype a, infotype b) {
     TeaterInfo* teater1 = (TeaterInfo*) a;
