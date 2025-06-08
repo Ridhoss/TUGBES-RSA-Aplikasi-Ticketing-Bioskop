@@ -1,7 +1,8 @@
 #include "header/ADTAkun.h"
 #include "../views/header/Auth.h"
 
-const char *users = "../database/users.txt";
+const char *users = "database/users.txt";
+
 
 int BacaFileAkun(Akun *akun){
     FILE *file = fopen(users, "r");
@@ -77,6 +78,9 @@ void DaftarAkun(int role) {
         printf("Gagal membuka file untuk menyimpan data!\n");
         return;
     }
+    fprintf(file, "%d,%s,%s,%s,%s,%d,%d\n",
+        akun.id, akun.username, akun.password,
+        akun.phone, akun.alamat, akun.saldo, akun.role);
 
     fclose(file);
 
