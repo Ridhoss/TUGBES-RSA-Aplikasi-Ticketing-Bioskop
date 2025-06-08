@@ -98,10 +98,9 @@ void HalamanAwal(int *loggedIn, int *idLogin) {
             HalamanLogin(loggedIn, idLogin);
             if (*loggedIn) break;
         } else if (masuk == 2) {
-            Akun akunBaru;
-            HalamanRegister(&akunBaru, akunBaru.role);
-
-        } else if (masuk == 3) {   
+            int role = 1;
+            DaftarAkun(role);
+        } else if (masuk == 3) {
             *loggedIn = 2;
             break;
         } else {
@@ -109,3 +108,4 @@ void HalamanAwal(int *loggedIn, int *idLogin) {
         }
     }
 }
+
