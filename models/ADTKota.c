@@ -18,14 +18,14 @@ void SimpanKotaKeFile(const KotaInfo* kota) {
 // Deskripsi : fungsi untuk mencari kota dalam file
 // IS : menerima nama kota sebagai string   
 // FS : mengembalikan 1 jika kota ditemukan, 0 jika tidak ditemukan
-int SearchKotaFile(const char* namaKota) {
+int SearchKotaFile(const KotaInfo* kota) {
     FILE* file = fopen("database/kota.txt", "r");
     if (!file) return 0;
 
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
-        if (strcmp(buffer, namaKota) == 0) {
+        if (strcmp(buffer, kota->nama) == 0) {
             fclose(file);
             return 1;
         }
@@ -38,9 +38,9 @@ int SearchKotaFile(const char* namaKota) {
 // Deskripsi : Prosedur untuk mengedit nama kota dalam file
 // IS : menerima nama lama dan nama baru sebagai string
 // FS : mengubah nama kota dalam file "database/kota.txt"
-void EditKotaKeFile(const char* namaLama, const char* namaBaru) {
-    if (!SearchKotaFile(namaLama)) {
-        printf("Kota '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", namaLama);
+void EditKotaKeFile(const KotaInfo* kotaLama, const KotaInfo* kotaBaru) {
+    if (!SearchKotaFile(kotaLama)) {
+        printf("Kota '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", kotaLama->nama);
         return;
     }
 
@@ -60,8 +60,8 @@ void EditKotaKeFile(const char* namaLama, const char* namaBaru) {
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
-        if (strcmp(buffer, namaLama) == 0) {
-            fprintf(temp, "%s\n", namaBaru);
+        if (strcmp(buffer, kotaLama->nama) == 0) {
+            fprintf(temp, "%s\n", kotaBaru->nama);
         } else {
             fprintf(temp, "%s\n", buffer);
         }
@@ -73,15 +73,15 @@ void EditKotaKeFile(const char* namaLama, const char* namaBaru) {
     remove("database/kota.txt");
     rename("database/temp.txt", "database/kota.txt");
 
-    printf("Kota '%s' berhasil diubah menjadi '%s'.\n", namaLama, namaBaru);
+    printf("Kota '%s' berhasil diubah menjadi '%s'.\n", kotaLama->nama, kotaBaru->nama);
 }
 
 // Deskripsi : Prosedur untuk menghapus kota dari file
 // IS : menerima nama kota sebagai string
 // FS : menghapus nama kota dari file "database/kota.txt"
-void HapusKotaKeFile(const char* namaKota) {
-    if (!SearchKotaFile(namaKota)) {
-        printf("Kota '%s' tidak ditemukan. Tidak dapat menghapus.\n", namaKota);
+void HapusKotaKeFile(const KotaInfo* kotaLama) {
+    if (!SearchKotaFile(kotaLama)) {
+        printf("Kota '%s' tidak ditemukan. Tidak dapat menghapus.\n", kotaLama->nama);
         return;
     }
 
@@ -101,7 +101,7 @@ void HapusKotaKeFile(const char* namaKota) {
 
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
-        if (strcmp(buffer, namaKota) != 0) {
+        if (strcmp(buffer, kotaLama->nama) != 0) {
             fprintf(temp, "%s\n", buffer);
         }
     }
@@ -112,7 +112,7 @@ void HapusKotaKeFile(const char* namaKota) {
     remove("database/kota.txt");
     rename("database/temp.txt", "database/kota.txt");
 
-    printf("Kota '%s' berhasil dihapus.\n", namaKota);
+    printf("Kota '%s' berhasil dihapus.\n", kotaLama->nama);
 }
 
 // Deskripsi : Prosedur untuk mengosongkan file kota.txt
@@ -224,31 +224,30 @@ void UbahKota(address node, KotaInfo dataBaru) {
         *newInfo = dataBaru;
         UbahNode(node, (infotype)newInfo);
 
-        EditKotaKeFile(namaLama, dataBaru.nama);
+        EditKotaKeFile(oldInfo, newInfo);
     }
 }
 
 // Deskripsi : Prosedur untuk menghapus kota dari tree dan file
 // IS : menerima address root dan namaKota sebagai string
 // FS : menghapus node yang sesuai dari tree dan menghapus nama kota dari file
-void DeleteKota(address root, const char* namaKota) {
-    if (IsTreeEmpty(root)) {
-        printf("Tree kosong.\n");
-        return;
+void DeleteKota(address kota) {
+    if (kota == NULL) return;
+
+    KotaInfo* oldInfo = (KotaInfo*) kota->info;
+
+    KotaInfo kotaLama;
+    strcpy(kotaLama.nama, oldInfo->nama);
+
+    address nodeRoot = kota->pr;
+
+    if (nodeRoot) {
+        HapusKotaKeFile(&kotaLama);
+
+        DeleteNode(&nodeRoot, kota);
+
+        printf("Node %s berhasil dihapus.\n", kotaLama.nama);
     }
-
-    address delNode = SearchKota(root, namaKota);
-    
-    if (delNode == NULL) {
-        printf("Node %s tidak ditemukan.\n", namaKota);
-        return;
-    }
-
-    HapusKotaKeFile(namaKota);
-
-    DeleteNode(&root, delNode);
-
-    printf("Node %s berhasil dihapus.\n", namaKota);
 }
 
 // Deskripsi : Prosedur untuk menghapus semua kota dari tree

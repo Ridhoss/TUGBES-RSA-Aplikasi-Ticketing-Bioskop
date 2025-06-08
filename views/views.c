@@ -67,13 +67,21 @@ void HalamanManipulasiKota(address root) {
 
                 break;
             }
-            case 3:
+            case 3: {
                 printf("Masukkan nama node yang ingin dihapus: ");
                 InputString(namaKota);
 
-                DeleteKota(root, namaKota);
+                address delNode = SearchKota(root, namaKota);
+    
+                if (delNode == NULL) {
+                    printf("Node %s tidak ditemukan.\n", namaKota);
+                    return;
+                }
+
+                DeleteKota(delNode);
 
                 break;
+            }
             case 4: {
                 char confirm;
 
