@@ -1,8 +1,7 @@
-#include <stdio.h>
-#include "header/Auth.h"
-#include "../views/header/views.h"
+#include "header/ADTAkun.h"
+#include "../views/header/Auth.h"
 
-const char *users = "database/users.txt";
+const char *users = "../database/users.txt";
 
 int BacaFileAkun(Akun *akun){
     FILE *file = fopen(users, "r");
@@ -122,18 +121,3 @@ void Clear(int *idLogin, char *username, char *password, char *phone, char *alam
     *role = 0;
     *idLogin = 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
