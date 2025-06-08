@@ -14,6 +14,7 @@
 void HalamanManipulasiKota(address root);
 void HalamanManipulasiBioskop(address root);
 void HalamanRegister(Akun *akun, int role);
+void HalamanLogin(int *loggedIn, int *idLogin);
 
 
 #endif

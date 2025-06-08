@@ -190,6 +190,7 @@ void HalamanManipulasiBioskop(address root) {
 }
 
 void HalamanRegister(Akun *akun, int role){
+
     char password_check[50];
 
     printf("== Registrasi Akun Baru ==\n");
@@ -221,8 +222,34 @@ void HalamanRegister(Akun *akun, int role){
         printf("Masukkan Alamat: ");
         getchar();
         fgets(akun->alamat, sizeof(akun->alamat), stdin);
-        akun->alamat[strcspn(akun->alamat, "\n")] = '\0'; // hapus newline
+        akun->alamat[strcspn(akun->alamat, "\n")] = '\0';
     } else {
         strcpy(akun->alamat, "null");
+    }
+}
+
+void HalamanLogin(int *loggedIn, int *idLogin){
+    char username[50];
+    char password[50];
+    Akun akun[100];
+    int total_akun = BacaFileAkun(akun);
+
+    printf("=======================\n");
+    printf("======== MASUK ========\n");
+    printf("=======================\n");
+
+    printf("Masukan Username: ");
+    scanf("%s", username);
+    printf("Masukan Password: ");
+    scanf("%s", password);
+
+    *loggedIn = Login(username, password, akun, total_akun, idLogin);
+    
+    if (*loggedIn) {
+        printf("Login berhasil!\n");
+    } else {
+        printf("=============================\n");
+        printf("Username atau Password salah!\n");   
+        printf("=============================\n");
     }
 }

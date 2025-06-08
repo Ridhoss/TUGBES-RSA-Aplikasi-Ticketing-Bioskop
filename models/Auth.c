@@ -19,7 +19,6 @@ int BacaFileAkun(Akun *akun){
     return index;
 }
 
-
 int CekDuplikat(const char *username) {
     FILE *file = fopen(users, "r");
     if (file == NULL) return 0; // file belum ada, jadi username belum ada
@@ -55,6 +54,7 @@ int get_last_id() {
 }
 
 void DaftarAkun(int role) {
+
     Akun akun;
     akun.role = role;
     akun.saldo = 0;
@@ -83,3 +83,57 @@ void DaftarAkun(int role) {
 
     printf("Registrasi berhasil!\n");
 }
+
+void Login(const char *username, const char *password, Akun *akun, int total_akun, int *idLogin){
+    for (int i = 0; i < total_akun; i++)
+    {
+        if (strcmp(username, akun[i].username) == 0 && strcmp(password, akun[i].password) == 0)
+        {
+            *idLogin = akun[i].id;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+Akun* CariAkunById(int idLogin) {
+    static Akun akun[100];
+    int totalAkun = BacaFileAkun(akun);
+
+    for (int i = 0; i < totalAkun; i++) {
+        if (akun[i].id == idLogin) {
+            return &akun[i];
+        }
+    }
+
+    return NULL;
+}
+
+void Logout(int *con){
+    *con = 0;
+}
+
+void Clear(int *idLogin, char *username, char *password, char *phone, char *alamat, int *saldo, int *role){
+    strcpy(username,"");
+    strcpy(password,"");
+    strcpy(phone,"");
+    strcpy(alamat,"");
+    *saldo = 0;
+    *role = 0;
+    *idLogin = 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

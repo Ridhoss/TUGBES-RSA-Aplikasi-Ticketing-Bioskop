@@ -20,15 +20,11 @@ int get_last_id();
 //* Procedure daftar user
 void DaftarAkun(int role);
 //* Procedure login
-void Login(int *loggedIn, int *idLogin);
-//* Procedure daftar
-void Daftar();
-//* Procedure masuk
-void Masuk(int *loggedIn, int *idLogin);
-//* Procedure CariAkun
-int CariAkun(int idLogin, char *username, char *password, char *phone, char *alamat, int *saldo, int role);
+int Login(const char *username, const char *password, Akun *akun, int total_akun, int *idLogin);
+//* Function CariAkun
+Akun* CariAkunById(int idLogin);
 //* Procedure logout
 void Logout(int *con);
 //* Clear Account
-void Clear(int *idLogin, char *username, char *password, char *phone, char *alamat, int *saldo, int role);
+void Clear(int *idLogin, char *username, char *password, char *phone, char *alamat, int *saldo, int *role);
 #endif
