@@ -10,13 +10,12 @@
 #include "../../models/header/ADTKota.h"
 #include "../../models/header/ADTBioskop.h"
 #include "../../models/header/ADTTeater.h"
-#include "../../models/header/Auth.h"
+
 
 void HalamanManipulasiKota(address root);
 void HalamanManipulasiBioskop(address root);
 void HalamanManipulasiTeater(address root, address nodeKota);
-void HalamanRegister(Akun *akun, int role);
-void HalamanLogin(int *loggedIn, int *idLogin);
+
 
 
 #endif

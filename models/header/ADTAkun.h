@@ -1,5 +1,7 @@
-#ifndef AUTH_H
-#define AUTH_H
+#ifndef ADTAKUN_H
+#define ADTAKUN_H
+#include <string.h>
+#include <stdio.h>
 
 typedef struct {
     int id;

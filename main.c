@@ -4,11 +4,15 @@
 #include "models/header/ADTKota.h"
 #include "models/header/ADTBioskop.h"
 #include "models/header/ADTTeater.h"
-#include "models/header/Auth.h"
+#include "models/header/ADTAkun.h"
 #include "views/header/views.h"
+#include "views/header/Auth.h"
 
 int main() {
-    DaftarAkun(1);
+    int loggedIn = 0;  // status login, 0 = belum login
+    int idLogin = 1; // 1 = sudah login
+    HalamanAwal(&loggedIn, &idLogin);
+    
     char* rootStr = (char*) malloc(strlen("Head") + 1);
     strcpy(rootStr, "Head");
     address root = CreateTree((infotype)rootStr, ROOT);
