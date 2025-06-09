@@ -30,7 +30,6 @@ typedef struct tNode {
 
 typedef int (*CompareFunc)(infotype a, infotype b);
 
-
 boolean IsTreeEmpty(address root);
 
 address Alokasi(infotype X, NodeType tipe);

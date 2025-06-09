@@ -1,4 +1,7 @@
 #include "header/ADTTree.h"
+#include "header/ADTKota.h"
+#include "header/ADTBioskop.h"
+#include "header/ADTTeater.h" 
 
 static int currentId = 1;
 
@@ -178,7 +181,16 @@ void PrintChildrenOnly(address node, int level) {
     address child = node->fs;
     while (child != NULL) {
         for (int i = 0; i < level; i++) printf("  ");
-        printf("- %s\n", child->info);
+        if (child->type == KOTA) {
+            KotaInfo* info = (KotaInfo*) child->info;
+            printf("- Kota: %s\n", info->nama);
+        } else if (child->type == BIOSKOP) {
+            BioskopInfo* info = (BioskopInfo*) child->info;
+            printf("- Bioskop: %s\n", info->nama);
+        } else if (child->type == TEATER) {
+            TeaterInfo* info = (TeaterInfo*) child->info;
+            printf("- Teater: %s || Jumlah Kursi: %d\n", info->nama, info->jumlahKursi);
+        }
         // PrintTree(child->fs, level + 1);
         child = child->nb;
     }

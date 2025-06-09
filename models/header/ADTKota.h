@@ -9,6 +9,7 @@
 
 #include "ADTTree.h"
 
+
 typedef struct {
     char nama[100];
 } KotaInfo;
