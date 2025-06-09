@@ -59,8 +59,6 @@ void HalamanManipulasiKota(address root) {
                     }
 
                     UbahKota(pilihNode, dataBaru);
-
-                    printf("Nama kota berhasil diubah!\n");
                 } else {
                     printf("Kota dengan nama tersebut tidak ditemukan.\n");
                 }

@@ -161,7 +161,7 @@ address AlokasiKota(KotaInfo X) {
     KotaInfo *newInfo = (KotaInfo *)malloc(sizeof(KotaInfo));
     if (newInfo != NULL) {
         *newInfo = X;
-        return Alokasi((infotype)newInfo);
+        return Alokasi((infotype)newInfo, KOTA);
     }
     return NULL;
 }
@@ -192,7 +192,7 @@ void TambahKota(address root, const char* namaKota) {
         return;
     }
 
-    AddChild(root, nodeBaru->info);
+    AddChild(root, nodeBaru->info, KOTA);
 
     printf("Kota '%s' berhasil ditambahkan.\n", kotaBaru.nama);
 }
@@ -225,6 +225,8 @@ void UbahKota(address node, KotaInfo dataBaru) {
         UbahNode(node, (infotype)newInfo);
 
         EditKotaKeFile(oldInfo, newInfo);
+        
+        printf("Nama kota berhasil diubah!\n");
     }
 }
 

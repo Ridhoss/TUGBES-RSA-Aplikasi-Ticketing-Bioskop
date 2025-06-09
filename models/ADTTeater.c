@@ -159,7 +159,7 @@ address AlokasiTeater(TeaterInfo X) {
     TeaterInfo* info = (TeaterInfo*) malloc(sizeof(TeaterInfo));
     if (info) {
         *info = X;
-        return Alokasi((infotype)info);
+        return Alokasi((infotype)info, TEATER);
     }
 
     return NULL;
@@ -188,7 +188,7 @@ void TambahTeater(address bioskop, const char* namaTeater, int jumlahKursi) {
         return;
     }
 
-    AddChild(bioskop, node->info);
+    AddChild(bioskop, node->info, TEATER);
     
     printf("Teater '%s' berhasil ditambahkan.\n", namaTeater);
 }

@@ -12,7 +12,7 @@ boolean IsTreeEmpty(address root) {
 // Deskripsi : Alokasi Memori untuk Node Baru
 // IS : menerima infotype X yang akan disimpan dalam node
 // FS : mengembalikan address dari node yang dialokasikan, atau NULL jika alokasi gagal
-address Alokasi(infotype X) {
+address Alokasi(infotype X, NodeType tipe) {
     address P = (address) malloc(sizeof(Node));
     if (P != NULL) {
         P->id = currentId++;
@@ -20,6 +20,7 @@ address Alokasi(infotype X) {
         P->pr = NULL;
         P->fs = NULL;
         P->nb = NULL;
+        P->type = tipe;
     }
     return P;
 }
@@ -35,17 +36,17 @@ void Dealokasi(address P) {
 // Deskripsi : Membuat Tree Baru dengan Node Root
 // IS : menerima infotype rootInfo yang akan menjadi informasi pada node root
 // FS : mengembalikan address dari node root yang baru dibuat, atau NULL jika alokasi gagal
-address CreateTree(infotype rootInfo) {
-    return Alokasi(rootInfo);
+address CreateTree(infotype rootInfo, NodeType tipe) {
+    return Alokasi(rootInfo, tipe);
 }
 
 // Deskripsi : Menambahkan Node Sebagai Anak dari Node Parent
 // IS : menerima address parent dan infotype childInfo yang akan disimpan pada node anak
 // FS : menambahkan node anak ke dalam tree sebagai anak dari parent
-void AddChild(address parent, infotype childInfo) {
+void AddChild(address parent, infotype childInfo, NodeType tipe) {
     if (parent == NULL) return;
 
-    address child = Alokasi(childInfo);
+    address child = Alokasi(childInfo, tipe);
     if (child == NULL) return;
 
     child->pr = parent;

@@ -144,7 +144,7 @@ address AlokasiBioskop(BioskopInfo X) {
     BioskopInfo* info = (BioskopInfo*) malloc(sizeof(BioskopInfo));
     if (info) {
         *info = X;
-        return Alokasi((infotype)info);
+        return Alokasi((infotype)info, BIOSKOP);
     }
     return NULL;
 }
@@ -174,7 +174,7 @@ void TambahBioskop(address kota, const char* namaBioskop) {
         return;
     }
 
-    AddChild(kota, node->info);
+    AddChild(kota, node->info, BIOSKOP);
     
     printf("Bioskop '%s' berhasil ditambahkan.\n", namaBioskop);
 }

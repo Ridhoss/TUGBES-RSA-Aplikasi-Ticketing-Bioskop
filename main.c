@@ -11,7 +11,7 @@ int main() {
     DaftarAkun(1);
     char* rootStr = (char*) malloc(strlen("Head") + 1);
     strcpy(rootStr, "Head");
-    address root = CreateTree((infotype)rootStr);
+    address root = CreateTree((infotype)rootStr, ROOT);
 
     if (root == NULL) {
         printf("Gagal membuat tree.\n");

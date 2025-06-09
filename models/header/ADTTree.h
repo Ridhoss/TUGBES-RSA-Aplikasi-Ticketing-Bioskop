@@ -8,6 +8,14 @@
 
 #include "../../library/boolean.h"
 
+typedef enum {
+    ROOT,
+    KOTA,
+    BIOSKOP,
+    TEATER,
+    JADWAL
+} NodeType;
+
 typedef void* infotype;
 
 typedef struct tNode* address;
@@ -17,6 +25,7 @@ typedef struct tNode {
     address pr;
     address fs;
     address nb;
+    NodeType type;
 } Node;
 
 typedef int (*CompareFunc)(infotype a, infotype b);
@@ -24,13 +33,13 @@ typedef int (*CompareFunc)(infotype a, infotype b);
 
 boolean IsTreeEmpty(address root);
 
-address Alokasi(infotype X);
+address Alokasi(infotype X, NodeType tipe);
 
 void Dealokasi(address P);
 
-address CreateTree(infotype rootInfo);
+address CreateTree(infotype rootInfo, NodeType tipe);
 
-void AddChild(address parent, infotype childInfo);
+void AddChild(address parent, infotype childInfo, NodeType tipe);
 
 address Search(address root, infotype searchinfo, CompareFunc cmp);
 
