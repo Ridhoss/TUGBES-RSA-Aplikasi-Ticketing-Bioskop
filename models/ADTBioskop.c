@@ -273,7 +273,7 @@ address SearchBioskop(address kota, const char* namaBioskop) {
     BioskopInfo target;
     strcpy(target.nama, namaBioskop);
 
-    return Search(kota, (infotype)&target, CompareBioskop);
+    return Search(kota, (infotype)&target, CompareBioskop, BIOSKOP);
 }
 
 // Deskripsi : Prosedur untuk mencetak daftar bioskop

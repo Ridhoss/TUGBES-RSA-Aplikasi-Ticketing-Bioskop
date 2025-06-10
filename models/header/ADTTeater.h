@@ -13,6 +13,7 @@
 typedef struct {
     char nama[100];
     int jumlahKursi;
+    int harga;
 } TeaterInfo;
 
 void SimpanTeaterKeFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teater);
@@ -25,8 +26,8 @@ void LoadTeater(address root);
 address AlokasiTeater(TeaterInfo X);
 void DeAlokasiTeater(address P);
 
-void TambahTeater(address bioskop, const char* namaTeater, int jumlahKursi);
-void TambahTeaterBaru(address kota, address bioskop, const char* namaTeater, int jumlahKursi);
+void TambahTeater(address bioskop, const char* namaTeater, int jumlahKursi, int hargaTeater);
+void TambahTeaterBaru(address kota, address bioskop, const char* namaTeater, int jumlahKursi, int hargaTeater);
 
 void UbahTeater(address node, TeaterInfo dataBaru);
 

@@ -270,6 +270,7 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
     char namaTeater[100];
     char namaBioskop[100];
     int jumlahKursi;
+    int hargaTeater;
     int pil;
     int running = 1;
 
@@ -308,7 +309,10 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                 printf("Masukan Jumlah Kursi di Teater : ");
                 scanf("%d", &jumlahKursi);
 
-                TambahTeaterBaru(nodeKota, nodeBioskop, namaTeater, jumlahKursi);
+                printf("Masukan Harga Tiket Teater : ");
+                scanf("%d", &hargaTeater);
+
+                TambahTeaterBaru(nodeKota, nodeBioskop, namaTeater, jumlahKursi, hargaTeater);
 
                 break;
             case 2: {
@@ -330,6 +334,9 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
 
                 printf("Masukkan Jumlah Kursi Baru: ");
                 scanf("%d", &dataBaru.jumlahKursi);
+
+                printf("Masukan Harga Tiket Teater : ");
+                scanf("%d", &dataBaru.harga);
 
                 UbahTeater(nodeTeater, dataBaru);
 

@@ -282,7 +282,7 @@ address SearchKota(address root, const char* namaKota) {
     KotaInfo target;
     strcpy(target.nama, namaKota);
 
-    return Search(root, (infotype)&target, CompareKota);
+    return Search(root, (infotype)&target, CompareKota, KOTA);
 }
 
 // Deskripsi : Prosedur untuk mencetak daftar kota

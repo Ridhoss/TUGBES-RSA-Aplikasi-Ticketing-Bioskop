@@ -40,7 +40,7 @@ address CreateTree(infotype rootInfo, NodeType tipe);
 
 void AddChild(address parent, infotype childInfo, NodeType tipe);
 
-address Search(address root, infotype searchinfo, CompareFunc cmp);
+address Search(address root, infotype searchinfo, CompareFunc cmp, NodeType tipeNode);
 
 void UbahNode(address node, infotype newInfo);
 

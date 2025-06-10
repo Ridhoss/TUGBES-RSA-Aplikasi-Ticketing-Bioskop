@@ -5,7 +5,7 @@
 void SimpanTeaterKeFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teater) {
     FILE* file = fopen("database/teater.txt", "a");
     if (file != NULL) {
-        fprintf(file, "%s|%s|%s|%d\n", namaKota, namaBioskop, teater->nama, teater->jumlahKursi);
+        fprintf(file, "%s|%s|%s|%d|%d\n", namaKota, namaBioskop, teater->nama, teater->jumlahKursi, teater->harga);
         fclose(file);
     } else {
         printf("Gagal menyimpan teater ke file.\n");
@@ -24,14 +24,17 @@ int SearchTeaterFile(const char* namaKota, const char* namaBioskop, const Teater
         char* bioskopNama = strtok(NULL, "|");
         char* teaterNama = strtok(NULL, "|");
         char* jumlahKursiStr = strtok(NULL, "|");
+        char* hargaTeaterStr = strtok(NULL, "|");
         
-        if (kotaNama && bioskopNama && teaterNama && jumlahKursiStr) {
+        if (kotaNama && bioskopNama && teaterNama && jumlahKursiStr && hargaTeaterStr) {
             int jumlahKursi = atoi(jumlahKursiStr);
+            int hargaTeater = atoi(hargaTeaterStr);
 
             if (strcmp(kotaNama, namaKota) == 0 &&
                 strcmp(bioskopNama, namaBioskop) == 0 &&
                 strcmp(teaterNama, teater->nama) == 0 &&
-                jumlahKursi == teater->jumlahKursi) {
+                jumlahKursi == teater->jumlahKursi &&
+                hargaTeater == teater->harga) {
 
                 fclose(file);
                 return 1;
@@ -57,17 +60,17 @@ void EditTeaterKeFile(const char* namaKota, const char* namaBioskop, const Teate
         buffer[strcspn(buffer, "\n")] = 0;
 
         char kotaNama[100], bioskopNama[100], teaterNama[100];
-        int jmlKursi;
-        sscanf(buffer, "%[^|]|%[^|]|%[^|]|%d", kotaNama, bioskopNama, teaterNama, &jmlKursi);
+        int jmlKursi, hargaTeater;
+        sscanf(buffer, "%[^|]|%[^|]|%[^|]|%d|%d", kotaNama, bioskopNama, teaterNama, &jmlKursi, &hargaTeater);
 
         if (strcmp(kotaNama, namaKota) == 0 &&
             strcmp(bioskopNama, namaBioskop) == 0 &&
             strcmp(teaterNama, teaterLama->nama) == 0 &&
-            jmlKursi == teaterLama->jumlahKursi) {
+            jmlKursi == teaterLama->jumlahKursi &&
+            hargaTeater == teaterLama->harga) {
 
-            fprintf(temp, "%s|%s|%s|%d\n", namaKota, namaBioskop, teater->nama, teater->jumlahKursi);
+            fprintf(temp, "%s|%s|%s|%d|%d\n", namaKota, namaBioskop, teater->nama, teater->jumlahKursi, teater->harga);
         } else {
-
             fprintf(temp, "%s\n", buffer);
         }
     }
@@ -93,13 +96,14 @@ void HapusTeaterKeFile(const char* namaKota, const char* namaBioskop, const Teat
         buffer[strcspn(buffer, "\n")] = 0;
 
         char kotaNama[100], bioskopNama[100], teaterNama[100];
-        int jmlKursi;
-        sscanf(buffer, "%[^|]|%[^|]|%[^|]|%d", kotaNama, bioskopNama, teaterNama, &jmlKursi);
+        int jmlKursi, hargaTeater;
+        sscanf(buffer, "%[^|]|%[^|]|%[^|]|%d|%d", kotaNama, bioskopNama, teaterNama, &jmlKursi, &hargaTeater);
 
         if (!(strcmp(kotaNama, namaKota) == 0 &&
             strcmp(bioskopNama, namaBioskop) == 0 &&
             strcmp(teaterNama, teaterLama->nama) == 0 &&
-            jmlKursi == teaterLama->jumlahKursi)) {
+            jmlKursi == teaterLama->jumlahKursi &&
+            hargaTeater == teaterLama->harga)) {
 
             fprintf(temp, "%s\n", buffer);
         }
@@ -133,14 +137,16 @@ void LoadTeater(address root) {
         char* bioskopNama = strtok(NULL, "|");
         char* teaterNama = strtok(NULL, "|");
         char* jumlahKursiStr = strtok(NULL, "|");
+        char* hargaTeaterStr = strtok(NULL, "|");
         int jumlahKursi = atoi(jumlahKursiStr);
+        int hargaTeater = atoi(hargaTeaterStr);
 
         if (kotaNama && bioskopNama && teaterNama && jumlahKursi) {
             address kota = SearchKota(root, kotaNama);
             if (kota != NULL) {
                 address bioskop = SearchBioskop(kota, bioskopNama);
                 if (bioskop != NULL) {
-                    TambahTeater(bioskop, teaterNama, jumlahKursi);
+                    TambahTeater(bioskop, teaterNama, jumlahKursi, hargaTeater);
                 }
             }
         }
@@ -175,12 +181,13 @@ void DeAlokasiTeater(address P){
     }
 }
 
-void TambahTeater(address bioskop, const char* namaTeater, int jumlahKursi) {
+void TambahTeater(address bioskop, const char* namaTeater, int jumlahKursi, int hargaTeater) {
     if (bioskop == NULL) return;
 
     TeaterInfo Teater;
     strcpy(Teater.nama, namaTeater);
     Teater.jumlahKursi = jumlahKursi;
+    Teater.harga = hargaTeater;
 
     address node = AlokasiTeater(Teater);
     if (node == NULL) {
@@ -193,12 +200,13 @@ void TambahTeater(address bioskop, const char* namaTeater, int jumlahKursi) {
     printf("Teater '%s' berhasil ditambahkan.\n", namaTeater);
 }
 
-void TambahTeaterBaru(address kota, address bioskop, const char* namaTeater, int jumlahKursi) {
-    TambahTeater(bioskop, namaTeater, jumlahKursi);
+void TambahTeaterBaru(address kota, address bioskop, const char* namaTeater, int jumlahKursi, int hargaTeater) {
+    TambahTeater(bioskop, namaTeater, jumlahKursi, hargaTeater);
 
     TeaterInfo teater;
     strcpy(teater.nama, namaTeater);
     teater.jumlahKursi = jumlahKursi;
+    teater.harga = hargaTeater;
 
     KotaInfo* kInfo = (KotaInfo*) kota->info;
     BioskopInfo* bInfo = (BioskopInfo*) bioskop->info;
@@ -219,6 +227,7 @@ void UbahTeater(address node, TeaterInfo dataBaru) {
     TeaterInfo teaterLama;
     strcpy(teaterLama.nama, oldInfo->nama);
     teaterLama.jumlahKursi = oldInfo->jumlahKursi;
+    teaterLama.harga = oldInfo->harga;
 
     address nodeBioskop = node->pr;
     address nodeKota = nodeBioskop ? nodeBioskop->pr : NULL;
@@ -241,6 +250,7 @@ void DeleteTeater(address teater) {
     TeaterInfo teaterLama;
     strcpy(teaterLama.nama, oldInfo->nama);
     teaterLama.jumlahKursi = oldInfo->jumlahKursi;
+    teaterLama.harga = oldInfo->harga;
 
     address nodeBioskop = teater->pr;
     address nodeKota = nodeBioskop ? nodeBioskop->pr : NULL;
@@ -278,7 +288,7 @@ address SearchTeater(address bioskop, const char* namaTeater) {
     TeaterInfo target;
     strcpy(target.nama, namaTeater);
 
-    return Search(bioskop, (infotype)&target, CompareTeater);
+    return Search(bioskop, (infotype)&target, CompareTeater, TEATER);
 }
 
 void PrintTeater(address node, int level) {

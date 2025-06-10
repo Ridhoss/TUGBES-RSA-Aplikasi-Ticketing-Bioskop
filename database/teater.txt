@@ -1,1 +1,2 @@
-bandung|CGV BEC|Teater 1|80
+bandung|CGV BEC|Teater 1|80|40000
+bandung|CGV BEC|1|80|50000

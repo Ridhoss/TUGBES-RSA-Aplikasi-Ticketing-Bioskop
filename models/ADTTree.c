@@ -68,19 +68,19 @@ void AddChild(address parent, infotype childInfo, NodeType tipe) {
 // Deskripsi : Prosedur untuk Mencari Node dalam Tree
 // IS : menerima address root, infotype searchinfo yang akan dicari, dan fungsi pembanding cmp
 // FS : mengembalikan address dari node yang sesuai dengan searchinfo, atau NULL jika tidak ditemukan
-address Search(address root, infotype searchinfo, CompareFunc cmp) {
+address Search(address root, infotype searchinfo, CompareFunc cmp, NodeType tipeNode) {
     if (root == NULL) return NULL;
 
-    if (cmp(root->info, searchinfo) == 0) {
+    if (root->type == tipeNode && cmp(root->info, searchinfo) == 0) {
         return root;
     }
 
-    address found = Search(root->fs, searchinfo, cmp);
+    address found = Search(root->fs, searchinfo, cmp, tipeNode);
     if (found != NULL) {
         return found;
     }
 
-    return Search(root->nb, searchinfo, cmp);
+    return Search(root->nb, searchinfo, cmp, tipeNode);
 }
 
 // Deskripsi : Prosedur untuk Mengubah Informasi pada Node
@@ -189,7 +189,7 @@ void PrintChildrenOnly(address node, int level) {
             printf("- Bioskop: %s\n", info->nama);
         } else if (child->type == TEATER) {
             TeaterInfo* info = (TeaterInfo*) child->info;
-            printf("- Teater: %s || Jumlah Kursi: %d\n", info->nama, info->jumlahKursi);
+            printf("- Teater: %s || Jumlah Kursi: %d || Harga: %d\n", info->nama, info->jumlahKursi, info->harga);
         }
         // PrintTree(child->fs, level + 1);
         child = child->nb;
