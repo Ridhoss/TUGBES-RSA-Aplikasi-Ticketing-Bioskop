@@ -8,7 +8,7 @@
 void SimpanKotaKeFile(const KotaInfo* kota) {
     FILE* file = fopen("database/kota.txt", "a");
     if (file != NULL) {
-        fprintf(file, "%s\n", kota->nama);
+        fprintf(file, "%s|\n", kota->nama);
         fclose(file);
     } else {
         printf("Gagal membuka file untuk menyimpan data kota.\n");
@@ -25,9 +25,14 @@ int SearchKotaFile(const KotaInfo* kota) {
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
-        if (strcmp(buffer, kota->nama) == 0) {
-            fclose(file);
-            return 1;
+
+        char* kotaNama = strtok(buffer, "|");
+
+        if(kotaNama) {
+            if (strcmp(kotaNama, kota->nama) == 0) {
+                fclose(file);
+                return 1;
+            }
         }
     }
 
@@ -45,23 +50,18 @@ void EditKotaKeFile(const KotaInfo* kotaLama, const KotaInfo* kotaBaru) {
     }
 
     FILE* file = fopen("database/kota.txt", "r");
-    if (!file) {
-        printf("Gagal membuka file untuk membaca data kota.\n");
-        return;
-    }
-
     FILE* temp = fopen("database/temp.txt", "w");
-    if (!temp) {
-        printf("Gagal membuka file sementara.\n");
-        fclose(file);
-        return;
-    }
+    if (!file || !temp) return;
     
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
-        if (strcmp(buffer, kotaLama->nama) == 0) {
-            fprintf(temp, "%s\n", kotaBaru->nama);
+
+        char kotaNama[100];
+        sscanf(buffer, "%[^|\n]", kotaNama);
+
+        if (strcmp(kotaNama, kotaLama->nama) == 0) {
+            fprintf(temp, "%s|\n", kotaBaru->nama);
         } else {
             fprintf(temp, "%s\n", buffer);
         }
@@ -138,11 +138,21 @@ void LoadKota(address root) {
         return;
     }
 
+    KotaInfo kota;
+
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        TambahKota(root, buffer);
+        char* kotaNama = strtok(buffer, "|");
+
+        if (kotaNama)
+        {
+            strcpy(kota.nama, kotaNama);
+
+            TambahKota(root, &kota);
+        }
+
     }
 
     fclose(file);
@@ -177,16 +187,13 @@ void DeAlokasiKota(address P) {
 // Deskripsi : Prosedur untuk menambah kota ke dalam tree
 // IS : menerima address root dan namaKota sebagai string
 // FS : menambah node baru ke dalam tree sebagai anak dari root
-void TambahKota(address root, const char* namaKota) {
+void TambahKota(address root, const KotaInfo* kotaBaru) {
     if (root == NULL) {
         printf("Root tidak ditemukan.\n");
         return;
     }
 
-    KotaInfo kotaBaru;
-    strcpy(kotaBaru.nama, namaKota);
-
-    address nodeBaru = AlokasiKota(kotaBaru);
+    address nodeBaru = AlokasiKota(*kotaBaru);
     if (nodeBaru == NULL) {
         printf("Gagal mengalokasikan node kota.\n");
         return;
@@ -194,35 +201,33 @@ void TambahKota(address root, const char* namaKota) {
 
     AddChild(root, nodeBaru->info, KOTA);
 
-    printf("Kota '%s' berhasil ditambahkan.\n", kotaBaru.nama);
+    printf("Kota '%s' berhasil ditambahkan.\n", kotaBaru->nama);
 }
 
 // Deskripsi : Prosedur untuk menambah kota baru dan menyimpannya ke file
 // IS : menerima address root dan namaKota sebagai string
 // FS : menambah node baru ke dalam tree dan menyimpan nama kota ke dalam file
-void TambahKotaBaru(address root, const char* namaKota) {
-    TambahKota(root, namaKota);
+void TambahKotaBaru(address root, const KotaInfo* kotaBaru) {
+    TambahKota(root, kotaBaru);
 
-    KotaInfo kota;
-    strcpy(kota.nama, namaKota);
-    SimpanKotaKeFile(&kota);
+    SimpanKotaKeFile(kotaBaru);
 
-    printf("Kota '%s' berhasil ditambahkan dan disimpan ke file.\n", namaKota);
+    printf("Kota '%s' berhasil ditambahkan dan disimpan ke file.\n", kotaBaru->nama);
 }
 
 // Deskripsi : Prosedur untuk mengubah nama kota pada node
 // IS : menerima address node dan dataBaru sebagai KotaInfo
 // FS : mengubah nama kota pada node dan memperbarui file
-void UbahKota(address node, KotaInfo dataBaru) {
+void UbahKota(address dataLama, KotaInfo dataBaru) {
     KotaInfo* newInfo = (KotaInfo*) malloc(sizeof(KotaInfo));
 
     if (newInfo != NULL) {
-        KotaInfo* oldInfo = (KotaInfo*) node->info;
+        KotaInfo* oldInfo = (KotaInfo*) dataLama->info;
         char namaLama[100];
         strcpy(namaLama, oldInfo->nama);
 
         *newInfo = dataBaru;
-        UbahNode(node, (infotype)newInfo);
+        UbahNode(dataLama, (infotype)newInfo);
 
         EditKotaKeFile(oldInfo, newInfo);
         

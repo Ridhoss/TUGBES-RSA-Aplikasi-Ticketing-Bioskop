@@ -1,2 +1,5 @@
-bandung
-jakarta
+bandung|
+jakarta|
+malang|
+surabaya|
+tanggerang|

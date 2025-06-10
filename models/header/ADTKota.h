@@ -24,10 +24,10 @@ void LoadKota(address root);
 address AlokasiKota(KotaInfo X);
 void DeAlokasiKota(address P);
 
-void TambahKota(address root, const char* namaKota);
-void TambahKotaBaru(address root, const char* namaKota);
+void TambahKota(address root, const KotaInfo* kotaBaru);
+void TambahKotaBaru(address root, const KotaInfo* kotaBaru);
 
-void UbahKota(address node, KotaInfo dataBaru);
+void UbahKota(address dataLama, KotaInfo dataBaru);
 
 void DeleteKota(address kota);
 void DeleteAllKota(address root);

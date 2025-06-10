@@ -27,28 +27,31 @@ void HalamanManipulasiKota(address root) {
 
         switch (pil)
         {
-            case 1:
-                printf("Masukkan nama kota baru: ");
-                InputString(namaKota);
+            case 1: {
+                KotaInfo dataBaru;
 
-                while(SearchKota(root, namaKota) != NULL) {
-                    printf("Kota dengan nama '%s' sudah ada\n", namaKota);
+                printf("Masukkan nama kota baru: ");
+                InputString(dataBaru.nama);
+
+                while(SearchKota(root, dataBaru.nama) != NULL) {
+                    printf("Kota dengan nama '%s' sudah ada\n", dataBaru.nama);
                     printf("Masukan nama kota baru: ");
-                    InputString(namaKota);
+                    InputString(dataBaru.nama);
                 }
 
-                TambahKotaBaru(root, namaKota);
+                TambahKotaBaru(root, &dataBaru);
 
                 break;
+            }
             case 2: {
                 KotaInfo dataBaru;
 
                 printf("Masukkan nama node yang ingin diubah: ");
                 InputString(namaKota);
 
-                address pilihNode = SearchKota(root, namaKota);
+                address dataLama = SearchKota(root, namaKota);
 
-                if (pilihNode != NULL) {
+                if (dataLama != NULL) {
                     printf("Masukkan nama kota baru: ");
                     InputString(dataBaru.nama);
 
@@ -58,7 +61,7 @@ void HalamanManipulasiKota(address root) {
                         InputString(dataBaru.nama);
                     }
 
-                    UbahKota(pilihNode, dataBaru);
+                    UbahKota(dataLama, dataBaru);
                 } else {
                     printf("Kota dengan nama tersebut tidak ditemukan.\n");
                 }
