@@ -9,9 +9,6 @@ typedef struct tElmtList *address;
 typedef struct tElmtList {
   infotype info;
   address next;
-  address fs;
-  address nb;
-  address pr;
 } ListElmt;
 
 typedef struct {

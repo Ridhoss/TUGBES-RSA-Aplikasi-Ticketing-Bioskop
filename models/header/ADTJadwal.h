@@ -14,8 +14,8 @@ typedef struct {
     char start[20];
     char end[20];
     // date tanggal;
-    address film;
     char kursi[20][20]; 
+    // address film;
     int jumlahBaris;
     int jumlahKolom;
 } JadwalInfo;
@@ -30,7 +30,7 @@ void LoadJadwal(address root);
 address AlokasiJadwal(JadwalInfo X);
 void DeAlokasiJadwal(address P);
 
-void TambahJadwal(address teater, JadwalInfo teaterBaru);
+void TambahJadwal(address teater, JadwalInfo jadwalBaru);
 void TambahJadwalBaru(address kota, address bioskop, address teater, JadwalInfo jadwalBaru);
 void InisialisasiKursi(JadwalInfo *jadwal, address teaterAddress);
 
