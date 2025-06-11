@@ -150,7 +150,7 @@ void LoadKota(address root) {
         {
             strcpy(kota.nama, kotaNama);
 
-            TambahKota(root, &kota);
+            TambahKota(root, kota);
         }
 
     }
@@ -187,13 +187,13 @@ void DeAlokasiKota(address P) {
 // Deskripsi : Prosedur untuk menambah kota ke dalam tree
 // IS : menerima address root dan namaKota sebagai string
 // FS : menambah node baru ke dalam tree sebagai anak dari root
-void TambahKota(address root, const KotaInfo* kotaBaru) {
+void TambahKota(address root, KotaInfo kotaBaru) {
     if (root == NULL) {
         printf("Root tidak ditemukan.\n");
         return;
     }
 
-    address nodeBaru = AlokasiKota(*kotaBaru);
+    address nodeBaru = AlokasiKota(kotaBaru);
     if (nodeBaru == NULL) {
         printf("Gagal mengalokasikan node kota.\n");
         return;
@@ -201,18 +201,18 @@ void TambahKota(address root, const KotaInfo* kotaBaru) {
 
     AddChild(root, nodeBaru->info, KOTA);
 
-    printf("Kota '%s' berhasil ditambahkan.\n", kotaBaru->nama);
+    printf("Kota '%s' berhasil ditambahkan.\n", kotaBaru.nama);
 }
 
 // Deskripsi : Prosedur untuk menambah kota baru dan menyimpannya ke file
 // IS : menerima address root dan namaKota sebagai string
 // FS : menambah node baru ke dalam tree dan menyimpan nama kota ke dalam file
-void TambahKotaBaru(address root, const KotaInfo* kotaBaru) {
+void TambahKotaBaru(address root, KotaInfo kotaBaru) {
     TambahKota(root, kotaBaru);
 
-    SimpanKotaKeFile(kotaBaru);
+    SimpanKotaKeFile(&kotaBaru);
 
-    printf("Kota '%s' berhasil ditambahkan dan disimpan ke file.\n", kotaBaru->nama);
+    printf("Kota '%s' berhasil ditambahkan dan disimpan ke file.\n", kotaBaru.nama);
 }
 
 // Deskripsi : Prosedur untuk mengubah nama kota pada node

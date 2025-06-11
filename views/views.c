@@ -6,6 +6,8 @@
 void HalamanManipulasiKota(address root) {
     char namaKota[100];
 
+    KotaInfo dataBaru;
+
     int pil;
     int running = 1;
 
@@ -28,8 +30,6 @@ void HalamanManipulasiKota(address root) {
         switch (pil)
         {
             case 1: {
-                KotaInfo dataBaru;
-
                 printf("Masukkan nama kota baru: ");
                 InputString(dataBaru.nama);
 
@@ -39,13 +39,11 @@ void HalamanManipulasiKota(address root) {
                     InputString(dataBaru.nama);
                 }
 
-                TambahKotaBaru(root, &dataBaru);
+                TambahKotaBaru(root, dataBaru);
 
                 break;
             }
             case 2: {
-                KotaInfo dataBaru;
-
                 printf("Masukkan nama node yang ingin diubah: ");
                 InputString(namaKota);
 
@@ -132,6 +130,8 @@ void HalamanManipulasiBioskop(address root) {
     char namaKota[100];
     char namaBioskop[100];
 
+    BioskopInfo dataBaru;
+
     int pil;
     int running = 1;
 
@@ -166,22 +166,21 @@ void HalamanManipulasiBioskop(address root) {
 
         switch (pil) 
         {
-            case 1:
+            case 1:{
                 printf("Masukkan nama bioskop baru: ");
-                InputString(namaBioskop);
+                InputString(dataBaru.nama);
                 
-                while (SearchBioskop(nodeKota, namaBioskop) != NULL) {
-                    printf("Bioskop dengan nama '%s' sudah ada.\n", namaBioskop);
+                while (SearchBioskop(nodeKota, dataBaru.nama) != NULL) {
+                    printf("Bioskop dengan nama '%s' sudah ada.\n", dataBaru.nama);
                     printf("Masukkan nama bioskop baru: ");
-                    InputString(namaBioskop);
+                    InputString(dataBaru.nama);
                 }
 
-                TambahBioskopBaru(nodeKota, namaBioskop);
+                TambahBioskopBaru(nodeKota, dataBaru);
 
                 break;
+            }
             case 2: {
-                BioskopInfo dataBaru;
-                
                 printf("Masukkan nama bioskop yang ingin diubah: ");
                 InputString(namaBioskop);
 
@@ -272,8 +271,12 @@ void HalamanManipulasiBioskop(address root) {
 void HalamanManipulasiTeater(address root, address nodeKota) {
     char namaTeater[100];
     char namaBioskop[100];
+
+    TeaterInfo teaterBaru;
+
     int jumlahKursi;
     int hargaTeater;
+
     int pil;
     int running = 1;
 
@@ -304,20 +307,21 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
         while (getchar() != '\n');
 
         switch (pil) {
-            case 1:
+            case 1: {
                 // Tambah Teater
                 printf("Masukan Nama Teater : ");
-                InputString(namaTeater);
+                InputString(teaterBaru.nama);
 
                 printf("Masukan Jumlah Kursi di Teater : ");
-                scanf("%d", &jumlahKursi);
+                scanf("%d", &teaterBaru.jumlahKursi);
 
                 printf("Masukan Harga Tiket Teater : ");
-                scanf("%d", &hargaTeater);
+                scanf("%d", &teaterBaru.harga);
 
-                TambahTeaterBaru(nodeKota, nodeBioskop, namaTeater, jumlahKursi, hargaTeater);
+                TambahTeaterBaru(nodeKota, nodeBioskop, teaterBaru);
 
                 break;
+            }
             case 2: {
                 // Ubah Informasi Teater
                 PrintTeater(nodeBioskop, 0);
@@ -331,17 +335,16 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                     break;
                 }
 
-                TeaterInfo dataBaru;
                 printf("Masukkan Nama Teater Baru: ");
-                InputString(dataBaru.nama);
+                InputString(teaterBaru.nama);
 
                 printf("Masukkan Jumlah Kursi Baru: ");
-                scanf("%d", &dataBaru.jumlahKursi);
+                scanf("%d", &teaterBaru.jumlahKursi);
 
                 printf("Masukan Harga Tiket Teater : ");
-                scanf("%d", &dataBaru.harga);
+                scanf("%d", &teaterBaru.harga);
 
-                UbahTeater(nodeTeater, dataBaru);
+                UbahTeater(nodeTeater, teaterBaru);
 
                 break;
             }

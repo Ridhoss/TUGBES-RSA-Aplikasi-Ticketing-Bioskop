@@ -129,6 +129,8 @@ void LoadTeater(address root) {
     FILE* file = fopen("database/teater.txt", "r");
     if (!file) return;
 
+    TeaterInfo teater;
+
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
@@ -146,7 +148,12 @@ void LoadTeater(address root) {
             if (kota != NULL) {
                 address bioskop = SearchBioskop(kota, bioskopNama);
                 if (bioskop != NULL) {
-                    TambahTeater(bioskop, teaterNama, jumlahKursi, hargaTeater);
+
+                    strcpy(teater.nama, teaterNama);
+                    teater.jumlahKursi = jumlahKursi;
+                    teater.harga = hargaTeater;
+
+                    TambahTeater(bioskop, teater);
                 }
             }
         }
@@ -181,15 +188,9 @@ void DeAlokasiTeater(address P){
     }
 }
 
-void TambahTeater(address bioskop, const char* namaTeater, int jumlahKursi, int hargaTeater) {
-    if (bioskop == NULL) return;
+void TambahTeater(address bioskop, TeaterInfo teaterBaru){
 
-    TeaterInfo Teater;
-    strcpy(Teater.nama, namaTeater);
-    Teater.jumlahKursi = jumlahKursi;
-    Teater.harga = hargaTeater;
-
-    address node = AlokasiTeater(Teater);
+    address node = AlokasiTeater(teaterBaru);
     if (node == NULL) {
         printf("Gagal mengalokasikan node Teater.\n");
         return;
@@ -197,22 +198,17 @@ void TambahTeater(address bioskop, const char* namaTeater, int jumlahKursi, int 
 
     AddChild(bioskop, node->info, TEATER);
     
-    printf("Teater '%s' berhasil ditambahkan.\n", namaTeater);
+    printf("Teater '%s' berhasil ditambahkan.\n", teaterBaru.nama);
 }
 
-void TambahTeaterBaru(address kota, address bioskop, const char* namaTeater, int jumlahKursi, int hargaTeater) {
-    TambahTeater(bioskop, namaTeater, jumlahKursi, hargaTeater);
-
-    TeaterInfo teater;
-    strcpy(teater.nama, namaTeater);
-    teater.jumlahKursi = jumlahKursi;
-    teater.harga = hargaTeater;
+void TambahTeaterBaru(address kota, address bioskop, TeaterInfo teaterBaru) {
+    TambahTeater(bioskop, teaterBaru);
 
     KotaInfo* kInfo = (KotaInfo*) kota->info;
     BioskopInfo* bInfo = (BioskopInfo*) bioskop->info;
-    SimpanTeaterKeFile(kInfo->nama, bInfo->nama, &teater);
+    SimpanTeaterKeFile(kInfo->nama, bInfo->nama, &teaterBaru);
 
-    printf("Teater '%s' berhasil ditambahkan dan disimpan ke file.\n", namaTeater);
+    printf("Teater '%s' berhasil ditambahkan dan disimpan ke file.\n", teaterBaru.nama);
 }
 
 void UbahTeater(address node, TeaterInfo dataBaru) {

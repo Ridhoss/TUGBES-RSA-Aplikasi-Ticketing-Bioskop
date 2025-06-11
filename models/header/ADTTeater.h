@@ -26,8 +26,8 @@ void LoadTeater(address root);
 address AlokasiTeater(TeaterInfo X);
 void DeAlokasiTeater(address P);
 
-void TambahTeater(address bioskop, const char* namaTeater, int jumlahKursi, int hargaTeater);
-void TambahTeaterBaru(address kota, address bioskop, const char* namaTeater, int jumlahKursi, int hargaTeater);
+void TambahTeater(address bioskop, TeaterInfo teaterBaru);
+void TambahTeaterBaru(address kota, address bioskop, TeaterInfo teaterBaru);
 
 void UbahTeater(address node, TeaterInfo dataBaru);
 

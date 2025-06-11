@@ -116,6 +116,8 @@ void LoadBioskop(address root) {
     FILE* file = fopen("database/bioskop.txt", "r");
     if (!file) return;
 
+    BioskopInfo bioskop;
+
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
@@ -126,7 +128,10 @@ void LoadBioskop(address root) {
         if (kotaNama && bioskopNama) {
             address kota = SearchKota(root, kotaNama);
             if (kota != NULL) {
-                TambahBioskop(kota, bioskopNama);
+
+                strcpy(bioskop.nama, bioskopNama);
+
+                TambahBioskop(kota, bioskop);
             }
         }
     }
@@ -162,13 +167,10 @@ void DeAlokasiBioskop(address P) {
 // Deskripsi : Prosedur untuk menambah bioskop ke dalam kota
 // IS : menerima address kota dan namaBioskop sebagai string
 // FS : menambah node baru bioskop menjadi anak dari node kota dalam tree
-void TambahBioskop(address kota, const char* namaBioskop) {
+void TambahBioskop(address kota, BioskopInfo bioskopBaru) {
     if (kota == NULL) return;
 
-    BioskopInfo bioskop;
-    strcpy(bioskop.nama, namaBioskop);
-
-    address node = AlokasiBioskop(bioskop);
+    address node = AlokasiBioskop(bioskopBaru);
     if (node == NULL) {
         printf("Gagal mengalokasikan node bioskop.\n");
         return;
@@ -176,22 +178,19 @@ void TambahBioskop(address kota, const char* namaBioskop) {
 
     AddChild(kota, node->info, BIOSKOP);
     
-    printf("Bioskop '%s' berhasil ditambahkan.\n", namaBioskop);
+    printf("Bioskop '%s' berhasil ditambahkan.\n", bioskopBaru.nama);
 }
 
 // Deskripsi : Prosedur untuk menambah bioskop baru dan menyimpannya ke file
 // IS : menerima address kota dan namaBioskop sebagai string
 // FS : node bioskop ditambahkan ke tree sebagai anak dari node kota, lalu disimpan ke file
-void TambahBioskopBaru(address kota, const char* namaBioskop) {
-    TambahBioskop(kota, namaBioskop);
-
-    BioskopInfo bioskop;
-    strcpy(bioskop.nama, namaBioskop);
+void TambahBioskopBaru(address kota, BioskopInfo bioskopBaru) {
+    TambahBioskop(kota, bioskopBaru);
 
     KotaInfo* kInfo = (KotaInfo*)kota->info;
-    SimpanBioskopKeFile(kInfo->nama, &bioskop);
+    SimpanBioskopKeFile(kInfo->nama, &bioskopBaru);
 
-    printf("Bioskop '%s' berhasil ditambahkan dan disimpan ke file.\n", namaBioskop);
+    printf("Bioskop '%s' berhasil ditambahkan dan disimpan ke file.\n", bioskopBaru.nama);
 }
 
 

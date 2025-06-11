@@ -24,8 +24,8 @@ void LoadBioskop(address root);
 address AlokasiBioskop(BioskopInfo X);
 void DeAlokasiBioskop(address P);
 
-void TambahBioskop(address kota, const char* namaBioskop);
-void TambahBioskopBaru(address kota, const char* namaBioskop);
+void TambahBioskop(address kota, BioskopInfo bioskopBaru);
+void TambahBioskopBaru(address kota, BioskopInfo bioskopBaru);
 
 void UbahBioskop(address node, BioskopInfo dataBaru);
 

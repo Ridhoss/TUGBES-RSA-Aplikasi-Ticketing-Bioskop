@@ -3,3 +3,4 @@ jakarta|
 malang|
 surabaya|
 tanggerang|
+karawang|

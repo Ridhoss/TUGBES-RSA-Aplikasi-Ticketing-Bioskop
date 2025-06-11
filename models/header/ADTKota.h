@@ -24,8 +24,8 @@ void LoadKota(address root);
 address AlokasiKota(KotaInfo X);
 void DeAlokasiKota(address P);
 
-void TambahKota(address root, const KotaInfo* kotaBaru);
-void TambahKotaBaru(address root, const KotaInfo* kotaBaru);
+void TambahKota(address root, KotaInfo kotaBaru);
+void TambahKotaBaru(address root, KotaInfo kotaBaru);
 
 void UbahKota(address dataLama, KotaInfo dataBaru);
 
