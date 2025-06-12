@@ -23,4 +23,10 @@ int ConvertTMenit(TimeInfo T);
 TimeInfo ConvertTime(int totalMenit);
 TimeInfo TambahWaktu(TimeInfo A, TimeInfo B);
 
+TimeInfo DifferenceTime(TimeInfo A, TimeInfo B);
+int CompareTime(TimeInfo A, TimeInfo B);
+boolean CekBetweenTime(TimeInfo start, TimeInfo end, TimeInfo new);
+void TimeString(TimeInfo T, char *buffer);
+void PrintTime(TimeInfo T);
+
 #endif 
