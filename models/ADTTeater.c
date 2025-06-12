@@ -26,16 +26,11 @@ int SearchTeaterFile(const TeaterInfo* teater) {
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char* idStr = strtok(buffer, "|");
-        char* idKotaStr = strtok(NULL, "|");
-        char* idBioskopStr = strtok(NULL, "|");
-        char* teaterNama = strtok(NULL, "|");
-        char* jumlahKursiStr = strtok(NULL, "|");
-        char* hargaTeaterStr = strtok(NULL, "|");
+        int id, idKota, idBioskop, jmlKursi, hargaTeater;
+        char teaterNama[100];
+        sscanf(buffer, "%d|%d|%d|%[^|]|%d|%d", &id, &idKota, &idBioskop, teaterNama, &jmlKursi, &hargaTeater);
         
-        if (idStr && idKotaStr && idBioskopStr && teaterNama && jumlahKursiStr && hargaTeaterStr) {
-            int id = atoi(idStr);
-
+        if (id && idKota && idBioskop && teaterNama && jmlKursi && hargaTeater) {
             if (id == teater->id) {
 
                 fclose(file);
@@ -151,19 +146,11 @@ void LoadTeater(address root) {
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char* idStr = strtok(buffer, "|");
-        char* idKotaStr = strtok(NULL, "|");
-        char* idBioskopStr = strtok(NULL, "|");
-        char* teaterNama = strtok(NULL, "|");
-        char* jumlahKursiStr = strtok(NULL, "|");
-        char* hargaTeaterStr = strtok(NULL, "|");
+        int id, idKota, idBioskop, jmlKursi, hargaTeater;
+        char teaterNama[100];
+        sscanf(buffer, "%d|%d|%d|%[^|]|%d|%d", &id, &idKota, &idBioskop, teaterNama, &jmlKursi, &hargaTeater);
 
-        if (idStr && idKotaStr && idBioskopStr && teaterNama && jumlahKursiStr && hargaTeaterStr) {
-            int id = atoi(idStr);
-            int idKota = atoi(idKotaStr);
-            int idBioskop = atoi(idBioskopStr);
-            int jumlahKursi = atoi(jumlahKursiStr);
-            int hargaTeater = atoi(hargaTeaterStr);
+        if (id && idKota && idBioskop && teaterNama && jmlKursi && hargaTeater) {
 
             address kota = SearchKotaById(root, &idKota);
             if (kota != NULL) {
@@ -172,7 +159,7 @@ void LoadTeater(address root) {
 
                     teater.id = id;
                     strcpy(teater.nama, teaterNama);
-                    teater.jumlahKursi = jumlahKursi;
+                    teater.jumlahKursi = jmlKursi;
                     teater.harga = hargaTeater;
 
                     TambahTeater(bioskop, teater);
@@ -335,7 +322,7 @@ void DeleteAllTeater(address bioskop) {
 
 // Deskripsi : Fungsi untuk membandingkan dua Teater berdasarkan nama
 // IS : menerima dua infotype yang berisi TeaterInfo
-// FS : mengembalikan nilai 0 jika kota sama, dan 1 jika kota berbeda
+// FS : mengembalikan nilai 0 jika teater sama, dan 1 jika teater berbeda
 int CompareTeater(infotype a, infotype b) {
     TeaterInfo* teater1 = (TeaterInfo*) a;
     TeaterInfo* teater2 = (TeaterInfo*) b;
@@ -354,7 +341,7 @@ int CompareTeaterId(infotype a, infotype b) {
 }
 
 // Deskripsi : Fungsi untuk mencari Teater berdasarkan nama
-// IS : menerima address kota dan namaTeater sebagai string
+// IS : menerima address bioskop dan namaTeater sebagai string
 // FS : mengembalikan address dari node yang sesuai, atau NULL jika tidak ditemukan
 address SearchTeaterByName(address bioskop, const char* namaTeater) {
     TeaterInfo target;
@@ -364,7 +351,7 @@ address SearchTeaterByName(address bioskop, const char* namaTeater) {
 }
 
 // Deskripsi : Fungsi untuk mencari Teater berdasarkan id
-// IS : menerima address kota dan namaTeater sebagai string
+// IS : menerima address bioskop dan namaTeater sebagai string
 // FS : mengembalikan address dari node yang sesuai, atau NULL jika tidak ditemukan
 address SearchTeaterById(address bioskop, const int* idTeater) {
     TeaterInfo target;

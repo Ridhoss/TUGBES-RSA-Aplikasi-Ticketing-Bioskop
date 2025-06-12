@@ -138,3 +138,66 @@ void InisialisasiKursi(JadwalInfo *jadwal, address teaterAddress) {
         }
     }
 }
+
+// Deskripsi : Prosedur untuk mengubah info Jadwal pada node
+// IS : menerima address node dan dataBaru sebagai JadwalInfo
+// FS : mengubah info Jadwal pada node dan memperbarui file
+void UbahJadwal(address node, JadwalInfo jadwalBaru) {
+
+}
+
+// Deskripsi : Prosedur untuk menghapus Jadwal dari teater
+// IS : menerima address Jadwal
+// FS : menghapus node Jadwal dari tree dan juga dari file
+void DeleteJadwal(address jadwal) {
+
+}
+
+// Deskripsi : Prosedur untuk menghapus semua jadwal dari teater
+// IS : menerima address teater
+// FS : menghapus semua node jadwal dari tree dan juga mengosongkan file jadwal
+void DeleteAllJadwal(address teater) {
+
+}
+
+// Deskripsi : Fungsi untuk membandingkan dua Jadwal berdasarkan start
+// IS : menerima dua infotype yang berisi JadwalInfo
+// FS : mengembalikan nilai 0 jika Jadwal sama, dan 1 jika Jadwal berbeda
+int CompareJadwal(infotype a, infotype b) {
+
+}
+
+// Deskripsi : Fungsi untuk membandingkan dua Jadwal berdasarkan id
+// IS : menerima dua infotype yang berisi JadwalInfo
+// FS : mengembalikan nilai 0 jika Jadwal sama, dan 1 jika Jadwal berbeda
+int CompareJadwalId(infotype a, infotype b) {
+
+}
+
+// Deskripsi : Fungsi untuk mencari Jadwal berdasarkan start
+// IS : menerima address teater dan namaJadwal sebagai string
+// FS : mengembalikan address dari node yang sesuai, atau NULL jika tidak ditemukan
+address SearchJadwalByName(address teater, const char* namaJadwal) {
+
+}
+
+// Deskripsi : Fungsi untuk mencari Jadwal berdasarkan id
+// IS : menerima address teater dan namaJadwal sebagai string
+// FS : mengembalikan address dari node yang sesuai, atau NULL jika tidak ditemukan
+address SearchJadwalById(address teater, const int* idJadwal) {
+
+}
+
+// Deskripsi : Prosedur untuk mencetak daftar jadwal
+// IS : menerima address teater dan level untuk indentasi
+// FS : mencetak daftar jadwal yang ada pada bioskop 
+void PrintJadwal(address node, int level) {
+    if (IsTreeEmpty(node)) {
+        printf("Tree kosong.\n");
+        return;
+    }
+    
+    printf("\nDaftar Jadwal :\n");
+
+    PrintChildrenOnly(node, level);
+}

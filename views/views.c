@@ -301,7 +301,8 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
         printf("4. Hapus Semua Teater\n");
         printf("5. Cari Teater\n");
         printf("6. Tampilkan Semua Teater\n");
-        printf("7. Kembali ke Menu Bioskop\n");
+        printf("7. Manipulasi Jadwal di Teater\n");
+        printf("8. Kembali ke Menu Bioskop\n");
         printf("Pilih: ");
         scanf("%d", &pil);
         while (getchar() != '\n');
@@ -403,6 +404,11 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
 
                 break;
             case 7:
+                // halaman manipulasi Jadwal 
+
+
+                break;
+            case 8:
                 running = 0;
 
                 break;
@@ -414,3 +420,78 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
     }
 }
 
+void HalamanManipulasiJadwal(address root, address nodeTeater) {
+    char namaTeater[100];
+
+    TeaterInfo teaterBaru;
+
+    int pil;
+    int running = 1;
+
+    PrintTeater(nodeTeater, 0);
+
+    printf("Masukkan nama teater yang ingin dimanipulasi teaterya: ");
+    InputString(namaTeater);
+
+    address teater = SearchTeaterByName(nodeTeater, namaTeater);
+
+    if (teater == NULL) {
+        printf("Bioskop '%s' tidak ditemukan.\n", namaTeater);
+
+        return;
+    }
+
+    while (running) {
+        TeaterInfo* teaterData = (TeaterInfo*) teater;
+        printf("\n==== Menu Manipulasi Teater Bioskop %s ====\n", teaterData->nama);
+        printf("1. Tambah Teater\n");
+        printf("2. Ubah Informasi Teater\n");
+        printf("3. Hapus Teater\n");
+        printf("4. Hapus Semua Teater\n");
+        printf("5. Cari Teater\n");
+        printf("6. Tampilkan Semua Teater\n");
+        printf("7. Kembali ke Menu Bioskop\n");
+        printf("Pilih: ");
+        scanf("%d", &pil);
+        while (getchar() != '\n');
+
+        switch (pil) {
+            case 1: {
+                // Tambah Teater
+
+                break;
+            }
+            case 2: {
+                // Ubah Informasi Teater
+
+                break;
+            }
+            case 3: {
+                // Hapus Teater
+
+                break;
+            }
+            case 4: {
+                // Hapus Semua Teater
+
+                break;
+            }
+            case 5:
+                // Cari Teater                
+
+                break;
+            case 6:
+                // Tampilkan Semua Teater
+
+                break;
+            case 7:
+                running = 0;
+
+                break;
+            default:
+                printf("Pilihan tidak valid, silahkan coba lagi\n");
+
+                break;
+        }
+    }
+}

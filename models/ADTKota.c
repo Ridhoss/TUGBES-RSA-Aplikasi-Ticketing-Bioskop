@@ -26,18 +26,18 @@ int SearchKotaFile(const KotaInfo* kota) {
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char* idStr = strtok(buffer, "|");
-        char* kotaNama = strtok(NULL, "|");
+        int id;
+        char kotaNama[100];
+        sscanf(buffer, "%d|%[^|\n]", &id, kotaNama);
 
-        if(idStr && kotaNama) {
-            int id = atoi(idStr);
-
+        if(id && kotaNama){
             if (id == kota->id) {
 
                 fclose(file);
                 return 1;
-            }
+            } 
         }
+        
     }
 
     fclose(file);
@@ -146,13 +146,12 @@ void LoadKota(address root) {
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char* idStr = strtok(buffer, "|");
-        char* kotaNama = strtok(NULL, "|");
+        int id;
+        char kotaNama[100];
+        sscanf(buffer, "%d|%[^|\n]", &id, kotaNama);
 
-        if (idStr && kotaNama)
+        if (id && kotaNama)
         {
-            int id = atoi(idStr);
-
             kota.id = id;
             strcpy(kota.nama, kotaNama);
 

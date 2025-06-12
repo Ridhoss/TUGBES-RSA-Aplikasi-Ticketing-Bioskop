@@ -26,14 +26,11 @@ int SearchBioskopFile(const BioskopInfo* bioskop) {
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
         
-        char* idStr = strtok(buffer, "|");
-        char* idKotaStr = strtok(NULL, "|");
-        char* bioskopNama = strtok(NULL, "|");
+        int id, idKota;
+        char bioskopNama[100];
+        sscanf(buffer, "%d|%d|%[^\n]", &id, &idKota, bioskopNama);
         
-        if (idStr && idKotaStr && bioskopNama) {
-
-            int id = atoi(idStr);
-
+        if (id && idKota && bioskopNama) {
             if (id == bioskop->id) {
 
                 fclose(file);
@@ -148,14 +145,11 @@ void LoadBioskop(address root) {
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char* idStr = strtok(buffer, "|");
-        char* idKotaStr = strtok(NULL, "|");
-        char* bioskopNama = strtok(NULL, "|");
+        int id, idKota;
+        char bioskopNama[100];
+        sscanf(buffer, "%d|%d|%[^\n]", &id, &idKota, bioskopNama);
 
-        if (idStr && idKotaStr && bioskopNama) {
-            int id = atoi(idStr);
-            int idKota = atoi(idKotaStr);
-
+        if (id && idKota && bioskopNama) {
             address kota = SearchKotaById(root, &idKota);
             if (kota != NULL) {
 
@@ -317,7 +311,7 @@ void DeleteAllBioskop(address kota) {
 
 // Deskripsi : Fungsi untuk membandingkan dua bioskop berdasarkan nama
 // IS : menerima dua infotype yang berisi BioskopInfo
-// FS : mengembalikan nilai 0 jika kota sama, dan 1 jika kota berbeda
+// FS : mengembalikan nilai 0 jika bioskop sama, dan 1 jika bioskop berbeda
 int CompareBioskop(infotype a, infotype b) {
     BioskopInfo* bioskop1 = (BioskopInfo*) a;
     BioskopInfo* bioskop2 = (BioskopInfo*) b;
