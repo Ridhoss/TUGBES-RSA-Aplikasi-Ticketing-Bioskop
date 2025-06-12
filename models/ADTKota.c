@@ -33,6 +33,7 @@ int SearchKotaFile(const KotaInfo* kota) {
             int id = atoi(idStr);
 
             if (id == kota->id) {
+
                 fclose(file);
                 return 1;
             }
@@ -65,7 +66,7 @@ void EditKotaKeFile(const KotaInfo* kotaLama, const KotaInfo* kotaBaru) {
         sscanf(buffer, "%d|%[^|\n]", &id, kotaNama);
 
         if (id == kotaLama->id) {
-            fprintf(temp, "%d|%s|\n", kotaLama->id, kotaBaru->nama);
+            fprintf(temp, "%d|%s|\n", id, kotaBaru->nama);
         } else {
             fprintf(temp, "%s\n", buffer);
         }
@@ -203,7 +204,7 @@ int AmbilIdKotaTerakhir() {
 // FS : mengembalikan address yang berisi alokasi memori untuk KotaInfo
 address AlokasiKota(KotaInfo X) {    
     KotaInfo *newInfo = (KotaInfo *)malloc(sizeof(KotaInfo));
-    if (newInfo != NULL) {
+    if (newInfo) {
         *newInfo = X;
         return Alokasi((infotype)newInfo, KOTA);
     }
@@ -214,8 +215,10 @@ address AlokasiKota(KotaInfo X) {
 // IS : menerima address P yang berisi KotaInfo
 // FS : menghapus alokasi memori KotaInfo yang ada pada address P
 void DeAlokasiKota(address P) {
-    free(P->info);
-    Dealokasi(P);
+    if (P != NULL) {
+        free(P->info);
+        Dealokasi(P);
+    }
 }
 
 // Deskripsi : Prosedur untuk menambah kota ke dalam tree
@@ -265,10 +268,6 @@ void UbahKota(address dataLama, KotaInfo dataBaru) {
 
     *newInfo = dataBaru;
     UbahNode(dataLama, (infotype)newInfo);
-
-    KotaInfo kotaLama;
-    kotaLama.id = oldInfo->id;
-    strcpy(kotaLama.nama, dataBaru.nama);
 
     EditKotaKeFile(oldInfo, newInfo);
         

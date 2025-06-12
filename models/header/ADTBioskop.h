@@ -21,6 +21,7 @@ void EditBioskopKeFile(const BioskopInfo* bioskop, const BioskopInfo* bioskopLam
 void HapusBioskopKeFile(const BioskopInfo* bioskopLama);
 void KosongkanFileBioskop();
 void LoadBioskop(address root);
+int AmbilIdBioskopTerakhir();
 
 address AlokasiBioskop(BioskopInfo X);
 void DeAlokasiBioskop(address P);
@@ -34,7 +35,9 @@ void DeleteBioskop(address bioskop);
 void DeleteAllBioskop(address kota);
 
 int CompareBioskop(infotype a, infotype b);
-address SearchBioskop(address kota, const char* namaBioskop);
+int CompareBioskopId(infotype a, infotype b);
+address SearchBioskopByName(address kota, const char* namaBioskop);
+address SearchBioskopById(address root, const int* idBioskop);
 
 void PrintBioskop(address node, int level);
 

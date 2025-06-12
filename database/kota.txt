@@ -3,4 +3,4 @@
 3|surabaya|
 4|tanggerang|
 5|malang|
-6|kebumen|
+6|cimahi|

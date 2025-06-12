@@ -170,7 +170,7 @@ void HalamanManipulasiBioskop(address root) {
                 printf("Masukkan nama bioskop baru: ");
                 InputString(dataBaru.nama);
                 
-                while (SearchBioskop(nodeKota, dataBaru.nama) != NULL) {
+                while (SearchBioskopByName(nodeKota, dataBaru.nama) != NULL) {
                     printf("Bioskop dengan nama '%s' sudah ada.\n", dataBaru.nama);
                     printf("Masukkan nama bioskop baru: ");
                     InputString(dataBaru.nama);
@@ -184,13 +184,13 @@ void HalamanManipulasiBioskop(address root) {
                 printf("Masukkan nama bioskop yang ingin diubah: ");
                 InputString(namaBioskop);
 
-                address nodeBioskop = SearchBioskop(nodeKota, namaBioskop);
+                address nodeBioskop = SearchBioskopByName(nodeKota, namaBioskop);
 
                 if (nodeBioskop != NULL) {
                     printf("Masukkan nama bioskop baru: ");
                     InputString(dataBaru.nama);
 
-                    while(SearchBioskop(nodeKota, dataBaru.nama) != NULL) {
+                    while(SearchBioskopByName(nodeKota, dataBaru.nama) != NULL) {
                         printf("Bioskop dengan nama '%s' sudah ada\n", dataBaru.nama);
                         printf("Masukan nama bioskop baru: ");
                         InputString(dataBaru.nama);
@@ -208,7 +208,7 @@ void HalamanManipulasiBioskop(address root) {
                 printf("Masukkan nama bioskop yang ingin dihapus: ");
                 InputString(namaBioskop);
 
-                address hasilCari = SearchBioskop(nodeKota, namaBioskop);
+                address hasilCari = SearchBioskopByName(nodeKota, namaBioskop);
                 if (!hasilCari) {
                     printf("Bioskop dengan nama '%s' tidak ditemukan.\n", namaBioskop);
                     break;
@@ -238,7 +238,7 @@ void HalamanManipulasiBioskop(address root) {
                 printf("Masukkan nama bioskop yang ingin dicari: ");
                 InputString(namaBioskop);
 
-                address hasilCari = SearchBioskop(nodeKota, namaBioskop);
+                address hasilCari = SearchBioskopByName(nodeKota, namaBioskop);
 
                 if (hasilCari != NULL) {
                     BioskopInfo* bioskop = (BioskopInfo*)hasilCari->info;
@@ -285,7 +285,7 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
     printf("Masukkan nama bioskop yang ingin dimanipulasi teaterya: ");
     InputString(namaBioskop);
 
-    address nodeBioskop = SearchBioskop(nodeKota, namaBioskop);
+    address nodeBioskop = SearchBioskopByName(nodeKota, namaBioskop);
 
     if (nodeBioskop == NULL) {
         printf("Bioskop '%s' tidak ditemukan.\n", namaBioskop);

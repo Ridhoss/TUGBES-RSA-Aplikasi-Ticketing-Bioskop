@@ -186,10 +186,10 @@ void PrintChildrenOnly(address node, int level) {
             printf("- Id: %d Kota: %s\n", info->id, info->nama);
         } else if (child->type == BIOSKOP) {
             BioskopInfo* info = (BioskopInfo*) child->info;
-            printf("- Bioskop: %s\n", info->nama);
+            printf("- id: %d Bioskop: %s\n", info->id, info->nama);
         } else if (child->type == TEATER) {
             TeaterInfo* info = (TeaterInfo*) child->info;
-            printf("- Teater: %s || Jumlah Kursi: %d || Harga: %d\n", info->nama, info->jumlahKursi, info->harga);
+            printf("- id: %d Teater: %s || Jumlah Kursi: %d || Harga: %d\n", info->id, info->nama, info->jumlahKursi, info->harga);
         }
         // PrintTree(child->fs, level + 1);
         child = child->nb;

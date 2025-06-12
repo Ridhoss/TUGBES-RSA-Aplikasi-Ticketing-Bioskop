@@ -146,7 +146,7 @@ void LoadTeater(address root) {
         if (kotaNama && bioskopNama && teaterNama && jumlahKursi) {
             address kota = SearchKotaByName(root, kotaNama);
             if (kota != NULL) {
-                address bioskop = SearchBioskop(kota, bioskopNama);
+                address bioskop = SearchBioskopByName(kota, bioskopNama);
                 if (bioskop != NULL) {
 
                     strcpy(teater.nama, teaterNama);
