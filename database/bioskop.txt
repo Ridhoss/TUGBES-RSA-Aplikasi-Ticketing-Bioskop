@@ -1,2 +1,2 @@
-bandung|CGV BEC
-bandung|CGV Ciwalk
+1|1|CGV BEC
+2|1|CGV Ciwalk

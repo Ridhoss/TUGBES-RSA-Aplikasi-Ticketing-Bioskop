@@ -5,30 +5,33 @@
 // Deskripsi : Prosedur untuk menyimpan data bioskop ke file
 // IS : menerima pointer ke BioskopInfo
 // FS : menyimpan nama bioskop dan kota ke dalam file "database/bioskop.txt"
-void SimpanBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop) {
+void SimpanBioskopKeFile(const int* idkota, const BioskopInfo* bioskop) {
     FILE* file = fopen("database/bioskop.txt", "a");
     if (file != NULL) {
-        fprintf(file, "%s|%s\n", namaKota, bioskop->nama);
+        fprintf(file, "%d|%d|%s\n", bioskop->id, idkota, bioskop->nama);
         fclose(file);
     } else {
         printf("Gagal menyimpan bioskop ke file.\n");
     }
 }
 
-int SearchBioskopFile(const char* namaKota, const BioskopInfo* bioskop) {
+int SearchBioskopFile(const BioskopInfo* bioskop) {
     FILE* file = fopen("database/bioskop.txt", "r");
     if (!file) return 0;
 
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
-
-        char* kotaNama = strtok(buffer, "|");
+        
+        char* idStr = strtok(buffer, "|");
+        char* idKotaStr = strtok(NULL, "|");
         char* bioskopNama = strtok(NULL, "|");
         
-        if (kotaNama && bioskopNama) {
-            if (strcmp(kotaNama, namaKota) == 0 &&
-                strcmp(bioskopNama, bioskop->nama) == 0) {
+        if (idStr && idKotaStr && bioskopNama) {
+
+            int id = atoi(idStr);
+
+            if (id == bioskop->id) {
 
                 fclose(file);
                 return 1; 
@@ -39,8 +42,8 @@ int SearchBioskopFile(const char* namaKota, const BioskopInfo* bioskop) {
     return 0;
 }
 
-void EditBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop, const BioskopInfo* bioskopLama) {
-    if (!SearchBioskopFile(namaKota, bioskopLama)) {
+void EditBioskopKeFile(const BioskopInfo* bioskop, const BioskopInfo* bioskopLama) {
+    if (!SearchBioskopFile(bioskopLama)) {
         printf("Bioskop '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", bioskopLama->nama);
         return;
     }
@@ -53,13 +56,13 @@ void EditBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop, const B
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char kotaNama[100], bioskopNama[100];
-        sscanf(buffer, "%[^|]|%[^\n]", kotaNama, bioskopNama);
+        char bioskopNama[100];
+        int id, idKota;
+        sscanf(buffer, "%[^|]|%[^|]|%[^\n]", id, idKota, bioskopNama);
 
-        if (strcmp(kotaNama, namaKota) == 0 &&
-            strcmp(bioskopNama, bioskopLama->nama) == 0) {
+        if (id == bioskopLama->id) {
 
-            fprintf(temp, "%s|%s\n", namaKota, bioskop->nama);
+            fprintf(temp, "%d|%d|%s\n", id, idKota, bioskop->nama);
         } else {
 
             fprintf(temp, "%s\n", buffer);
@@ -72,8 +75,8 @@ void EditBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop, const B
     rename("database/temp.txt", "database/bioskop.txt");
 }
 
-void HapusBioskopKeFile(const char* namaKota, const BioskopInfo* bioskopLama) {
-    if (!SearchBioskopFile(namaKota, bioskopLama)) {
+void HapusBioskopKeFile(const BioskopInfo* bioskopLama) {
+    if (!SearchBioskopFile(bioskopLama)) {
         printf("Bioskop '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", bioskopLama->nama);
         return;
     }
@@ -86,11 +89,11 @@ void HapusBioskopKeFile(const char* namaKota, const BioskopInfo* bioskopLama) {
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char kotaNama[100], bioskopNama[100];
-        sscanf(buffer, "%[^|]|%[^\n]", kotaNama, bioskopNama);
+        char bioskopNama[100];
+        int id, idKota;
+        sscanf(buffer, "%[^|]|%[^|]|%[^\n]", id, idKota, bioskopNama);
 
-        if (!(strcmp(kotaNama, namaKota) == 0 && 
-              strcmp(bioskopNama, bioskopLama->nama) == 0)) {
+        if (id != bioskopLama->id) {
 
             fprintf(temp, "%s\n", buffer);
         }
@@ -122,16 +125,22 @@ void LoadBioskop(address root) {
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char* kotaNama = strtok(buffer, "|");
+        char* idStr = strtok(buffer, "|");
+        char* idKotaStr = strtok(NULL, "|");
         char* bioskopNama = strtok(NULL, "|");
 
-        if (kotaNama && bioskopNama) {
-            address kota = SearchKota(root, kotaNama);
+        if (idStr && idKotaStr && bioskopNama) {
+            int id = atoi(idStr);
+            int idKota = atoi(idKotaStr);
+
+            address kota = SearchKotaById(root, &idKota);
             if (kota != NULL) {
 
                 strcpy(bioskop.nama, bioskopNama);
 
                 TambahBioskop(kota, bioskop);
+            } else {
+                printf("dasdasdas\n");
             }
         }
     }
@@ -188,7 +197,7 @@ void TambahBioskopBaru(address kota, BioskopInfo bioskopBaru) {
     TambahBioskop(kota, bioskopBaru);
 
     KotaInfo* kInfo = (KotaInfo*)kota->info;
-    SimpanBioskopKeFile(kInfo->nama, &bioskopBaru);
+    SimpanBioskopKeFile(&kInfo->id, &bioskopBaru);
 
     printf("Bioskop '%s' berhasil ditambahkan dan disimpan ke file.\n", bioskopBaru.nama);
 }
@@ -211,7 +220,7 @@ void UbahBioskop(address node, BioskopInfo dataBaru) {
     if (nodeKota) {
         KotaInfo* kInfo = (KotaInfo*) nodeKota->info;
 
-        EditBioskopKeFile(kInfo->nama, newInfo, &bioskopLama);
+        EditBioskopKeFile(newInfo, &bioskopLama);
     }
 
     printf("Informasi bioskop berhasil diubah.\n");
@@ -232,7 +241,7 @@ void DeleteBioskop(address bioskop) {
 
     if (nodeKota) {
         KotaInfo* kInfo = (KotaInfo*) nodeKota->info;
-        HapusBioskopKeFile(kInfo->nama, &bioskopLama);
+        HapusBioskopKeFile(&bioskopLama);
     }
 
     DeleteNode(&nodeKota, bioskop);

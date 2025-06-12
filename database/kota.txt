@@ -1,6 +1,6 @@
-bandung|
-jakarta|
-malang|
-surabaya|
-tanggerang|
-karawang|
+1|bandung|
+2|jakarta|
+3|surabaya|
+4|tanggerang|
+5|malang|
+6|kebumen|

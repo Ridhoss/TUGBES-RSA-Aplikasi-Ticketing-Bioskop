@@ -11,6 +11,7 @@
 #include "ADTTeater.h"
 
 typedef struct {
+    int id;
     char start[20];
     char end[20];
     // date tanggal;

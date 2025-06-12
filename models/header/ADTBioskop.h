@@ -11,13 +11,14 @@
 #include "ADTKota.h"
 
 typedef struct {
+    int id;
     char nama[100];
 } BioskopInfo;
 
-void SimpanBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop);
-int SearchBioskopFile(const char* namaKota, const BioskopInfo* bioskop);
-void EditBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop, const BioskopInfo* bioskopLama);
-void HapusBioskopKeFile(const char* namaKota, const BioskopInfo* bioskopLama);
+void SimpanBioskopKeFile(const int* idkota, const BioskopInfo* bioskop);
+int SearchBioskopFile(const BioskopInfo* bioskop);
+void EditBioskopKeFile(const BioskopInfo* bioskop, const BioskopInfo* bioskopLama);
+void HapusBioskopKeFile(const BioskopInfo* bioskopLama);
 void KosongkanFileBioskop();
 void LoadBioskop(address root);
 

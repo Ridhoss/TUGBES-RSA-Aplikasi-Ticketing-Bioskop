@@ -33,7 +33,7 @@ void HalamanManipulasiKota(address root) {
                 printf("Masukkan nama kota baru: ");
                 InputString(dataBaru.nama);
 
-                while(SearchKota(root, dataBaru.nama) != NULL) {
+                while(SearchKotaByName(root, dataBaru.nama) != NULL) {
                     printf("Kota dengan nama '%s' sudah ada\n", dataBaru.nama);
                     printf("Masukan nama kota baru: ");
                     InputString(dataBaru.nama);
@@ -44,16 +44,16 @@ void HalamanManipulasiKota(address root) {
                 break;
             }
             case 2: {
-                printf("Masukkan nama node yang ingin diubah: ");
+                printf("Masukkan nama kota yang ingin diubah: ");
                 InputString(namaKota);
 
-                address dataLama = SearchKota(root, namaKota);
+                address dataLama = SearchKotaByName(root, namaKota);
 
                 if (dataLama != NULL) {
                     printf("Masukkan nama kota baru: ");
                     InputString(dataBaru.nama);
 
-                    while(SearchKota(root, dataBaru.nama) != NULL) {
+                    while(SearchKotaByName(root, dataBaru.nama) != NULL) {
                         printf("Kota dengan nama '%s' sudah ada\n", dataBaru.nama);
                         printf("Masukan nama kota baru: ");
                         InputString(dataBaru.nama);
@@ -70,7 +70,7 @@ void HalamanManipulasiKota(address root) {
                 printf("Masukkan nama node yang ingin dihapus: ");
                 InputString(namaKota);
 
-                address delNode = SearchKota(root, namaKota);
+                address delNode = SearchKotaByName(root, namaKota);
     
                 if (delNode == NULL) {
                     printf("Node %s tidak ditemukan.\n", namaKota);
@@ -100,7 +100,7 @@ void HalamanManipulasiKota(address root) {
                 printf("Masukkan nama kota yang ingin dicari: ");
                 InputString(namaKota);
 
-                address hasilCari = SearchKota(root, namaKota);
+                address hasilCari = SearchKotaByName(root, namaKota);
 
                 if (hasilCari != NULL) {
                     KotaInfo* kota = (KotaInfo*)hasilCari->info;
@@ -140,7 +140,7 @@ void HalamanManipulasiBioskop(address root) {
     printf("Masukkan nama kota yang ingin dimanipulasi bioskopnya: ");
     InputString(namaKota);
 
-    address nodeKota = SearchKota(root, namaKota);
+    address nodeKota = SearchKotaByName(root, namaKota);
     
     if (nodeKota == NULL) {
         printf("Kota '%s' tidak ditemukan.\n", namaKota);

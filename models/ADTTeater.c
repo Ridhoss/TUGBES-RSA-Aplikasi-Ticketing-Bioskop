@@ -144,7 +144,7 @@ void LoadTeater(address root) {
         int hargaTeater = atoi(hargaTeaterStr);
 
         if (kotaNama && bioskopNama && teaterNama && jumlahKursi) {
-            address kota = SearchKota(root, kotaNama);
+            address kota = SearchKotaByName(root, kotaNama);
             if (kota != NULL) {
                 address bioskop = SearchBioskop(kota, bioskopNama);
                 if (bioskop != NULL) {

@@ -11,6 +11,7 @@
 
 
 typedef struct {
+    int id;
     char nama[100];
 } KotaInfo;
 
@@ -20,6 +21,7 @@ void EditKotaKeFile(const KotaInfo* kotaLama, const KotaInfo* kotaBaru);
 void HapusKotaKeFile(const KotaInfo* kotaLama);
 void KosongkanFileKota();
 void LoadKota(address root);
+int AmbilIdKotaTerakhir();
 
 address AlokasiKota(KotaInfo X);
 void DeAlokasiKota(address P);
@@ -33,7 +35,9 @@ void DeleteKota(address kota);
 void DeleteAllKota(address root);
 
 int CompareKota(infotype a, infotype b);
-address SearchKota(address root, const char* namaKota);
+int CompareKotaId(infotype a, infotype b);
+address SearchKotaByName(address root, const char* namaKota);
+address SearchKotaById(address root, const int* idKota);
 
 void PrintKota(address node, int level);
 

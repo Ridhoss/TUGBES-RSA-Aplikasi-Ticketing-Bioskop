@@ -183,7 +183,7 @@ void PrintChildrenOnly(address node, int level) {
         for (int i = 0; i < level; i++) printf("  ");
         if (child->type == KOTA) {
             KotaInfo* info = (KotaInfo*) child->info;
-            printf("- Kota: %s\n", info->nama);
+            printf("- Id: %d Kota: %s\n", info->id, info->nama);
         } else if (child->type == BIOSKOP) {
             BioskopInfo* info = (BioskopInfo*) child->info;
             printf("- Bioskop: %s\n", info->nama);

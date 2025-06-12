@@ -11,6 +11,7 @@
 #include "ADTBioskop.h"
 
 typedef struct {
+    int id;
     char nama[100];
     int jumlahKursi;
     int harga;
