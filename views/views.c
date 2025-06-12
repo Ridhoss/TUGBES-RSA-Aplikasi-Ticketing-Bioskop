@@ -329,7 +329,7 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                 printf("Masukkan Nama Teater yang Ingin Diubah: ");
                 InputString(namaTeater);
 
-                address nodeTeater = SearchTeater(nodeBioskop, namaTeater);
+                address nodeTeater = SearchTeaterByName(nodeBioskop, namaTeater);
                 if (!nodeTeater) {
                     printf("Teater dengan nama '%s' tidak ditemukan.\n", namaTeater);
                     break;
@@ -355,7 +355,7 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                 printf("Masukkan Nama Teater yang Ingin Dihapus: ");
                 InputString(namaTeater);
 
-                address nodeTeater = SearchTeater(nodeBioskop, namaTeater);
+                address nodeTeater = SearchTeaterByName(nodeBioskop, namaTeater);
                 if (!nodeTeater) {
                     printf("Teater dengan nama '%s' tidak ditemukan.\n", namaTeater);
                     break;
@@ -387,7 +387,7 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                 printf("Masukkan teater yang ingin dicari: ");
                 InputString(namaTeater);
 
-                address hasilCari = SearchTeater(root, namaTeater);
+                address hasilCari = SearchTeaterByName(root, namaTeater);
 
                 if (hasilCari != NULL) {
                     TeaterInfo* teater = (TeaterInfo*)hasilCari->info;

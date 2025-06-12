@@ -2,17 +2,23 @@
 
 // modul-modul operasi file
 
-void SimpanTeaterKeFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teater) {
+// Deskripsi : Prosedur untuk menyimpan data Teater ke file
+// IS : menerima pointer ke TeaterInfo
+// FS : menyimpan id kota dan bioskop serta informasi teater ke dalam file "database/teater.txt"
+void SimpanTeaterKeFile(const int* idKota, const int* idBioskop, const TeaterInfo* teater) {
     FILE* file = fopen("database/teater.txt", "a");
     if (file != NULL) {
-        fprintf(file, "%s|%s|%s|%d|%d\n", namaKota, namaBioskop, teater->nama, teater->jumlahKursi, teater->harga);
+        fprintf(file, "%d|%d|%d|%s|%d|%d\n", teater->id, *idKota, *idBioskop, teater->nama, teater->jumlahKursi, teater->harga);
         fclose(file);
     } else {
         printf("Gagal menyimpan teater ke file.\n");
     }
 }
 
-int SearchTeaterFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teater) {
+// Deskripsi : fungsi untuk mencari teater dalam file
+// IS : menerima informasi teater sebagai string   
+// FS : mengembalikan 1 jika teater ditemukan, 0 jika tidak ditemukan
+int SearchTeaterFile(const TeaterInfo* teater) {
     FILE* file = fopen("database/teater.txt", "r");
     if (!file) return 0;
 
@@ -20,33 +26,33 @@ int SearchTeaterFile(const char* namaKota, const char* namaBioskop, const Teater
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char* kotaNama = strtok(buffer, "|");
-        char* bioskopNama = strtok(NULL, "|");
+        char* idStr = strtok(buffer, "|");
+        char* idKotaStr = strtok(NULL, "|");
+        char* idBioskopStr = strtok(NULL, "|");
         char* teaterNama = strtok(NULL, "|");
         char* jumlahKursiStr = strtok(NULL, "|");
         char* hargaTeaterStr = strtok(NULL, "|");
         
-        if (kotaNama && bioskopNama && teaterNama && jumlahKursiStr && hargaTeaterStr) {
-            int jumlahKursi = atoi(jumlahKursiStr);
-            int hargaTeater = atoi(hargaTeaterStr);
+        if (idStr && idKotaStr && idBioskopStr && teaterNama && jumlahKursiStr && hargaTeaterStr) {
+            int id = atoi(idStr);
 
-            if (strcmp(kotaNama, namaKota) == 0 &&
-                strcmp(bioskopNama, namaBioskop) == 0 &&
-                strcmp(teaterNama, teater->nama) == 0 &&
-                jumlahKursi == teater->jumlahKursi &&
-                hargaTeater == teater->harga) {
+            if (id == teater->id) {
 
                 fclose(file);
                 return 1;
             }
         }
     }
+
     fclose(file);
     return 0;
 }
 
-void EditTeaterKeFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teater, const TeaterInfo* teaterLama) {
-    if (!SearchTeaterFile(namaKota, namaBioskop, teaterLama)) {
+// Deskripsi : Prosedur untuk mengedit info teater dalam file
+// IS : menerima info lama dan info baru
+// FS : mengubah info teater dalam file "database/teater.txt"
+void EditTeaterKeFile(const TeaterInfo* teater, const TeaterInfo* teaterLama) {
+    if (!SearchTeaterFile(teaterLama)) {
         printf("Teater '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", teaterLama->nama);
         return;
     }
@@ -59,17 +65,13 @@ void EditTeaterKeFile(const char* namaKota, const char* namaBioskop, const Teate
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char kotaNama[100], bioskopNama[100], teaterNama[100];
-        int jmlKursi, hargaTeater;
-        sscanf(buffer, "%[^|]|%[^|]|%[^|]|%d|%d", kotaNama, bioskopNama, teaterNama, &jmlKursi, &hargaTeater);
+        int id, idKota, idBioskop, jmlKursi, hargaTeater;
+        char teaterNama[100];
+        sscanf(buffer, "%d|%d|%d|%[^|]|%d|%d", &id, &idKota, &idBioskop, teaterNama, &jmlKursi, &hargaTeater);
 
-        if (strcmp(kotaNama, namaKota) == 0 &&
-            strcmp(bioskopNama, namaBioskop) == 0 &&
-            strcmp(teaterNama, teaterLama->nama) == 0 &&
-            jmlKursi == teaterLama->jumlahKursi &&
-            hargaTeater == teaterLama->harga) {
+        if (id == teaterLama->id) {
 
-            fprintf(temp, "%s|%s|%s|%d|%d\n", namaKota, namaBioskop, teater->nama, teater->jumlahKursi, teater->harga);
+            fprintf(temp, "%d|%d|%d|%s|%d|%d\n", id, idKota, idBioskop, teater->nama, teater->jumlahKursi, teater->harga);
         } else {
             fprintf(temp, "%s\n", buffer);
         }
@@ -77,12 +79,18 @@ void EditTeaterKeFile(const char* namaKota, const char* namaBioskop, const Teate
 
     fclose(file);
     fclose(temp);
+
     remove("database/teater.txt");
     rename("database/temp.txt", "database/teater.txt");
+
+    printf("Teater '%s' berhasil diubah menjadi '%s'.\n", teaterLama->nama, teater->nama);
 }
 
-void HapusTeaterKeFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teaterLama) {
-    if (!SearchTeaterFile(namaKota, namaBioskop, teaterLama)) {
+// Deskripsi : Prosedur untuk menghapus teater dari file
+// IS : menerima info teater
+// FS : menghapus info teater dari file "database/teater.txt"
+void HapusTeaterKeFile(const TeaterInfo* teaterLama) {
+    if (!SearchTeaterFile(teaterLama)) {
         printf("Teater '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", teaterLama->nama);
         return;
     }
@@ -95,15 +103,11 @@ void HapusTeaterKeFile(const char* namaKota, const char* namaBioskop, const Teat
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char kotaNama[100], bioskopNama[100], teaterNama[100];
-        int jmlKursi, hargaTeater;
-        sscanf(buffer, "%[^|]|%[^|]|%[^|]|%d|%d", kotaNama, bioskopNama, teaterNama, &jmlKursi, &hargaTeater);
+        int id, idKota, idBioskop, jmlKursi, hargaTeater;
+        char teaterNama[100];
+        sscanf(buffer, "%d|%d|%d|%[^|]|%d|%d", &id, &idKota, &idBioskop, teaterNama, &jmlKursi, &hargaTeater);
 
-        if (!(strcmp(kotaNama, namaKota) == 0 &&
-            strcmp(bioskopNama, namaBioskop) == 0 &&
-            strcmp(teaterNama, teaterLama->nama) == 0 &&
-            jmlKursi == teaterLama->jumlahKursi &&
-            hargaTeater == teaterLama->harga)) {
+        if (id != teaterLama->id) {
 
             fprintf(temp, "%s\n", buffer);
         }
@@ -111,10 +115,16 @@ void HapusTeaterKeFile(const char* namaKota, const char* namaBioskop, const Teat
 
     fclose(file);
     fclose(temp);
+
     remove("database/teater.txt");
     rename("database/temp.txt", "database/teater.txt");
+
+    printf("Teater '%s' berhasil dihapus.\n", teaterLama->nama);
 }
 
+// Deskripsi : Prosedur untuk mengosongkan file teater.txt
+// IS : membuka file "database/teater.txt" dalam mode tulis
+// FS : mengosongkan isi file
 void KosongkanFileTeater() {
     FILE* file = fopen("database/teater.txt", "w");
     if (file != NULL) {
@@ -125,9 +135,15 @@ void KosongkanFileTeater() {
     }
 }
 
+// Deskripsi : Prosedur untuk memuat data teater dari file
+// IS : membuka file "database/teater.txt" dalam mode baca
+// FS : membaca setiap baris dari file dan menambahkannya ke tree
 void LoadTeater(address root) {
     FILE* file = fopen("database/teater.txt", "r");
-    if (!file) return;
+    if (!file) {
+        printf("File teater.txt tidak ditemukan atau gagal dibuka.\n");
+        return;
+    }
 
     TeaterInfo teater;
 
@@ -135,20 +151,26 @@ void LoadTeater(address root) {
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char* kotaNama = strtok(buffer, "|");
-        char* bioskopNama = strtok(NULL, "|");
+        char* idStr = strtok(buffer, "|");
+        char* idKotaStr = strtok(NULL, "|");
+        char* idBioskopStr = strtok(NULL, "|");
         char* teaterNama = strtok(NULL, "|");
         char* jumlahKursiStr = strtok(NULL, "|");
         char* hargaTeaterStr = strtok(NULL, "|");
-        int jumlahKursi = atoi(jumlahKursiStr);
-        int hargaTeater = atoi(hargaTeaterStr);
 
-        if (kotaNama && bioskopNama && teaterNama && jumlahKursi) {
-            address kota = SearchKotaByName(root, kotaNama);
+        if (idStr && idKotaStr && idBioskopStr && teaterNama && jumlahKursiStr && hargaTeaterStr) {
+            int id = atoi(idStr);
+            int idKota = atoi(idKotaStr);
+            int idBioskop = atoi(idBioskopStr);
+            int jumlahKursi = atoi(jumlahKursiStr);
+            int hargaTeater = atoi(hargaTeaterStr);
+
+            address kota = SearchKotaById(root, &idKota);
             if (kota != NULL) {
-                address bioskop = SearchBioskopByName(kota, bioskopNama);
+                address bioskop = SearchBioskopById(kota, &idBioskop);
                 if (bioskop != NULL) {
 
+                    teater.id = id;
                     strcpy(teater.nama, teaterNama);
                     teater.jumlahKursi = jumlahKursi;
                     teater.harga = hargaTeater;
@@ -161,6 +183,40 @@ void LoadTeater(address root) {
 
     fclose(file);
 }
+
+// Deskripsi : Prosedur untuk mengambil id terakhir dari data file
+// IS : membuka file "database/teater.txt" dalam mode baca
+// FS : membaca setiap baris dari file dan mencari id paling besar
+int AmbilIdTeaterTerakhir() {
+    FILE* file = fopen("database/teater.txt", "r");
+    if (file == NULL) {
+        return 0;
+    }
+
+    int idTerakhir = 0;
+    char buffer[200];
+
+    while (fgets(buffer, sizeof(buffer), file)) {
+        char* idStr = strtok(buffer, "|");
+
+        if (idStr)
+        {
+            int idSementara = atoi(idStr);
+            if (idSementara > idTerakhir) {
+                idTerakhir = idSementara;
+            }
+        } 
+    }
+
+    fclose(file);
+    return idTerakhir;
+}
+
+
+
+
+
+
 
 
 //modul-modul utama
@@ -188,7 +244,11 @@ void DeAlokasiTeater(address P){
     }
 }
 
+// Deskripsi : Prosedur untuk menambah Teater ke dalam bioskop
+// IS : menerima address bioskop dan info teater
+// FS : menambah node baru Teater menjadi anak dari node bioskop dalam tree
 void TambahTeater(address bioskop, TeaterInfo teaterBaru){
+    if (bioskop == NULL) return;
 
     address node = AlokasiTeater(teaterBaru);
     if (node == NULL) {
@@ -201,16 +261,25 @@ void TambahTeater(address bioskop, TeaterInfo teaterBaru){
     printf("Teater '%s' berhasil ditambahkan.\n", teaterBaru.nama);
 }
 
+// Deskripsi : Prosedur untuk menambah teater baru dan menyimpannya ke file
+// IS : menerima address kota dan bioskop serta info teater
+// FS : node teater ditambahkan ke tree sebagai anak dari node bioskop, lalu disimpan ke file
 void TambahTeaterBaru(address kota, address bioskop, TeaterInfo teaterBaru) {
+    int idBaru = AmbilIdTeaterTerakhir() + 1;
+    teaterBaru.id = idBaru;
+
     TambahTeater(bioskop, teaterBaru);
 
     KotaInfo* kInfo = (KotaInfo*) kota->info;
     BioskopInfo* bInfo = (BioskopInfo*) bioskop->info;
-    SimpanTeaterKeFile(kInfo->nama, bInfo->nama, &teaterBaru);
+    SimpanTeaterKeFile(&kInfo->id, &bInfo->id, &teaterBaru);
 
     printf("Teater '%s' berhasil ditambahkan dan disimpan ke file.\n", teaterBaru.nama);
 }
 
+// Deskripsi : Prosedur untuk mengubah info teater pada node
+// IS : menerima address node dan dataBaru sebagai TeaterInfo
+// FS : mengubah info teater pada node dan memperbarui file
 void UbahTeater(address node, TeaterInfo dataBaru) {
     TeaterInfo* oldInfo = (TeaterInfo*) node->info;
     TeaterInfo* newInfo = (TeaterInfo*) malloc(sizeof(TeaterInfo));
@@ -220,30 +289,21 @@ void UbahTeater(address node, TeaterInfo dataBaru) {
     *newInfo = dataBaru;
     UbahNode(node, (infotype)newInfo);
 
-    TeaterInfo teaterLama;
-    strcpy(teaterLama.nama, oldInfo->nama);
-    teaterLama.jumlahKursi = oldInfo->jumlahKursi;
-    teaterLama.harga = oldInfo->harga;
+    EditTeaterKeFile(newInfo, oldInfo);
 
-    address nodeBioskop = node->pr;
-    address nodeKota = nodeBioskop ? nodeBioskop->pr : NULL;
-
-    if (nodeBioskop && nodeKota) {
-        BioskopInfo* bInfo = (BioskopInfo*) nodeBioskop->info;
-        KotaInfo* kInfo = (KotaInfo*) nodeKota->info;
-
-        EditTeaterKeFile(kInfo->nama, bInfo->nama, newInfo, &teaterLama);
-    }
-
-    printf("Teater '%s' berhasil diubah dan disimpan ke file.\n", teaterLama.nama);
+    printf("Teater '%s' berhasil diubah dan disimpan ke file.\n", oldInfo->nama);
 }
 
+// Deskripsi : Prosedur untuk menghapus Teater dari bioskop
+// IS : menerima address teater
+// FS : menghapus node teater dari tree dan juga dari file
 void DeleteTeater(address teater) {
     if (teater == NULL) return;
 
     TeaterInfo* oldInfo = (TeaterInfo*) teater->info;
 
     TeaterInfo teaterLama;
+    teaterLama.id = oldInfo->id;
     strcpy(teaterLama.nama, oldInfo->nama);
     teaterLama.jumlahKursi = oldInfo->jumlahKursi;
     teaterLama.harga = oldInfo->harga;
@@ -252,17 +312,17 @@ void DeleteTeater(address teater) {
     address nodeKota = nodeBioskop ? nodeBioskop->pr : NULL;
 
     if (nodeBioskop && nodeKota) {
-        BioskopInfo* bInfo = (BioskopInfo*) nodeBioskop->info;
-        KotaInfo* kInfo = (KotaInfo*) nodeKota->info;
+        HapusTeaterKeFile(&teaterLama);
 
-        HapusTeaterKeFile(kInfo->nama, bInfo->nama, &teaterLama);
+        DeleteNode(&nodeBioskop, teater);
+
+        printf("Teater '%s' berhasil dihapus.\n", teaterLama.nama);
     }
-
-    DeleteNode(&nodeBioskop, teater);
-
-    printf("Teater '%s' berhasil dihapus.\n", teaterLama.nama);
 }
 
+// Deskripsi : Prosedur untuk menghapus semua teater dari bioskop
+// IS : menerima address bioskop
+// FS : menghapus semua node teater dari tree dan juga mengosongkan file teater
 void DeleteAllTeater(address bioskop) {
     if (IsTreeEmpty(bioskop)) {
         printf("Biioskop tidak valid atau kosong.\n");
@@ -273,6 +333,9 @@ void DeleteAllTeater(address bioskop) {
     KosongkanFileTeater();
 }
 
+// Deskripsi : Fungsi untuk membandingkan dua Teater berdasarkan nama
+// IS : menerima dua infotype yang berisi TeaterInfo
+// FS : mengembalikan nilai 0 jika kota sama, dan 1 jika kota berbeda
 int CompareTeater(infotype a, infotype b) {
     TeaterInfo* teater1 = (TeaterInfo*) a;
     TeaterInfo* teater2 = (TeaterInfo*) b;
@@ -280,13 +343,39 @@ int CompareTeater(infotype a, infotype b) {
     return strcmp(teater1->nama, teater2->nama);
 }
 
-address SearchTeater(address bioskop, const char* namaTeater) {
+// Deskripsi : Fungsi untuk membandingkan dua Teater berdasarkan id
+// IS : menerima dua infotype yang berisi TeaterInfo
+// FS : mengembalikan nilai 0 jika Teater sama, dan 1 jika Teater berbeda
+int CompareTeaterId(infotype a, infotype b) {
+    TeaterInfo* teater1 = (TeaterInfo*) a;
+    TeaterInfo* teater2 = (TeaterInfo*) b;
+
+    return teater1->id - teater2->id;
+}
+
+// Deskripsi : Fungsi untuk mencari Teater berdasarkan nama
+// IS : menerima address kota dan namaTeater sebagai string
+// FS : mengembalikan address dari node yang sesuai, atau NULL jika tidak ditemukan
+address SearchTeaterByName(address bioskop, const char* namaTeater) {
     TeaterInfo target;
     strcpy(target.nama, namaTeater);
 
     return Search(bioskop, (infotype)&target, CompareTeater, TEATER);
 }
 
+// Deskripsi : Fungsi untuk mencari Teater berdasarkan id
+// IS : menerima address kota dan namaTeater sebagai string
+// FS : mengembalikan address dari node yang sesuai, atau NULL jika tidak ditemukan
+address SearchTeaterById(address bioskop, const int* idTeater) {
+    TeaterInfo target;
+    target.id = *idTeater;
+
+    return Search(bioskop, (infotype)&target, CompareTeaterId, TEATER);
+}
+
+// Deskripsi : Prosedur untuk mencetak daftar teater
+// IS : menerima address bioskop dan level untuk indentasi
+// FS : mencetak daftar teater yang ada pada bioskop 
 void PrintTeater(address node, int level) {
     if (IsTreeEmpty(node)) {
         printf("Tree kosong.\n");

@@ -9,7 +9,7 @@
 
 #include "ADTTree.h"
 #include "ADTKota.h"
-
+ 
 typedef struct {
     int id;
     char nama[100];

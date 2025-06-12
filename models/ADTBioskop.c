@@ -4,7 +4,7 @@
 
 // Deskripsi : Prosedur untuk menyimpan data bioskop ke file
 // IS : menerima pointer ke BioskopInfo
-// FS : menyimpan nama bioskop dan kota ke dalam file "database/bioskop.txt"
+// FS : menyimpan id bioskop dan informasi kota ke dalam file "database/bioskop.txt"
 void SimpanBioskopKeFile(const int* idkota, const BioskopInfo* bioskop) {
     FILE* file = fopen("database/bioskop.txt", "a");
     if (file != NULL) {
@@ -16,7 +16,7 @@ void SimpanBioskopKeFile(const int* idkota, const BioskopInfo* bioskop) {
 }
 
 // Deskripsi : fungsi untuk mencari bioskop dalam file
-// IS : menerima nama bioskop sebagai string   
+// IS : menerima informasi bioskop sebagai string   
 // FS : mengembalikan 1 jika bioskop ditemukan, 0 jika tidak ditemukan
 int SearchBioskopFile(const BioskopInfo* bioskop) {
     FILE* file = fopen("database/bioskop.txt", "r");
@@ -46,9 +46,9 @@ int SearchBioskopFile(const BioskopInfo* bioskop) {
     return 0;
 }
 
-// Deskripsi : Prosedur untuk mengedit nama bioskop dalam file
-// IS : menerima nama lama dan nama baru sebagai string
-// FS : mengubah nama bioskop dalam file "database/bioskop.txt"
+// Deskripsi : Prosedur untuk mengedit info bioskop dalam file
+// IS : menerima info lama dan info baru
+// FS : mengubah info bioskop dalam file "database/bioskop.txt"
 void EditBioskopKeFile(const BioskopInfo* bioskop, const BioskopInfo* bioskopLama) {
     if (!SearchBioskopFile(bioskopLama)) {
         printf("Bioskop '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", bioskopLama->nama);
@@ -63,8 +63,8 @@ void EditBioskopKeFile(const BioskopInfo* bioskop, const BioskopInfo* bioskopLam
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char bioskopNama[100];
         int id, idKota;
+        char bioskopNama[100];
         sscanf(buffer, "%d|%d|%[^\n]", &id, &idKota, bioskopNama);
 
         if (id == bioskopLama->id) {
@@ -84,8 +84,8 @@ void EditBioskopKeFile(const BioskopInfo* bioskop, const BioskopInfo* bioskopLam
 }
 
 // Deskripsi : Prosedur untuk menghapus bioskop dari file
-// IS : menerima nama bioskop sebagai string
-// FS : menghapus nama bioskop dari file "database/bioskop.txt"
+// IS : menerima info bioskop
+// FS : menghapus info bioskop dari file "database/bioskop.txt"
 void HapusBioskopKeFile(const BioskopInfo* bioskopLama) {
     if (!SearchBioskopFile(bioskopLama)) {
         printf("Bioskop '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", bioskopLama->nama);
@@ -171,7 +171,7 @@ void LoadBioskop(address root) {
 }
 
 // Deskripsi : Prosedur untuk mengambil id terakhir dari data file
-// IS : membuka file "database/kota.txt" dalam mode baca
+// IS : membuka file "database/bioskop.txt" dalam mode baca
 // FS : membaca setiap baris dari file dan mencari id paling besar
 int AmbilIdBioskopTerakhir() {
     FILE* file = fopen("database/bioskop.txt", "r");
@@ -229,7 +229,7 @@ void DeAlokasiBioskop(address P) {
 }
 
 // Deskripsi : Prosedur untuk menambah bioskop ke dalam kota
-// IS : menerima address kota dan namaBioskop sebagai string
+// IS : menerima address kota dan namaBioskop
 // FS : menambah node baru bioskop menjadi anak dari node kota dalam tree
 void TambahBioskop(address kota, BioskopInfo bioskopBaru) {
     if (kota == NULL) return;
@@ -260,9 +260,9 @@ void TambahBioskopBaru(address kota, BioskopInfo bioskopBaru) {
     printf("Bioskop '%s' berhasil ditambahkan dan disimpan ke file.\n", bioskopBaru.nama);
 }
 
-// Deskripsi : Prosedur untuk mengubah nama Bioskop pada node
+// Deskripsi : Prosedur untuk mengubah info Bioskop pada node
 // IS : menerima address node dan dataBaru sebagai BioskopInfo
-// FS : mengubah nama Bioskop pada node dan memperbarui file
+// FS : mengubah info Bioskop pada node dan memperbarui file
 void UbahBioskop(address node, BioskopInfo dataBaru) {
     BioskopInfo* oldInfo = (BioskopInfo*) node->info;
     BioskopInfo* newInfo = (BioskopInfo*) malloc(sizeof(BioskopInfo));
@@ -280,7 +280,7 @@ void UbahBioskop(address node, BioskopInfo dataBaru) {
 }
 
 // Deskripsi : Prosedur untuk menghapus bioskop dari kota
-// IS : menerima address kota dan namaBioskop sebagai string
+// IS : menerima address bioskop
 // FS : menghapus node bioskop dari tree dan juga dari file
 void DeleteBioskop(address bioskop) {
     if (bioskop == NULL) return;
@@ -317,7 +317,7 @@ void DeleteAllBioskop(address kota) {
 
 // Deskripsi : Fungsi untuk membandingkan dua bioskop berdasarkan nama
 // IS : menerima dua infotype yang berisi BioskopInfo
-// FS : mengembalikan nilai negatif jika a < b, 0 jika a == b, dan positif jika a > b
+// FS : mengembalikan nilai 0 jika kota sama, dan 1 jika kota berbeda
 int CompareBioskop(infotype a, infotype b) {
     BioskopInfo* bioskop1 = (BioskopInfo*) a;
     BioskopInfo* bioskop2 = (BioskopInfo*) b;

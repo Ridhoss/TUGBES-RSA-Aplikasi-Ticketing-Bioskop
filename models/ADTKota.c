@@ -4,7 +4,7 @@
 
 // Deskripsi : Prosedur untuk menyimpan data kota ke file
 // IS : menerima pointer ke KotaInfo
-// FS : menyimpan nama kota ke dalam file "database/kota.txt"
+// FS : menyimpan informasi kota ke dalam file "database/kota.txt"
 void SimpanKotaKeFile(const KotaInfo* kota) {
     FILE* file = fopen("database/kota.txt", "a");
     if (file != NULL) {
@@ -16,7 +16,7 @@ void SimpanKotaKeFile(const KotaInfo* kota) {
 }
 
 // Deskripsi : fungsi untuk mencari kota dalam file
-// IS : menerima nama kota sebagai string   
+// IS : menerima informasi kota sebagai string   
 // FS : mengembalikan 1 jika kota ditemukan, 0 jika tidak ditemukan
 int SearchKotaFile(const KotaInfo* kota) {
     FILE* file = fopen("database/kota.txt", "r");
@@ -44,9 +44,9 @@ int SearchKotaFile(const KotaInfo* kota) {
     return 0;
 }
 
-// Deskripsi : Prosedur untuk mengedit nama kota dalam file
-// IS : menerima nama lama dan nama baru sebagai string
-// FS : mengubah nama kota dalam file "database/kota.txt"
+// Deskripsi : Prosedur untuk mengedit info kota dalam file
+// IS : menerima info lama dan info baru
+// FS : mengubah info kota dalam file "database/kota.txt"
 void EditKotaKeFile(const KotaInfo* kotaLama, const KotaInfo* kotaBaru) {
     if (!SearchKotaFile(kotaLama)) {
         printf("Kota '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", kotaLama->nama);
@@ -82,8 +82,8 @@ void EditKotaKeFile(const KotaInfo* kotaLama, const KotaInfo* kotaBaru) {
 }
 
 // Deskripsi : Prosedur untuk menghapus kota dari file
-// IS : menerima nama kota sebagai string
-// FS : menghapus nama kota dari file "database/kota.txt"
+// IS : menerima info kota
+// FS : menghapus info kota dari file "database/kota.txt"
 void HapusKotaKeFile(const KotaInfo* kotaLama) {
     if (!SearchKotaFile(kotaLama)) {
         printf("Kota '%s' tidak ditemukan. Tidak dapat menghapus.\n", kotaLama->nama);
@@ -255,9 +255,9 @@ void TambahKotaBaru(address root, KotaInfo kotaBaru) {
     printf("Kota '%s' berhasil ditambahkan dan disimpan ke file.\n", kotaBaru.nama);
 }
 
-// Deskripsi : Prosedur untuk mengubah nama kota pada node
+// Deskripsi : Prosedur untuk mengubah info kota pada node
 // IS : menerima address node dan dataBaru sebagai KotaInfo
-// FS : mengubah nama kota pada node dan memperbarui file
+// FS : mengubah info kota pada node dan memperbarui file
 void UbahKota(address dataLama, KotaInfo dataBaru) {
     KotaInfo* newInfo = (KotaInfo*) malloc(sizeof(KotaInfo));
     KotaInfo* oldInfo = (KotaInfo*) dataLama->info;
@@ -275,7 +275,7 @@ void UbahKota(address dataLama, KotaInfo dataBaru) {
 }
 
 // Deskripsi : Prosedur untuk menghapus kota dari tree dan file
-// IS : menerima address root dan namaKota sebagai string
+// IS : menerima address kota
 // FS : menghapus node yang sesuai dari tree dan menghapus nama kota dari file
 void DeleteKota(address kota) {
     if (kota == NULL) return;
