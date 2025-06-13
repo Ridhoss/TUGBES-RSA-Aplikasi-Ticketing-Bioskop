@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 #include "models/header/ADTTree.h"
+#include "models/header/ADTList.h"
 #include "models/header/ADTKota.h"
 #include "models/header/ADTBioskop.h"
 #include "models/header/ADTTeater.h"
 #include "models/header/ADTAkun.h"
+#include "models/header/ADTFilm.h"
 #include "views/header/views.h"
 #include "views/header/Auth.h"
 
@@ -26,6 +28,9 @@ int main() {
     LoadKota(root);
     LoadBioskop(root);
     LoadTeater(root);
+
+    List L;
+    CreateList(&L);
 
     char parentName[100], childName[100];
     char pilihan;
@@ -53,7 +58,7 @@ int main() {
                 break;
             }
             case '3': {
-
+                HalamanManipulasiFilm(&L);
                 break;
             }
             case '4': {

@@ -495,3 +495,83 @@ void HalamanManipulasiJadwal(address root, address nodeTeater) {
         }
     }
 }
+
+void HalamanManipulasiFilm(List *L) {
+    int pilihan;
+    int id;
+    FilmInfo data;
+    do {
+        printf("\n=== Halaman Manipulasi Film ===\n");
+        printf("1. Tampilkan semua film\n");
+        printf("2. Tambah film baru\n");
+        printf("3. Hapus film berdasarkan ID\n");
+        printf("4. Cari film berdasarkan ID\n");
+        printf("5. Keluar\n");
+        printf("Pilih opsi (1-5): ");
+        scanf("%d", &pilihan);
+        getchar();
+
+        switch (pilihan) {
+        case 1:
+            printf("\n--- Daftar Semua Film ---\n");
+            printFilm(*L);
+            break;
+
+        case 2:
+            printf("\n--- Tambah Film Baru ---\n");
+            printf("Masukkan ID film: ");
+            scanf("%d", &data.idFilm);
+            getchar();
+
+            printf("Masukkan judul film: ");
+            fgets(data.judul, sizeof(data.judul), stdin);
+            data.judul[strcspn(data.judul, "\n")] = 0;
+
+            printf("Masukkan produser film: ");
+            fgets(data.produser, sizeof(data.produser), stdin);
+            data.produser[strcspn(data.produser, "\n")] = 0;
+
+            printf("Masukkan deskripsi film: ");
+            fgets(data.deskripsi, sizeof(data.deskripsi), stdin);
+            data.deskripsi[strcspn(data.deskripsi, "\n")] = 0;
+
+            tambahFilm(L, data);
+            printf("Film berhasil ditambahkan.\n");
+            break;
+
+        case 3:
+            printf("\n--- Hapus Film ---\n");
+            printf("Masukkan ID film yang ingin dihapus: ");
+            scanf("%d", &id);
+            getchar();
+            hapusFilm(L, id);
+            printf("Film dengan ID %d dihapus (jika ada).\n", id);
+            break;
+
+        case 4:
+            printf("\n--- Cari Film ---\n");
+            printf("Masukkan ID film yang ingin dicari: ");
+            scanf("%d", &id);
+            getchar();
+            FilmInfo* hasil = cariFilm(*L, id);
+            if (hasil != NULL) {
+                printf("Film ditemukan:\n");
+                printf("ID         : %d\n", hasil->idFilm);
+                printf("Judul      : %s\n", hasil->judul);
+                printf("Produser   : %s\n", hasil->produser);
+                printf("Deskripsi  : %s\n", hasil->deskripsi);
+            } else {
+                printf("Film dengan ID %d tidak ditemukan.\n", id);
+            }
+            break;
+
+        case 5:
+            printf("Keluar dari halaman manipulasi film.\n");
+            break;
+
+        default:
+            printf("Pilihan tidak valid. Silakan pilih 1-5.\n");
+            break;
+        }
+    } while (pilihan != 5);
+}

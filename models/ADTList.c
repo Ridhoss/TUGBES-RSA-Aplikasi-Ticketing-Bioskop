@@ -16,7 +16,7 @@ void UpdateLast(List *L) {
         // List kosong
         L->Last = NULL;
     } else {
-        address P = L->First;
+        addressList P = L->First;
         while (P->next != NULL) {
             P = P->next;
         }
@@ -24,8 +24,8 @@ void UpdateLast(List *L) {
     }
 }
 
-address Alokasi(infotype X) {
-    address P = (address)malloc(sizeof(struct tElmtList));
+addressList Allocation(infotype X) {
+    addressList P = (addressList)malloc(sizeof(struct tElmtList));
     if (P != NULL) {
         P->info = X;
         P->next = NULL;
@@ -33,22 +33,22 @@ address Alokasi(infotype X) {
     return P;
 }
 
-void DeAlokasi(address P) {
+void DeAllocation(addressList P) {
     free(P->info);
     free(P);
 }
 
-address Search(List L, infotype X) {
-    address P = L.First;
+addressList SearchList(List L, infotype X) {
+    addressList P = L.First;
     while (P != NULL && P->info != X) {
         P = P->next;
     }
     return P;
 }
 
-address SearchPrec(List L, infotype X) {
-    address P = L.First;
-    address Prec = NULL;
+addressList SearchPrec(List L, infotype X) {
+    addressList P = L.First;
+    addressList Prec = NULL;
 
     while (P != NULL && P->info != X) {
         Prec = P;
@@ -59,7 +59,7 @@ address SearchPrec(List L, infotype X) {
 }
 
 void InsLast(List *L, infotype X) {
-    address P = Alokasi(X);
+    addressList P = Allocation(X);
     if (P != NULL) {
         if (ListEmpty(*L)) {
             L->First = P;
@@ -73,9 +73,9 @@ void InsLast(List *L, infotype X) {
 
 void DelP(List *L, infotype X) {
     if (!ListEmpty(*L)) {
-        address P = Search(*L, X);
+        addressList P = SearchList(*L, X);
         if (P != NULL) {
-            address Prec = SearchPrec(*L, X);
+            addressList Prec = SearchPrec(*L, X);
 
             if (Prec == NULL) {
                 // elemen di awal
@@ -83,7 +83,7 @@ void DelP(List *L, infotype X) {
                 DelFirst(L, &dummy);
             } else {
                 Prec->next = P->next;
-                DeAlokasi(P);
+                DeAllocation(P);
             }
         }
 
@@ -101,7 +101,7 @@ void DelAll(List *L) {
 }
 
 void PrintInfo(List L) {
-    address P = L.First;
+    addressList P = L.First;
     printf("[");
     while (P != NULL) {
         printf("%d", P->info);
@@ -117,7 +117,7 @@ void PrintInfo(List L) {
 // opsional (dipertimbangkan)
 
 void InsFirst(List *L, infotype X) {
-    address P = Alokasi(X);
+    addressList P = Allocation(X);
     if (P != NULL) {
         P->next = L->First;
         L->First = P;
@@ -127,9 +127,9 @@ void InsFirst(List *L, infotype X) {
 
 }
 
-void InsertAfter(List *L, infotype X, address Prec) {
+void InsertAfter(List *L, infotype X, addressList Prec) {
     if (Prec != NULL) {
-        address P = Alokasi(X);
+        addressList P = Allocation(X);
         if (P != NULL) {
             P->next = Prec->next;
             Prec->next = P;
@@ -141,10 +141,10 @@ void InsertAfter(List *L, infotype X, address Prec) {
 
 void DelFirst(List *L, infotype *X) {
     if (!ListEmpty(*L)) {
-        address P = L->First;
+        addressList P = L->First;
         *X = P->info;
         L->First = P->next;
-        DeAlokasi(P);
+        DeAllocation(P);
 
         UpdateLast(L);
     }
@@ -152,8 +152,8 @@ void DelFirst(List *L, infotype *X) {
 
 void DelLast(List *L, infotype *X) {
     if (!ListEmpty(*L)) {
-        address P = L->First;
-        address Prec = NULL;
+        addressList P = L->First;
+        addressList Prec = NULL;
 
         while (P->next != NULL) {
             Prec = P;
@@ -167,7 +167,7 @@ void DelLast(List *L, infotype *X) {
         } else {
             Prec->next = NULL;
         }
-        DeAlokasi(P);
+        DeAllocation(P);
 
         UpdateLast(L);
     }
