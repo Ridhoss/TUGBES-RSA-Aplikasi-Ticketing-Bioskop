@@ -1,2 +1,1 @@
-1;the avenger;ridho;keren
-2;keren;ridho;waow
+1|the avenger|salma|nais

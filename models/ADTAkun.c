@@ -78,7 +78,7 @@ void DaftarAkun(int role) {
         printf("Gagal membuka file untuk menyimpan data!\n");
         return;
     }
-    fprintf(file, "%d,%s,%s,%s,%s,%d,%d\n",
+    fprintf(file, "%d|%s|%s|%s|%s|%d|%d\n",
         akun.id, akun.username, akun.password,
         akun.phone, akun.alamat, akun.saldo, akun.role);
 
