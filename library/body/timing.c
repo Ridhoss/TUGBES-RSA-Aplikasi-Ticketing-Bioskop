@@ -20,8 +20,8 @@ void SetTime(TimeInfo *T, int jam, int menit) {
     }
 }
 
-boolean isValid(int jam, int menit) {
-    return (jam >= 0 && menit >= 0 && menit < 60);
+boolean isValidTime(int jam, int menit) {
+    return (jam >= 0 && jam < 24  && menit >= 0 && menit < 60);
 }
 
 //  Fungsi untuk mengonversi TimeInfo menjadi total menit
@@ -46,7 +46,7 @@ TimeInfo TambahWaktu(TimeInfo A, TimeInfo B) {
 // Fungsi untuk menghitung selisih waktu
 TimeInfo DifferenceTime(TimeInfo A, TimeInfo B) {
     int selisih = ConvertMenit(A) - ConvertMenit(B); 
-    if (selisih < 0) selisih = 0;                 // Hindari hasil negatif
+    if (selisih < 0) selisih = 0;                
     return ConvertTime(selisih);
 }
 

@@ -17,7 +17,7 @@ typedef struct {
 
 void InisialisasiWaktu(TimeInfo *T);
 void SetTime(TimeInfo *T, int jam, int menit);
-boolean isValid(int jam, int menit);
+boolean isValidTime(int jam, int menit);
 
 int ConvertTMenit(TimeInfo T);
 TimeInfo ConvertTime(int totalMenit);

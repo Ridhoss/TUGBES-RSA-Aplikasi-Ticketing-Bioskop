@@ -7,7 +7,11 @@
 /* Type data */
 /***************************/
 /* Kamus */
-typedef struct { int Tgl; int Bln; int Thn;} date;
+typedef struct { 
+    int Tgl; 
+    int Bln; 
+    int Thn;
+} date;
 
 
 /*************************************/
