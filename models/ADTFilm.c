@@ -151,6 +151,21 @@ FilmInfo* cariFilm(List L, int id) {
     return NULL;
 }
 
+addressList cariFilmByJudul(List L, const char* title) {
+    addressList P = L.First;
+
+    while (P != NULL) {
+        FilmInfo* film = (FilmInfo*)(P->info);
+        if (strcmp(film->judul, title) == 0) {
+            return P;
+        }
+        P = P->next;
+    }
+
+    return NULL;
+}
+
+
 void printFilm(List L) {
     addressList P = L.First;
     if (P == NULL) {

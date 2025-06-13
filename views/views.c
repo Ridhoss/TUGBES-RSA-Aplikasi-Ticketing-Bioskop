@@ -425,10 +425,10 @@ void HalamanManipulasiFilm(List *L) {
     do {
         printf("\n=== Halaman Manipulasi Film ===\n");
         printf("1. Tampilkan semua film\n");
-        printf("2. Tambah film baru\n");
+        printf("2. Tambah Film baru\n");
         printf("3. Edit Film\n");
-        printf("4. Hapus film berdasarkan ID\n");
-        printf("5. Cari film berdasarkan ID\n");
+        printf("4. Hapus Film\n");
+        printf("5. Cari Film\n");
         printf("6. Keluar\n");
         printf("Pilih opsi (1-6): ");
         scanf("%d", &pilihan);
@@ -506,16 +506,23 @@ void HalamanManipulasiFilm(List *L) {
 
         case 5:
             printf("\n--- Cari Film ---\n");
-            printf("Masukkan ID film yang ingin dicari: ");
-            scanf("%d", &id);
-            getchar();
-            FilmInfo* hasil = cariFilm(*L, id);
+            char judul[100];
+            printf("Masukkan judul film yang ingin dicari: ");
+            fgets(judul, sizeof(judul), stdin);
+            judul[strcspn(judul, "\n")] = 0;
+
+            addressList hasil = cariFilmByJudul(*L, judul);
             if (hasil != NULL) {
                 printf("Film ditemukan:\n");
-                printFilm(*L);
+                FilmInfo* film = (FilmInfo*)(hasil->info);
+                printf("ID         : %d\n", film->idFilm);
+                printf("Judul      : %s\n", film->judul);
+                printf("Produser   : %s\n", film->produser);
+                printf("Deskripsi  : %s\n", film->deskripsi);
             } else {
-                printf("Film dengan ID %d tidak ditemukan.\n", id);
+                printf("Film dengan judul \"%s\" tidak ditemukan.\n", judul);
             }
+
             break;
 
         case 6:
