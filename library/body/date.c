@@ -75,7 +75,7 @@ boolean isValidDate(date D){
 }
 
 /* Print nilai D dengan format dd/mm/yyyy */
-void PrintObj (date D){
+void PrintObjDate(date D){
 	printf ("%d/%d/%d\n", GetTgl(D), GetBln(D), GetThn(D));
 }
 

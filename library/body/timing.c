@@ -10,7 +10,6 @@ void InisialisasiWaktu(TimeInfo *T) {
     T->menit = 0;
 }
 
-
 void SetTime(TimeInfo *T, int jam, int menit) {
     if (isValidTime(jam, menit)) {
         T->jam = jam;

@@ -11,6 +11,7 @@
 
 #include "ADTTree.h"
 #include "ADTTeater.h"
+#include "ADTFilm.h"
 
 typedef struct {
     int id;
@@ -18,7 +19,7 @@ typedef struct {
     TimeInfo End;
     date tanggal;
     char kursi[20][20]; 
-    // FilmInfo *idFilm;
+    FilmInfo *film;
     int jumlahBaris;
     int jumlahKolom;
 } JadwalInfo;

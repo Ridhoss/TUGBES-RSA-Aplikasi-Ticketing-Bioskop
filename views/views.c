@@ -405,7 +405,7 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                 break;
             case 7:
                 // halaman manipulasi Jadwal 
-
+                HalamanManipulasiJadwal(root, nodeBioskop);
 
                 break;
             case 8:
@@ -420,68 +420,133 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
     }
 }
 
-void HalamanManipulasiJadwal(address root, address nodeTeater) {
+void HalamanManipulasiJadwal(address root, address nodeBioskop) {
     char namaTeater[100];
 
-    TeaterInfo teaterBaru;
+    JadwalInfo jadwalBaru;
+    TimeInfo starTime, endTime;
+    date tglBaru;
+
+    int jam, menit, tgl, bln, thn;
+
+    // dummy
+    FilmInfo* filmBaru = (FilmInfo*) malloc(sizeof(FilmInfo));
+
+    filmBaru->idFilm = 1;
+    strcpy(filmBaru->judul, "Test Film1");
+    strcpy(filmBaru->produser, "Test Produser 1");
+    strcpy(filmBaru->deskripsi, "Ini film horror");
 
     int pil;
     int running = 1;
 
-    PrintTeater(nodeTeater, 0);
+    PrintTeater(nodeBioskop, 0);
 
-    printf("Masukkan nama teater yang ingin dimanipulasi teaterya: ");
+    printf("Masukkan nama teater yang ingin dimanipulasi jadwalnya: ");
     InputString(namaTeater);
 
-    address teater = SearchTeaterByName(nodeTeater, namaTeater);
+    address nodeTeater = SearchTeaterByName(nodeBioskop, namaTeater);
 
-    if (teater == NULL) {
-        printf("Bioskop '%s' tidak ditemukan.\n", namaTeater);
+    if (nodeTeater == NULL) {
+        printf("Teater '%s' tidak ditemukan.\n", namaTeater);
 
         return;
     }
 
     while (running) {
-        TeaterInfo* teaterData = (TeaterInfo*) teater;
-        printf("\n==== Menu Manipulasi Teater Bioskop %s ====\n", teaterData->nama);
-        printf("1. Tambah Teater\n");
-        printf("2. Ubah Informasi Teater\n");
-        printf("3. Hapus Teater\n");
-        printf("4. Hapus Semua Teater\n");
-        printf("5. Cari Teater\n");
-        printf("6. Tampilkan Semua Teater\n");
-        printf("7. Kembali ke Menu Bioskop\n");
+        TeaterInfo* teaterData = (TeaterInfo*) nodeTeater->info;
+        printf("\n==== Menu Manipulasi Jadwal Teater %s ====\n", teaterData->nama);
+        printf("1. Tambah Jadwal\n");
+        printf("2. Ubah Informasi Jadwal\n");
+        printf("3. Hapus Jadwal\n");
+        printf("4. Hapus Semua Jadwal\n");
+        printf("5. Cari Jadwal\n");
+        printf("6. Tampilkan Semua Jadwal\n");
+        printf("7. Kembali ke Menu Teater\n");
         printf("Pilih: ");
         scanf("%d", &pil);
         while (getchar() != '\n');
 
         switch (pil) {
             case 1: {
-                // Tambah Teater
+
+                int pilTam;
+                int runningTam = 1;
+
+                while (runningTam)
+                {
+                    printf("========= Menu Tambah Jadwal =========\n");
+                    printf("1. Tambah Jadwal hari ini\n");
+                    printf("2. Tambah Jadwal advance\n");
+                    printf("3. Kembali\n");
+                    printf("Pilih: ");
+                    scanf("%d", &pilTam);
+                    while (getchar() != '\n');
+
+                    switch (pilTam) {
+                        case 1: {
+                            printf("Pilih Film: ");
+
+                            if(filmBaru){
+                                printf("Film terpilih\n");
+
+                                GetToday(&tglBaru);
+
+                                PrintObjDate(tglBaru);
+
+                                jadwalBaru.film = filmBaru;
+
+                                printf("Masukan waktu tayang jadwal film (jam:menit): \n");
+                                scanf("%d:%d", &jam, &menit);
+
+                                SetTime(&starTime, jam, menit);
+
+                                PrintTime(starTime);
+                            }
+
+                            break;
+                        }
+                        case 2: {
+
+                            break;
+                        }
+                        case 3: {
+                            runningTam = 0;
+
+                            break;
+                        }
+                        default:
+                            printf("Pilihan tidak valid, silahkan coba lagi\n");
+
+                            break;
+                    }
+                }
+
+                // Tambah jadwal
 
                 break;
             }
             case 2: {
-                // Ubah Informasi Teater
+                // Ubah Informasi jadwal
 
                 break;
             }
             case 3: {
-                // Hapus Teater
+                // Hapus jadwal
 
                 break;
             }
             case 4: {
-                // Hapus Semua Teater
+                // Hapus Semua jadwal
 
                 break;
             }
             case 5:
-                // Cari Teater                
+                // Cari jadwal                
 
                 break;
             case 6:
-                // Tampilkan Semua Teater
+                // Tampilkan Semua jadwal
 
                 break;
             case 7:

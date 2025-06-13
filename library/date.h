@@ -7,7 +7,11 @@
 /* Type data */
 /***************************/
 /* Kamus */
-typedef struct { int Tgl; int Bln; int Thn;} date;
+typedef struct { 
+  int Tgl; 
+  int Bln; 
+  int Thn;
+} date;
 
 
 /*************************************/
@@ -46,7 +50,7 @@ void ReadDate (int itgl,int ibln, int ithn, date * D);
 boolean isValidDate(date D);
 /* Memeriksa apakah suatu tanggal valid, yaitu dengan memperhatikan batas akhir per bulan */
 
-void PrintObj (date D);
+void PrintObjDate(date D);
 /* Print nilai D dengan format dd/mm/yyyy */
 
 /****** Operator Relasional ******/
