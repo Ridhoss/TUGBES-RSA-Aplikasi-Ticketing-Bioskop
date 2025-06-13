@@ -4,11 +4,11 @@
 
 // Deskripsi : Prosedur untuk menyimpan data kota ke file
 // IS : menerima pointer ke KotaInfo
-// FS : menyimpan nama kota ke dalam file "database/kota.txt"
+// FS : menyimpan informasi kota ke dalam file "database/kota.txt"
 void SimpanKotaKeFile(const KotaInfo* kota) {
     FILE* file = fopen("database/kota.txt", "a");
     if (file != NULL) {
-        fprintf(file, "%s|\n", kota->nama);
+        fprintf(file, "%d|%s|\n", kota->id, kota->nama);
         fclose(file);
     } else {
         printf("Gagal membuka file untuk menyimpan data kota.\n");
@@ -16,7 +16,7 @@ void SimpanKotaKeFile(const KotaInfo* kota) {
 }
 
 // Deskripsi : fungsi untuk mencari kota dalam file
-// IS : menerima nama kota sebagai string   
+// IS : menerima informasi kota sebagai string   
 // FS : mengembalikan 1 jika kota ditemukan, 0 jika tidak ditemukan
 int SearchKotaFile(const KotaInfo* kota) {
     FILE* file = fopen("database/kota.txt", "r");
@@ -26,23 +26,27 @@ int SearchKotaFile(const KotaInfo* kota) {
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char* kotaNama = strtok(buffer, "|");
+        int id;
+        char kotaNama[100];
+        sscanf(buffer, "%d|%[^|\n]", &id, kotaNama);
 
-        if(kotaNama) {
-            if (strcmp(kotaNama, kota->nama) == 0) {
+        if(id && kotaNama){
+            if (id == kota->id) {
+
                 fclose(file);
                 return 1;
-            }
+            } 
         }
+        
     }
 
     fclose(file);
     return 0;
 }
 
-// Deskripsi : Prosedur untuk mengedit nama kota dalam file
-// IS : menerima nama lama dan nama baru sebagai string
-// FS : mengubah nama kota dalam file "database/kota.txt"
+// Deskripsi : Prosedur untuk mengedit info kota dalam file
+// IS : menerima info lama dan info baru
+// FS : mengubah info kota dalam file "database/kota.txt"
 void EditKotaKeFile(const KotaInfo* kotaLama, const KotaInfo* kotaBaru) {
     if (!SearchKotaFile(kotaLama)) {
         printf("Kota '%s' tidak ditemukan. Tidak dapat melakukan edit.\n", kotaLama->nama);
@@ -57,11 +61,12 @@ void EditKotaKeFile(const KotaInfo* kotaLama, const KotaInfo* kotaBaru) {
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
+        int id;
         char kotaNama[100];
-        sscanf(buffer, "%[^|\n]", kotaNama);
+        sscanf(buffer, "%d|%[^|\n]", &id, kotaNama);
 
-        if (strcmp(kotaNama, kotaLama->nama) == 0) {
-            fprintf(temp, "%s|\n", kotaBaru->nama);
+        if (id == kotaLama->id) {
+            fprintf(temp, "%d|%s|\n", id, kotaBaru->nama);
         } else {
             fprintf(temp, "%s\n", buffer);
         }
@@ -77,8 +82,8 @@ void EditKotaKeFile(const KotaInfo* kotaLama, const KotaInfo* kotaBaru) {
 }
 
 // Deskripsi : Prosedur untuk menghapus kota dari file
-// IS : menerima nama kota sebagai string
-// FS : menghapus nama kota dari file "database/kota.txt"
+// IS : menerima info kota
+// FS : menghapus info kota dari file "database/kota.txt"
 void HapusKotaKeFile(const KotaInfo* kotaLama) {
     if (!SearchKotaFile(kotaLama)) {
         printf("Kota '%s' tidak ditemukan. Tidak dapat menghapus.\n", kotaLama->nama);
@@ -86,22 +91,19 @@ void HapusKotaKeFile(const KotaInfo* kotaLama) {
     }
 
     FILE* file = fopen("database/kota.txt", "r");
-    if (!file) {
-        printf("Gagal membuka file untuk membaca data kota.\n");
-        return;
-    }
-
-    char buffer[256];
     FILE* temp = fopen("database/temp.txt", "w");
-    if (!temp) {
-        printf("Gagal membuka file sementara.\n");
-        fclose(file);
-        return;
-    }
+    if (!file || !temp) return;
+    
+    char buffer[256];
 
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
-        if (strcmp(buffer, kotaLama->nama) != 0) {
+
+        int id;
+        char kotaNama[100];
+        sscanf(buffer, "%d|%[^|\n]", &id, kotaNama);
+
+        if (id != kotaLama->id) {
             fprintf(temp, "%s\n", buffer);
         }
     }
@@ -144,10 +146,13 @@ void LoadKota(address root) {
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        char* kotaNama = strtok(buffer, "|");
+        int id;
+        char kotaNama[100];
+        sscanf(buffer, "%d|%[^|\n]", &id, kotaNama);
 
-        if (kotaNama)
+        if (id && kotaNama)
         {
+            kota.id = id;
             strcpy(kota.nama, kotaNama);
 
             TambahKota(root, kota);
@@ -158,6 +163,35 @@ void LoadKota(address root) {
     fclose(file);
 }
 
+// Deskripsi : Prosedur untuk mengambil id terakhir dari data file
+// IS : membuka file "database/kota.txt" dalam mode baca
+// FS : membaca setiap baris dari file dan mencari id paling besar
+int AmbilIdKotaTerakhir() {
+    FILE* file = fopen("database/kota.txt", "r");
+    if (file == NULL) {
+        return 0;
+    }
+
+    int idTerakhir = 0;
+    char buffer[200];
+
+    while (fgets(buffer, sizeof(buffer), file)) {
+        char* idStr = strtok(buffer, "|");
+
+        if (idStr)
+        {
+            int idSementara = atoi(idStr);
+            if (idSementara > idTerakhir) {
+                idTerakhir = idSementara;
+            }
+        } 
+    }
+
+    fclose(file);
+    return idTerakhir;
+}
+
+
 
 
 
@@ -167,9 +201,9 @@ void LoadKota(address root) {
 // Deskripsi : Fungsi untuk Alokasi memori KotaInfo
 // IS : menerima KotaInfo X
 // FS : mengembalikan address yang berisi alokasi memori untuk KotaInfo
-address AlokasiKota(KotaInfo X) {
+address AlokasiKota(KotaInfo X) {    
     KotaInfo *newInfo = (KotaInfo *)malloc(sizeof(KotaInfo));
-    if (newInfo != NULL) {
+    if (newInfo) {
         *newInfo = X;
         return Alokasi((infotype)newInfo, KOTA);
     }
@@ -180,8 +214,10 @@ address AlokasiKota(KotaInfo X) {
 // IS : menerima address P yang berisi KotaInfo
 // FS : menghapus alokasi memori KotaInfo yang ada pada address P
 void DeAlokasiKota(address P) {
-    free(P->info);
-    Dealokasi(P);
+    if (P != NULL) {
+        free(P->info);
+        Dealokasi(P);
+    }
 }
 
 // Deskripsi : Prosedur untuk menambah kota ke dalam tree
@@ -208,6 +244,9 @@ void TambahKota(address root, KotaInfo kotaBaru) {
 // IS : menerima address root dan namaKota sebagai string
 // FS : menambah node baru ke dalam tree dan menyimpan nama kota ke dalam file
 void TambahKotaBaru(address root, KotaInfo kotaBaru) {
+    int idBaru = AmbilIdKotaTerakhir() + 1;
+    kotaBaru.id = idBaru;
+
     TambahKota(root, kotaBaru);
 
     SimpanKotaKeFile(&kotaBaru);
@@ -215,28 +254,27 @@ void TambahKotaBaru(address root, KotaInfo kotaBaru) {
     printf("Kota '%s' berhasil ditambahkan dan disimpan ke file.\n", kotaBaru.nama);
 }
 
-// Deskripsi : Prosedur untuk mengubah nama kota pada node
+// Deskripsi : Prosedur untuk mengubah info kota pada node
 // IS : menerima address node dan dataBaru sebagai KotaInfo
-// FS : mengubah nama kota pada node dan memperbarui file
+// FS : mengubah info kota pada node dan memperbarui file
 void UbahKota(address dataLama, KotaInfo dataBaru) {
     KotaInfo* newInfo = (KotaInfo*) malloc(sizeof(KotaInfo));
+    KotaInfo* oldInfo = (KotaInfo*) dataLama->info;
 
-    if (newInfo != NULL) {
-        KotaInfo* oldInfo = (KotaInfo*) dataLama->info;
-        char namaLama[100];
-        strcpy(namaLama, oldInfo->nama);
+    if (!newInfo) return;
 
-        *newInfo = dataBaru;
-        UbahNode(dataLama, (infotype)newInfo);
+    dataBaru.id = oldInfo->id;
 
-        EditKotaKeFile(oldInfo, newInfo);
+    *newInfo = dataBaru;
+    UbahNode(dataLama, (infotype)newInfo);
+
+    EditKotaKeFile(oldInfo, newInfo);
         
-        printf("Nama kota berhasil diubah!\n");
-    }
+    printf("Nama kota berhasil diubah!\n");
 }
 
 // Deskripsi : Prosedur untuk menghapus kota dari tree dan file
-// IS : menerima address root dan namaKota sebagai string
+// IS : menerima address kota
 // FS : menghapus node yang sesuai dari tree dan menghapus nama kota dari file
 void DeleteKota(address kota) {
     if (kota == NULL) return;
@@ -244,6 +282,7 @@ void DeleteKota(address kota) {
     KotaInfo* oldInfo = (KotaInfo*) kota->info;
 
     KotaInfo kotaLama;
+    kotaLama.id = oldInfo->id;
     strcpy(kotaLama.nama, oldInfo->nama);
 
     address nodeRoot = kota->pr;
@@ -272,7 +311,7 @@ void DeleteAllKota(address root) {
 
 // Deskripsi : Fungsi untuk membandingkan dua kota berdasarkan nama
 // IS : menerima dua infotype yang berisi KotaInfo
-// FS : mengembalikan nilai negatif jika a < b, 0 jika a == b, dan positif jika a > b
+// FS : mengembalikan nilai 0 jika kota sama, dan 1 jika kota berbeda
 int CompareKota(infotype a, infotype b) {
     KotaInfo* kota1 = (KotaInfo*) a;
     KotaInfo* kota2 = (KotaInfo*) b;
@@ -280,14 +319,34 @@ int CompareKota(infotype a, infotype b) {
     return strcmp(kota1->nama, kota2->nama);
 }
 
+// Deskripsi : Fungsi untuk membandingkan dua kota berdasarkan id
+// IS : menerima dua infotype yang berisi KotaInfo
+// FS : mengembalikan nilai 0 jika kota sama, dan 1 jika kota berbeda
+int CompareKotaId(infotype a, infotype b) {
+    KotaInfo* kota1 = (KotaInfo*) a;
+    KotaInfo* kota2 = (KotaInfo*) b;
+
+    return kota1->id - kota2->id;
+}
+
 // Deskripsi : Fungsi untuk mencari kota berdasarkan nama
-// IS : menerima address root dan namaKota sebagai string
+// IS : menerima address root dan namaKota
 // FS : mengembalikan address dari node yang sesuai, atau NULL jika tidak ditemukan
-address SearchKota(address root, const char* namaKota) {
+address SearchKotaByName(address root, const char* namaKota) {
     KotaInfo target;
     strcpy(target.nama, namaKota);
 
     return Search(root, (infotype)&target, CompareKota, KOTA);
+}
+
+// Deskripsi : Fungsi untuk mencari kota berdasarkan id
+// IS : menerima address root dan idkota
+// FS : mengembalikan address dari node yang sesuai, atau NULL jika tidak ditemukan
+address SearchKotaById(address root, const int* idKota) {
+    KotaInfo target;
+    target.id = *idKota;
+
+    return Search(root, (infotype)&target, CompareKotaId, KOTA);
 }
 
 // Deskripsi : Prosedur untuk mencetak daftar kota

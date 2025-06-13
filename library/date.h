@@ -7,7 +7,11 @@
 /* Type data */
 /***************************/
 /* Kamus */
-typedef struct { int Tgl; int Bln; int Thn;} date;
+typedef struct { 
+  int Tgl; 
+  int Bln; 
+  int Thn;
+} date;
 
 
 /*************************************/
@@ -43,10 +47,10 @@ void SetThn (int NewThn, date * D);
 void ReadDate (int itgl,int ibln, int ithn, date * D);
 /* Membentuk DATE dari iTgl, iBln dan iThn yang dibaca dari keyboard */
 
-boolean isValid(date D);
+boolean isValidDate(date D);
 /* Memeriksa apakah suatu tanggal valid, yaitu dengan memperhatikan batas akhir per bulan */
 
-void PrintObj (date D);
+void PrintObjDate(date D);
 /* Print nilai D dengan format dd/mm/yyyy */
 
 /****** Operator Relasional ******/
@@ -58,25 +62,29 @@ boolean isKabisat (date D);
 int getEndDate (date D);
 /* Memberikan tanggal terakhir dari sebuah bulan */
 
-void DateBefore (date D);
+date DateBefore (date D);
 /* Menampilkan tanggal sebelumnya dari sebuah Date
 I.S = Tanggal tertentu diketahui
 F.S = Tanggal sebelumnya diketahui
 Hal yang perlu diketahui : Batas akhir tiap bulan dan jika jan, thn-1*/
 
-void NextDate (date D);
+date NextDate (date D);
 /* Menampilkan tanggal berikutnya dari sebuah Date
 I.S = Tanggal tertentu diketahui
 F.S = Tanggal berikutnya diketahui
 Hal yang perlu diketahui : Batas akhir tiap bulan dan jika
 des, thn+1 */
 
-void DifferenceDate (date D1, date D2);
+int DifferenceDate (date D1, date D2);
 /* Menampilkan selisih dua tanggal
 I.S = 2 buah Tanggal tertentu diketahui
 F.S = Tampil selisih dua buah tanggal
 Asumsi : 1 tahun = 365 hari */
 
 void GetToday(date *D);
+
+date AddDays(date D, int n);
+
+const char* NamaHari(date D);
 
 #endif

@@ -33,7 +33,7 @@ void HalamanManipulasiKota(address root) {
                 printf("Masukkan nama kota baru: ");
                 InputString(dataBaru.nama);
 
-                while(SearchKota(root, dataBaru.nama) != NULL) {
+                while(SearchKotaByName(root, dataBaru.nama) != NULL) {
                     printf("Kota dengan nama '%s' sudah ada\n", dataBaru.nama);
                     printf("Masukan nama kota baru: ");
                     InputString(dataBaru.nama);
@@ -44,16 +44,16 @@ void HalamanManipulasiKota(address root) {
                 break;
             }
             case 2: {
-                printf("Masukkan nama node yang ingin diubah: ");
+                printf("Masukkan nama kota yang ingin diubah: ");
                 InputString(namaKota);
 
-                address dataLama = SearchKota(root, namaKota);
+                address dataLama = SearchKotaByName(root, namaKota);
 
                 if (dataLama != NULL) {
                     printf("Masukkan nama kota baru: ");
                     InputString(dataBaru.nama);
 
-                    while(SearchKota(root, dataBaru.nama) != NULL) {
+                    while(SearchKotaByName(root, dataBaru.nama) != NULL) {
                         printf("Kota dengan nama '%s' sudah ada\n", dataBaru.nama);
                         printf("Masukan nama kota baru: ");
                         InputString(dataBaru.nama);
@@ -70,7 +70,7 @@ void HalamanManipulasiKota(address root) {
                 printf("Masukkan nama node yang ingin dihapus: ");
                 InputString(namaKota);
 
-                address delNode = SearchKota(root, namaKota);
+                address delNode = SearchKotaByName(root, namaKota);
     
                 if (delNode == NULL) {
                     printf("Node %s tidak ditemukan.\n", namaKota);
@@ -100,7 +100,7 @@ void HalamanManipulasiKota(address root) {
                 printf("Masukkan nama kota yang ingin dicari: ");
                 InputString(namaKota);
 
-                address hasilCari = SearchKota(root, namaKota);
+                address hasilCari = SearchKotaByName(root, namaKota);
 
                 if (hasilCari != NULL) {
                     KotaInfo* kota = (KotaInfo*)hasilCari->info;
@@ -140,7 +140,7 @@ void HalamanManipulasiBioskop(address root) {
     printf("Masukkan nama kota yang ingin dimanipulasi bioskopnya: ");
     InputString(namaKota);
 
-    address nodeKota = SearchKota(root, namaKota);
+    address nodeKota = SearchKotaByName(root, namaKota);
     
     if (nodeKota == NULL) {
         printf("Kota '%s' tidak ditemukan.\n", namaKota);
@@ -170,7 +170,7 @@ void HalamanManipulasiBioskop(address root) {
                 printf("Masukkan nama bioskop baru: ");
                 InputString(dataBaru.nama);
                 
-                while (SearchBioskop(nodeKota, dataBaru.nama) != NULL) {
+                while (SearchBioskopByName(nodeKota, dataBaru.nama) != NULL) {
                     printf("Bioskop dengan nama '%s' sudah ada.\n", dataBaru.nama);
                     printf("Masukkan nama bioskop baru: ");
                     InputString(dataBaru.nama);
@@ -184,13 +184,13 @@ void HalamanManipulasiBioskop(address root) {
                 printf("Masukkan nama bioskop yang ingin diubah: ");
                 InputString(namaBioskop);
 
-                address nodeBioskop = SearchBioskop(nodeKota, namaBioskop);
+                address nodeBioskop = SearchBioskopByName(nodeKota, namaBioskop);
 
                 if (nodeBioskop != NULL) {
                     printf("Masukkan nama bioskop baru: ");
                     InputString(dataBaru.nama);
 
-                    while(SearchBioskop(nodeKota, dataBaru.nama) != NULL) {
+                    while(SearchBioskopByName(nodeKota, dataBaru.nama) != NULL) {
                         printf("Bioskop dengan nama '%s' sudah ada\n", dataBaru.nama);
                         printf("Masukan nama bioskop baru: ");
                         InputString(dataBaru.nama);
@@ -208,7 +208,7 @@ void HalamanManipulasiBioskop(address root) {
                 printf("Masukkan nama bioskop yang ingin dihapus: ");
                 InputString(namaBioskop);
 
-                address hasilCari = SearchBioskop(nodeKota, namaBioskop);
+                address hasilCari = SearchBioskopByName(nodeKota, namaBioskop);
                 if (!hasilCari) {
                     printf("Bioskop dengan nama '%s' tidak ditemukan.\n", namaBioskop);
                     break;
@@ -238,7 +238,7 @@ void HalamanManipulasiBioskop(address root) {
                 printf("Masukkan nama bioskop yang ingin dicari: ");
                 InputString(namaBioskop);
 
-                address hasilCari = SearchBioskop(nodeKota, namaBioskop);
+                address hasilCari = SearchBioskopByName(nodeKota, namaBioskop);
 
                 if (hasilCari != NULL) {
                     BioskopInfo* bioskop = (BioskopInfo*)hasilCari->info;
@@ -285,7 +285,7 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
     printf("Masukkan nama bioskop yang ingin dimanipulasi teaterya: ");
     InputString(namaBioskop);
 
-    address nodeBioskop = SearchBioskop(nodeKota, namaBioskop);
+    address nodeBioskop = SearchBioskopByName(nodeKota, namaBioskop);
 
     if (nodeBioskop == NULL) {
         printf("Bioskop '%s' tidak ditemukan.\n", namaBioskop);
@@ -301,7 +301,8 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
         printf("4. Hapus Semua Teater\n");
         printf("5. Cari Teater\n");
         printf("6. Tampilkan Semua Teater\n");
-        printf("7. Kembali ke Menu Bioskop\n");
+        printf("7. Manipulasi Jadwal di Teater\n");
+        printf("8. Kembali ke Menu Bioskop\n");
         printf("Pilih: ");
         scanf("%d", &pil);
         while (getchar() != '\n');
@@ -329,7 +330,7 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                 printf("Masukkan Nama Teater yang Ingin Diubah: ");
                 InputString(namaTeater);
 
-                address nodeTeater = SearchTeater(nodeBioskop, namaTeater);
+                address nodeTeater = SearchTeaterByName(nodeBioskop, namaTeater);
                 if (!nodeTeater) {
                     printf("Teater dengan nama '%s' tidak ditemukan.\n", namaTeater);
                     break;
@@ -355,7 +356,7 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                 printf("Masukkan Nama Teater yang Ingin Dihapus: ");
                 InputString(namaTeater);
 
-                address nodeTeater = SearchTeater(nodeBioskop, namaTeater);
+                address nodeTeater = SearchTeaterByName(nodeBioskop, namaTeater);
                 if (!nodeTeater) {
                     printf("Teater dengan nama '%s' tidak ditemukan.\n", namaTeater);
                     break;
@@ -387,7 +388,7 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                 printf("Masukkan teater yang ingin dicari: ");
                 InputString(namaTeater);
 
-                address hasilCari = SearchTeater(root, namaTeater);
+                address hasilCari = SearchTeaterByName(root, namaTeater);
 
                 if (hasilCari != NULL) {
                     TeaterInfo* teater = (TeaterInfo*)hasilCari->info;
@@ -400,6 +401,152 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
             case 6:
                 // Tampilkan Semua Teater
                 PrintTeater(nodeBioskop, 0);
+
+                break;
+            case 7:
+                // halaman manipulasi Jadwal 
+                HalamanManipulasiJadwal(root, nodeBioskop);
+
+                break;
+            case 8:
+                running = 0;
+
+                break;
+            default:
+                printf("Pilihan tidak valid, silahkan coba lagi\n");
+
+                break;
+        }
+    }
+}
+
+void HalamanManipulasiJadwal(address root, address nodeBioskop) {
+    char namaTeater[100];
+
+    JadwalInfo jadwalBaru;
+    TimeInfo starTime, endTime;
+    date tglBaru;
+
+    int jam, menit, tgl, bln, thn;
+
+    // dummy
+    FilmInfo* filmBaru = (FilmInfo*) malloc(sizeof(FilmInfo));
+
+    filmBaru->idFilm = 1;
+    strcpy(filmBaru->judul, "Test Film1");
+    strcpy(filmBaru->produser, "Test Produser 1");
+    strcpy(filmBaru->deskripsi, "Ini film horror");
+
+    int pil;
+    int running = 1;
+
+    PrintTeater(nodeBioskop, 0);
+
+    printf("Masukkan nama teater yang ingin dimanipulasi jadwalnya: ");
+    InputString(namaTeater);
+
+    address nodeTeater = SearchTeaterByName(nodeBioskop, namaTeater);
+
+    if (nodeTeater == NULL) {
+        printf("Teater '%s' tidak ditemukan.\n", namaTeater);
+
+        return;
+    }
+
+    while (running) {
+        TeaterInfo* teaterData = (TeaterInfo*) nodeTeater->info;
+        printf("\n==== Menu Manipulasi Jadwal Teater %s ====\n", teaterData->nama);
+        printf("1. Tambah Jadwal\n");
+        printf("2. Ubah Informasi Jadwal\n");
+        printf("3. Hapus Jadwal\n");
+        printf("4. Hapus Semua Jadwal\n");
+        printf("5. Cari Jadwal\n");
+        printf("6. Tampilkan Semua Jadwal\n");
+        printf("7. Kembali ke Menu Teater\n");
+        printf("Pilih: ");
+        scanf("%d", &pil);
+        while (getchar() != '\n');
+
+        switch (pil) {
+            case 1: {
+
+                int pilTam;
+                int runningTam = 1;
+
+                while (runningTam)
+                {
+                    printf("========= Menu Tambah Jadwal =========\n");
+                    printf("1. Tambah Jadwal hari ini\n");
+                    printf("2. Tambah Jadwal advance\n");
+                    printf("3. Kembali\n");
+                    printf("Pilih: ");
+                    scanf("%d", &pilTam);
+                    while (getchar() != '\n');
+
+                    switch (pilTam) {
+                        case 1: {
+                            printf("Pilih Film: ");
+
+                            if(filmBaru){
+                                printf("Film terpilih\n");
+                                GetToday(&tglBaru);
+
+                                printf("Masukan waktu tayang jadwal film ( jam:menit ): ");
+                                scanf("%d:%d", &jam, &menit);
+                                
+                                SetTime(&starTime, jam, menit);
+
+                                jadwalBaru.film = filmBaru;
+                                jadwalBaru.tanggal = tglBaru;
+                                jadwalBaru.start = starTime;
+                                
+                                PrintObjDate(jadwalBaru.tanggal);
+                                PrintTime(jadwalBaru.start);
+                            }
+
+                            break;
+                        }
+                        case 2: {
+
+                            break;
+                        }
+                        case 3: {
+                            runningTam = 0;
+
+                            break;
+                        }
+                        default:
+                            printf("Pilihan tidak valid, silahkan coba lagi\n");
+
+                            break;
+                    }
+                }
+
+                // Tambah jadwal
+
+                break;
+            }
+            case 2: {
+                // Ubah Informasi jadwal
+
+                break;
+            }
+            case 3: {
+                // Hapus jadwal
+
+                break;
+            }
+            case 4: {
+                // Hapus Semua jadwal
+
+                break;
+            }
+            case 5:
+                // Cari jadwal                
+
+                break;
+            case 6:
+                // Tampilkan Semua jadwal
 
                 break;
             case 7:

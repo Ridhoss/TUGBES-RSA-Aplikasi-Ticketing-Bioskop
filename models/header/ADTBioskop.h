@@ -9,17 +9,19 @@
 
 #include "ADTTree.h"
 #include "ADTKota.h"
-
+ 
 typedef struct {
+    int id;
     char nama[100];
 } BioskopInfo;
 
-void SimpanBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop);
-int SearchBioskopFile(const char* namaKota, const BioskopInfo* bioskop);
-void EditBioskopKeFile(const char* namaKota, const BioskopInfo* bioskop, const BioskopInfo* bioskopLama);
-void HapusBioskopKeFile(const char* namaKota, const BioskopInfo* bioskopLama);
+void SimpanBioskopKeFile(const int* idkota, const BioskopInfo* bioskop);
+int SearchBioskopFile(const BioskopInfo* bioskop);
+void EditBioskopKeFile(const BioskopInfo* bioskop, const BioskopInfo* bioskopLama);
+void HapusBioskopKeFile(const BioskopInfo* bioskopLama);
 void KosongkanFileBioskop();
 void LoadBioskop(address root);
+int AmbilIdBioskopTerakhir();
 
 address AlokasiBioskop(BioskopInfo X);
 void DeAlokasiBioskop(address P);
@@ -33,7 +35,9 @@ void DeleteBioskop(address bioskop);
 void DeleteAllBioskop(address kota);
 
 int CompareBioskop(infotype a, infotype b);
-address SearchBioskop(address kota, const char* namaBioskop);
+int CompareBioskopId(infotype a, infotype b);
+address SearchBioskopByName(address kota, const char* namaBioskop);
+address SearchBioskopById(address root, const int* idBioskop);
 
 void PrintBioskop(address node, int level);
 

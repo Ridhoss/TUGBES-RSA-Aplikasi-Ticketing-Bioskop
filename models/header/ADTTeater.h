@@ -11,17 +11,19 @@
 #include "ADTBioskop.h"
 
 typedef struct {
+    int id;
     char nama[100];
     int jumlahKursi;
     int harga;
 } TeaterInfo;
 
-void SimpanTeaterKeFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teater);
-int SearchTeaterFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teater);
-void EditTeaterKeFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teater, const TeaterInfo* teaterLama);
-void HapusTeaterKeFile(const char* namaKota, const char* namaBioskop, const TeaterInfo* teaterLama);
-// void KosongkanFileTeater();
+void SimpanTeaterKeFile(const int* idKota, const int* idBioskop, const TeaterInfo* teater);
+int SearchTeaterFile(const TeaterInfo* teater);
+void EditTeaterKeFile(const TeaterInfo* teater, const TeaterInfo* teaterLama);
+void HapusTeaterKeFile(const TeaterInfo* teaterLama);
+void KosongkanFileTeater();
 void LoadTeater(address root);
+int AmbilIdTeaterTerakhir();
 
 address AlokasiTeater(TeaterInfo X);
 void DeAlokasiTeater(address P);
@@ -35,7 +37,9 @@ void DeleteTeater(address teater);
 void DeleteAllTeater(address bioskop);
 
 int CompareTeater(infotype a, infotype b);
-address SearchTeater(address bioskop, const char* namaTeater);
+int CompareTeaterId(infotype a, infotype b);
+address SearchTeaterByName(address bioskop, const char* namaTeater);
+address SearchTeaterById(address bioskop, const int* idTeater);
 
 void PrintTeater(address node, int level);
 
