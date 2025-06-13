@@ -489,19 +489,19 @@ void HalamanManipulasiJadwal(address root, address nodeBioskop) {
 
                             if(filmBaru){
                                 printf("Film terpilih\n");
-
                                 GetToday(&tglBaru);
 
-                                PrintObjDate(tglBaru);
-
-                                jadwalBaru.film = filmBaru;
-
-                                printf("Masukan waktu tayang jadwal film (jam:menit): \n");
+                                printf("Masukan waktu tayang jadwal film ( jam:menit ): ");
                                 scanf("%d:%d", &jam, &menit);
-
+                                
                                 SetTime(&starTime, jam, menit);
 
-                                PrintTime(starTime);
+                                jadwalBaru.film = filmBaru;
+                                jadwalBaru.tanggal = tglBaru;
+                                jadwalBaru.start = starTime;
+                                
+                                PrintObjDate(jadwalBaru.tanggal);
+                                PrintTime(jadwalBaru.start);
                             }
 
                             break;

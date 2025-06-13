@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "ADTList.h"
+#include "../../library/timing.h"
 
 // Struct utama untuk informasi film
 typedef struct {
@@ -12,7 +13,7 @@ typedef struct {
     char judul [100];
     char produser[100];
     char deskripsi[100];
-    // time durasi;
+    TimeInfo durasi;
 } FilmInfo;
 
 FilmInfo* alokasiFilm(FilmInfo data);
