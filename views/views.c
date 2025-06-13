@@ -584,9 +584,6 @@ void HalamanManipulasiFilm(List *L) {
 
         case 2:
             printf("\n--- Tambah Film Baru ---\n");
-            printf("Masukkan ID film: ");
-            scanf("%d", &data.idFilm);
-            getchar();
 
             printf("Masukkan judul film: ");
             fgets(data.judul, sizeof(data.judul), stdin);
@@ -600,7 +597,8 @@ void HalamanManipulasiFilm(List *L) {
             fgets(data.deskripsi, sizeof(data.deskripsi), stdin);
             data.deskripsi[strcspn(data.deskripsi, "\n")] = 0;
 
-            tambahFilm(L, data);
+            tambahFilm(L, data.judul, data.produser, data.deskripsi);
+
             printf("Film berhasil ditambahkan.\n");
             break;
 
