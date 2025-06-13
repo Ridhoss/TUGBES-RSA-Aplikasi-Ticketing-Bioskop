@@ -60,14 +60,14 @@ void ReadDate (int itgl,int ibln, int ithn, date * D){
 	SetBln (ibln, &(* D));
 	SetThn (ithn, &(* D));
 
-	if(!isValid((* D))){
+	if(!isValidDate((* D))){
 		printf("Tanggal tidak valid! Program Error.\n");
 		exit(1);
 	}
 }
 
 /* Memeriksa apakah suatu tanggal valid, yaitu dengan memperhatikan batas akhir per bulan */
-boolean isValid(date D){
+boolean isValidDate(date D){
 	if ((GetThn(D) < 1900)||(GetThn(D) > 30000)||(GetBln(D) < 1) ||(GetBln(D) > 12)||(GetTgl(D) < 1)||(GetTgl(D) > getEndDate(D)))
 		return (false);
 	else

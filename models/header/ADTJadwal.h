@@ -3,6 +3,7 @@
 
 #include "../../library/boolean.h"
 #include "../../library/date.h"
+#include "../../library/timing.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,8 +14,8 @@
 
 typedef struct {
     int id;
-    char start[20];
-    char end[20];
+    TimeInfo start;
+    TimeInfo End;
     date tanggal;
     char kursi[20][20]; 
     // FilmInfo *idFilm;

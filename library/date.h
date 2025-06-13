@@ -43,7 +43,7 @@ void SetThn (int NewThn, date * D);
 void ReadDate (int itgl,int ibln, int ithn, date * D);
 /* Membentuk DATE dari iTgl, iBln dan iThn yang dibaca dari keyboard */
 
-boolean isValid(date D);
+boolean isValidDate(date D);
 /* Memeriksa apakah suatu tanggal valid, yaitu dengan memperhatikan batas akhir per bulan */
 
 void PrintObj (date D);

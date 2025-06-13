@@ -12,7 +12,7 @@ void InisialisasiWaktu(TimeInfo *T) {
 
 
 void SetTime(TimeInfo *T, int jam, int menit) {
-    if (isValid(jam, menit)) {
+    if (isValidTime(jam, menit)) {
         T->jam = jam;
         T->menit = menit;
     } else {
@@ -20,7 +20,7 @@ void SetTime(TimeInfo *T, int jam, int menit) {
     }
 }
 
-boolean isValid(int jam, int menit) {
+boolean isValidTime(int jam, int menit) {
     return (jam >= 0 && menit >= 0 && menit < 60);
 }
 

@@ -8,8 +8,8 @@
 void SimpanJadwalKeFile(const int* idKota, const int* idBioskop, const int* idTeater, const int* idFilm, const JadwalInfo* jadwal) {
     FILE* file = fopen("database/jadwal.txt", "a");
     if (file != NULL) {
-        fprintf(file, "%d|%d|%d|%d|%s|%s|%d|\n", jadwal->id, *idKota, *idBioskop, *idTeater, jadwal->start, jadwal->end, *idFilm);
-        fclose(file); 
+        // fprintf(file, "%d|%d|%d|%d|%s|%s|%d|\n", jadwal->id, *idKota, *idBioskop, *idTeater, jadwal->start, jadwal->end, *idFilm);
+        // fclose(file); 
     } else {
         printf("Gagal menyimpan teater ke file.\n");
     }
