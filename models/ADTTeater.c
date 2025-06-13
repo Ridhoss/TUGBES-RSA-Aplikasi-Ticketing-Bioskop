@@ -8,7 +8,7 @@
 void SimpanTeaterKeFile(const int* idKota, const int* idBioskop, const TeaterInfo* teater) {
     FILE* file = fopen("database/teater.txt", "a");
     if (file != NULL) {
-        fprintf(file, "%d|%d|%d|%s|%d|%d\n", teater->id, *idKota, *idBioskop, teater->nama, teater->jumlahKursi, teater->harga);
+        fprintf(file, "%d|%d|%d|%s|%d|%d|\n", teater->id, *idKota, *idBioskop, teater->nama, teater->jumlahKursi, teater->harga);
         fclose(file);
     } else {
         printf("Gagal menyimpan teater ke file.\n");
@@ -28,7 +28,7 @@ int SearchTeaterFile(const TeaterInfo* teater) {
 
         int id, idKota, idBioskop, jmlKursi, hargaTeater;
         char teaterNama[100];
-        sscanf(buffer, "%d|%d|%d|%[^|]|%d|%d", &id, &idKota, &idBioskop, teaterNama, &jmlKursi, &hargaTeater);
+        sscanf(buffer, "%d|%d|%d|%[^|]|%d|%d|", &id, &idKota, &idBioskop, teaterNama, &jmlKursi, &hargaTeater);
         
         if (id && idKota && idBioskop && teaterNama && jmlKursi && hargaTeater) {
             if (id == teater->id) {
@@ -62,11 +62,11 @@ void EditTeaterKeFile(const TeaterInfo* teater, const TeaterInfo* teaterLama) {
 
         int id, idKota, idBioskop, jmlKursi, hargaTeater;
         char teaterNama[100];
-        sscanf(buffer, "%d|%d|%d|%[^|]|%d|%d", &id, &idKota, &idBioskop, teaterNama, &jmlKursi, &hargaTeater);
+        sscanf(buffer, "%d|%d|%d|%[^|]|%d|%d|", &id, &idKota, &idBioskop, teaterNama, &jmlKursi, &hargaTeater);
 
         if (id == teaterLama->id) {
 
-            fprintf(temp, "%d|%d|%d|%s|%d|%d\n", id, idKota, idBioskop, teater->nama, teater->jumlahKursi, teater->harga);
+            fprintf(temp, "%d|%d|%d|%s|%d|%d|\n", id, idKota, idBioskop, teater->nama, teater->jumlahKursi, teater->harga);
         } else {
             fprintf(temp, "%s\n", buffer);
         }
@@ -100,7 +100,7 @@ void HapusTeaterKeFile(const TeaterInfo* teaterLama) {
 
         int id, idKota, idBioskop, jmlKursi, hargaTeater;
         char teaterNama[100];
-        sscanf(buffer, "%d|%d|%d|%[^|]|%d|%d", &id, &idKota, &idBioskop, teaterNama, &jmlKursi, &hargaTeater);
+        sscanf(buffer, "%d|%d|%d|%[^|]|%d|%d|", &id, &idKota, &idBioskop, teaterNama, &jmlKursi, &hargaTeater);
 
         if (id != teaterLama->id) {
 
@@ -148,7 +148,7 @@ void LoadTeater(address root) {
 
         int id, idKota, idBioskop, jmlKursi, hargaTeater;
         char teaterNama[100];
-        sscanf(buffer, "%d|%d|%d|%[^|]|%d|%d", &id, &idKota, &idBioskop, teaterNama, &jmlKursi, &hargaTeater);
+        sscanf(buffer, "%d|%d|%d|%[^|]|%d|%d|", &id, &idKota, &idBioskop, teaterNama, &jmlKursi, &hargaTeater);
 
         if (id && idKota && idBioskop && teaterNama && jmlKursi && hargaTeater) {
 

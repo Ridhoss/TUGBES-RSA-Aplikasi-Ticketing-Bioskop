@@ -8,7 +8,7 @@
 void SimpanBioskopKeFile(const int* idkota, const BioskopInfo* bioskop) {
     FILE* file = fopen("database/bioskop.txt", "a");
     if (file != NULL) {
-        fprintf(file, "%d|%d|%s\n", bioskop->id, *idkota, bioskop->nama);
+        fprintf(file, "%d|%d|%s|\n", bioskop->id, *idkota, bioskop->nama);
         fclose(file);
     } else {
         printf("Gagal menyimpan bioskop ke file.\n");
@@ -28,7 +28,7 @@ int SearchBioskopFile(const BioskopInfo* bioskop) {
         
         int id, idKota;
         char bioskopNama[100];
-        sscanf(buffer, "%d|%d|%[^\n]", &id, &idKota, bioskopNama);
+        sscanf(buffer, "%d|%d|%[^|\n]", &id, &idKota, bioskopNama);
         
         if (id && idKota && bioskopNama) {
             if (id == bioskop->id) {
@@ -62,10 +62,10 @@ void EditBioskopKeFile(const BioskopInfo* bioskop, const BioskopInfo* bioskopLam
 
         int id, idKota;
         char bioskopNama[100];
-        sscanf(buffer, "%d|%d|%[^\n]", &id, &idKota, bioskopNama);
+        sscanf(buffer, "%d|%d|%[^|\n]", &id, &idKota, bioskopNama);
 
         if (id == bioskopLama->id) {
-            fprintf(temp, "%d|%d|%s\n", id, idKota, bioskop->nama);
+            fprintf(temp, "%d|%d|%s|\n", id, idKota, bioskop->nama);
         } else {
             fprintf(temp, "%s\n", buffer);
         }
@@ -100,7 +100,7 @@ void HapusBioskopKeFile(const BioskopInfo* bioskopLama) {
 
         int id, idKota;
         char bioskopNama[100];
-        sscanf(buffer, "%d|%d|%[^\n]", &id, &idKota, bioskopNama);
+        sscanf(buffer, "%d|%d|%[^|\n]", &id, &idKota, bioskopNama);
 
         if (id != bioskopLama->id) {
             fprintf(temp, "%s\n", buffer);
@@ -147,7 +147,7 @@ void LoadBioskop(address root) {
 
         int id, idKota;
         char bioskopNama[100];
-        sscanf(buffer, "%d|%d|%[^\n]", &id, &idKota, bioskopNama);
+        sscanf(buffer, "%d|%d|%[^|\n]", &id, &idKota, bioskopNama);
 
         if (id && idKota && bioskopNama) {
             address kota = SearchKotaById(root, &idKota);

@@ -4,3 +4,4 @@
 4|tanggerang|
 5|malang|
 6|cimahi|
+7|jayapura|

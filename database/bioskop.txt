@@ -1,3 +1,4 @@
-1|1|CGV BEC
-3|1|XXI Ciwalk
-4|1|CGV Paskal
+1|1|CGV BEC|
+3|1|XXI Ciwalk|
+4|1|CGV Pasir Kaliki|
+5|1|XXI Botanica|
