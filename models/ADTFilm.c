@@ -39,6 +39,7 @@ void tambahFilm(List* L, const char* judul, const char* produser, const char* de
     }
     simpanKeFile(*L, films);
 }
+
 // Edit film berdasarkan id
 void editFilm(List* L, int id, FilmInfo newData) {
     addressList P = L->First;
@@ -59,11 +60,12 @@ void hapusFilm(List* L, int id) {
     while (P != NULL) {
         FilmInfo* film = (FilmInfo*)(P->info);
         if (film->idFilm == id) {
-            DelP(L, (infotype)film);
-            return;
+            DelP(L, P->info);
+            break;
         }
         P = P->next;
     }
+    simpanKeFile(*L, films);
 }
 
 void simpanKeFile(List L, const char* filename) {
