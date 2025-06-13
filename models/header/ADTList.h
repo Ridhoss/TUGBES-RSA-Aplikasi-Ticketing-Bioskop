@@ -35,6 +35,7 @@ void PrintInfo(List L);
 
 void InsFirst(List * L, infotype X);
 void InsertAfter(List *L, infotype X, addressList Prec);
+void InsLast(List* L, infotype X);
 void DelFirst(List * L, infotype * X);
 void DelLast(List * L, infotype * X);
 

@@ -18,6 +18,7 @@ typedef struct {
 FilmInfo* alokasiFilm(FilmInfo data);
 void dealokasiFilm(FilmInfo* f);
 
+int editFilmById(List* L, int id, const char* judulBaru, const char* produserBaru, const char* deskripsiBaru);
 int get_last_film_id(const char* filename);
 void tambahFilm(List* L, const char* judul, const char* produser, const char* deskripsi);
 void editFilm(List* L, int id, FilmInfo newData);

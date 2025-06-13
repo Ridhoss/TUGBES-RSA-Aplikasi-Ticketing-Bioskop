@@ -12,7 +12,6 @@
 #include "../../models/header/ADTTeater.h"
 #include "../../models/header/ADTFilm.h"
 
-
 void HalamanManipulasiKota(address root);
 void HalamanManipulasiBioskop(address root);
 void HalamanManipulasiTeater(address root, address nodeKota);
