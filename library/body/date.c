@@ -55,14 +55,13 @@ void SetThn (int NewThn, date * D){
 
 /****** Kelompok Interaksi dengan I/O device, BACA/TULIS ******/
 /* Membentuk DATE dari iTgl, iBln dan iThn yang dibaca dari keyboard */
-void ReadDate (int itgl,int ibln, int ithn, date * D){
+void ReadDate (int itgl, int ibln, int ithn, date * D){
 	SetTgl (itgl, &(* D));
 	SetBln (ibln, &(* D));
 	SetThn (ithn, &(* D));
 
 	if(!isValidDate((* D))){
 		printf("Tanggal tidak valid! Program Error.\n");
-		exit(1);
 	}
 }
 
@@ -234,6 +233,14 @@ const char* NamaHari(date D) {
 
     const char *hari[] = {"Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"};
     return hari[waktu.tm_wday];
+}
+
+date TambahHari(date D, int hariTambahan) {
+    for (int i = 0; i < hariTambahan; i++) {
+        D = NextDate(D);
+    }
+		
+    return D;
 }
 
 /* Mengecek apakah dua tanggal sama atau tidak */

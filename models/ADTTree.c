@@ -2,6 +2,7 @@
 #include "header/ADTKota.h"
 #include "header/ADTBioskop.h"
 #include "header/ADTTeater.h" 
+#include "header/ADTJadwal.h" 
 
 static int currentId = 1;
 
@@ -190,6 +191,9 @@ void PrintChildrenOnly(address node, int level) {
         } else if (child->type == TEATER) {
             TeaterInfo* info = (TeaterInfo*) child->info;
             printf("- id: %d Teater: %s || Jumlah Kursi: %d || Harga: %d\n", info->id, info->nama, info->jumlahKursi, info->harga);
+        } else if (child->type == JADWAL) {
+            JadwalInfo* info = (JadwalInfo*) child->info;
+            printf("- id: %d Jadwal Pukul: %d:%d || Tanggal: %d/%d/%d\n", info->id, info->Start.jam, info->Start.menit, info->tanggal.Tgl, info->tanggal.Bln, info->tanggal.Thn);
         }
         // PrintTree(child->fs, level + 1);
         child = child->nb;

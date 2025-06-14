@@ -492,7 +492,7 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
     TimeInfo starTime, endTime;
     date tglBaru;
 
-    int jam, menit, tgl, bln, thn;
+    int jam, menit, tgl, bln, thn, jmlHari = 1;
 
     int pil;
     int running = 1;
@@ -570,12 +570,47 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
                                 PrintObjDate(jadwalBaru.tanggal);
                                 PrintTime(jadwalBaru.Start);
 
-                                TambahJadwalBaru(nodeKota, nodeBioskop, nodeTeater, jadwalBaru);
+                                TambahJadwalBaru(nodeKota, nodeBioskop, nodeTeater, jadwalBaru, jmlHari);
                             }
 
                             break;
                         }
                         case 2: {
+                            printf("===== Daftar Film =====\n");
+                            printFilm(*L);
+                            printf("=======================\n");
+
+                            printf("Pilih Film: ");
+                            InputString(namaFilm);
+
+                            addressList filmTerpilih = cariFilmByJudul(*L, namaFilm);
+
+                            if(filmTerpilih){
+                                FilmInfo* film = (FilmInfo*)(filmTerpilih->info);
+
+                                printf("%s film terpilih\n", film->judul);
+
+                                printf("Masukan tanggal tayang film ( dd/mm/yyyy ): ");
+                                scanf("%d/%d/%d", &tgl, &bln, &thn);
+                                ReadDate(tgl, bln, thn, &tglBaru);
+
+                                printf("Jumlah hari jadwal film tayang: ");
+                                scanf("%d", &jmlHari);
+
+                                printf("Masukan waktu tayang jadwal film ( jam:menit ): ");
+                                scanf("%d:%d", &jam, &menit);
+                                
+                                SetTime(&starTime, jam, menit);
+
+                                jadwalBaru.film = film;
+                                jadwalBaru.tanggal = tglBaru;
+                                jadwalBaru.Start = starTime;
+                                
+                                PrintObjDate(jadwalBaru.tanggal);
+                                PrintTime(jadwalBaru.Start);
+
+                                TambahJadwalBaru(nodeKota, nodeBioskop, nodeTeater, jadwalBaru, jmlHari);
+                            }
 
                             break;
                         }
@@ -597,6 +632,41 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
             }
             case 2: {
                 // Ubah Informasi jadwal
+                date tanggalCari;
+                TimeInfo jamTerpilih;
+
+                PrintJadwal(nodeTeater, 0);
+
+                printf("Masukkan tanggal yang ingin diubah ( dd/mm/yyyy ): ");
+                scanf("%d/%d/%d", &tanggalCari.Tgl, &tanggalCari.Bln, &tanggalCari.Thn);
+
+                List listJadwalTgl;
+                AmbilJadwalTeaterTanggalKeList(nodeTeater, tanggalCari, &listJadwalTgl);
+
+                if (ListEmpty(listJadwalTgl)) {
+                    printf("Tidak ada jadwal pada tanggal %d/%d/%d.\n", tanggalCari.Tgl, tanggalCari.Bln, tanggalCari.Thn);
+                    break;
+                }
+
+                TampilkanListJadwal(listJadwalTgl);
+
+                printf("Pilih jadwal yang ingin diubah ( jam:menit ): ");
+                scanf("%d:%d", &jam, &menit);
+                SetTime(&jamTerpilih, jam, menit);
+
+                // JadwalInfo* jadwalLama = (JadwalInfo*) P->info;
+
+                // // Buat salinan dari jadwal lama sebagai dasar
+                // JadwalInfo jadwalBaru = *jadwalLama;
+
+                // printf("Masukkan jam mulai baru (HH MM): ");
+                // scanf("%d %d", &jadwalBaru.Start.jam, &jadwalBaru.Start.menit);
+                // jadwalBaru.End = TambahWaktu(jadwalBaru.Start, jadwalBaru.film->durasi);
+
+                // UbahJadwal(teater, jadwalBaru); // node adalah node teater
+                // printf("Jadwal berhasil diubah.\n");
+
+                DelAll(&listJadwalTgl);
 
                 break;
             }
@@ -616,6 +686,7 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
                 break;
             case 6:
                 // Tampilkan Semua jadwal
+                PrintJadwal(nodeTeater, 0);
 
                 break;
             case 7:
