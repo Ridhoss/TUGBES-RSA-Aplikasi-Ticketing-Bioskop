@@ -60,9 +60,9 @@ void HalamanLogin(int *loggedIn, int *idLogin){
     Akun akun[100];
     int total_akun = BacaFileAkun(akun);
 
-    printf("=======================\n");
-    printf("======== MASUK ========\n");
-    printf("=======================\n");
+   printf("===================================================\n");
+    printf("||                     Masuk                     ||\n");
+    printf("===================================================\n");
 
     printf("Masukan Username: ");
     scanf(" %s", username);
@@ -84,16 +84,19 @@ void HalamanAwal(int *loggedIn, int *idLogin) {
     int masuk = 0;
 
     for (;;) {
-        printf("====================================\n");
-        printf("=== Selamat Datang Di Aplikasi Ticketing Bioskop ===\n");
-        printf("====================================\n");
-
-        printf("Apakah Sudah Memiliki Akun?\n");
-        printf("1. Masuk\n");
-        printf("2. Daftar\n");
-        printf("3. Keluar Dari Aplikasi\n");
-        printf("Pilih:(1-3) ");
-        scanf("%d", &masuk);
+        printf("===================================================\n");
+        printf("|| SELAMAT DATANG DI APLIKASI TICKETING BIOSKOP  ||\n");
+        printf("===================================================\n");
+        printf("|| Apakah Anda sudah memiliki akun?              ||\n");
+        printf("||                                               ||\n");
+        printf("||     1. Masuk                                  ||\n");
+        printf("||     2. Daftar                                 ||\n");
+        printf("||     3. Keluar dari Aplikasi                   ||\n");
+        printf("||                                               ||\n");
+        printf("|| Silakan pilih menu (1-3):                     ||\n");
+        printf("===================================================\n");
+        printf(">> ");
+        scanf("%d",&masuk);
 
         if (masuk == 1) {
             HalamanLogin(loggedIn, idLogin);

@@ -239,5 +239,11 @@ date TambahHari(date D, int hariTambahan) {
     for (int i = 0; i < hariTambahan; i++) {
         D = NextDate(D);
     }
+		
     return D;
+}
+
+/* Mengecek apakah dua tanggal sama atau tidak */
+boolean isSameDate(date D1, date D2) {
+    return (D1.Tgl == D2.Tgl && D1.Bln == D2.Bln && D1.Thn == D2.Thn);
 }
