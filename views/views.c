@@ -655,17 +655,20 @@ void HalamanManipulasiFilm(List *L) {
         case 2:
             printf("\n--- Tambah Film Baru ---\n");
 
+            FilmInfo newFilm;
+            int jam, menit;
+
             printf("Masukkan judul film: ");
-            fgets(data.judul, sizeof(data.judul), stdin);
-            data.judul[strcspn(data.judul, "\n")] = 0;
+            fgets(newFilm.judul, sizeof(newFilm.judul), stdin);
+            newFilm.judul[strcspn(newFilm.judul, "\n")] = 0;
 
             printf("Masukkan produser film: ");
-            fgets(data.produser, sizeof(data.produser), stdin);
-            data.produser[strcspn(data.produser, "\n")] = 0;
+            fgets(newFilm.produser, sizeof(newFilm.produser), stdin);
+            newFilm.produser[strcspn(newFilm.produser, "\n")] = 0;
 
             printf("Masukkan deskripsi film: ");
-            fgets(data.deskripsi, sizeof(data.deskripsi), stdin);
-            data.deskripsi[strcspn(data.deskripsi, "\n")] = 0;
+            fgets(newFilm.deskripsi, sizeof(newFilm.deskripsi), stdin);
+            newFilm.deskripsi[strcspn(newFilm.deskripsi, "\n")] = 0;
 
             printf("Masukkan durasi jam   : ");
             scanf("%d", &jam);
@@ -673,10 +676,14 @@ void HalamanManipulasiFilm(List *L) {
             scanf("%d", &menit);
             getchar();
 
-            TambahFilmBaru(L, data.judul, data.produser, data.deskripsi, jam, menit);
+            newFilm.durasi.jam = jam;
+            newFilm.durasi.menit = menit;
+
+            TambahFilmBaru(L, newFilm);
 
             printf("Film berhasil ditambahkan.\n");
             break;
+
 
         case 3:
             printf("\n--- Edit Film ---\n");
