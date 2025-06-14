@@ -12,6 +12,7 @@
 #include "../../models/header/ADTTeater.h"
 #include "../../models/header/ADTFilm.h"
 #include "../../models/header/ADTJadwal.h"
+#include "../../models/header/ADTList.h"
 
 void HalamanMenuAdmin(address root, List *L);
 void HalamanManipulasiKota(address root, List *L);

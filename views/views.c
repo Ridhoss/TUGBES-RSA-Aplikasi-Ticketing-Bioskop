@@ -584,7 +584,7 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
 
                                 printf("%s film terpilih\n", film->judul);
 
-                                printf("Masukan tanggal tayang film ( tgl/bln/thn ): ");
+                                printf("Masukan tanggal tayang film ( dd/mm/yyyy ): ");
                                 scanf("%d/%d/%d", &tgl, &bln, &thn);
                                 ReadDate(tgl, bln, thn, &tglBaru);
 
@@ -626,6 +626,41 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
             }
             case 2: {
                 // Ubah Informasi jadwal
+                date tanggalCari;
+                TimeInfo jamTerpilih;
+
+                PrintJadwal(nodeTeater, 0);
+
+                printf("Masukkan tanggal yang ingin diubah ( dd/mm/yyyy ): ");
+                scanf("%d/%d/%d", &tanggalCari.Tgl, &tanggalCari.Bln, &tanggalCari.Thn);
+
+                List listJadwalTgl;
+                AmbilJadwalTeaterTanggalKeList(nodeTeater, tanggalCari, &listJadwalTgl);
+
+                if (ListEmpty(listJadwalTgl)) {
+                    printf("Tidak ada jadwal pada tanggal %d/%d/%d.\n", tanggalCari.Tgl, tanggalCari.Bln, tanggalCari.Thn);
+                    break;
+                }
+
+                TampilkanListJadwal(listJadwalTgl);
+
+                printf("Pilih jadwal yang ingin diubah ( jam:menit ): ");
+                scanf("%d:%d", &jam, &menit);
+                SetTime(&jamTerpilih, jam, menit);
+
+                // JadwalInfo* jadwalLama = (JadwalInfo*) P->info;
+
+                // // Buat salinan dari jadwal lama sebagai dasar
+                // JadwalInfo jadwalBaru = *jadwalLama;
+
+                // printf("Masukkan jam mulai baru (HH MM): ");
+                // scanf("%d %d", &jadwalBaru.Start.jam, &jadwalBaru.Start.menit);
+                // jadwalBaru.End = TambahWaktu(jadwalBaru.Start, jadwalBaru.film->durasi);
+
+                // UbahJadwal(teater, jadwalBaru); // node adalah node teater
+                // printf("Jadwal berhasil diubah.\n");
+
+                DelAll(&listJadwalTgl);
 
                 break;
             }

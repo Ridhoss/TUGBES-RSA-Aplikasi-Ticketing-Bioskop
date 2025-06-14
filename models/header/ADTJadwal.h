@@ -40,6 +40,8 @@ void TambahJadwalBaru(address kota, address bioskop, address teater, JadwalInfo 
 void InisialisasiKursi(JadwalInfo *jadwal, address teaterAddress);
 void AmbilJadwalTeaterKeList(address nodeTeater, List* L);
 boolean AdaJadwalBentrok(List L, date tanggal, TimeInfo start, TimeInfo end);
+void AmbilJadwalTeaterTanggalKeList(address teater, date tanggal, List* hasil);
+void TampilkanListJadwal(List L);
 
 void UbahJadwal(address node, JadwalInfo jadwalBaru);
 

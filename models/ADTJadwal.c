@@ -414,11 +414,70 @@ boolean AdaJadwalBentrok(List L, date tanggal, TimeInfo start, TimeInfo end) {
     return false;
 }
 
+void AmbilJadwalTeaterTanggalKeList(address teater, date tanggal, List* hasil) {
+    CreateList(hasil);
+
+    List semua;
+    CreateList(&semua);
+    AmbilJadwalTeaterKeList(teater, &semua);
+
+    addressList P = semua.First;
+    while (P != NULL) {
+        JadwalInfo* j = (JadwalInfo*) P->info;
+
+        if (j->tanggal.Tgl == tanggal.Tgl &&
+            j->tanggal.Bln == tanggal.Bln &&
+            j->tanggal.Thn == tanggal.Thn) {
+            JadwalInfo* salinan = (JadwalInfo*) malloc(sizeof(JadwalInfo));
+            *salinan = *j;
+
+            InsLast(hasil, (infotype) salinan);
+        }
+
+        P = P->next;
+    }
+
+    DelAll(&semua);
+}
+
+void TampilkanListJadwal(List L) {
+    if (ListEmpty(L)) {
+        printf("Tidak ada jadwal ditemukan.\n");
+        return;
+    }
+
+    int index = 1;
+    addressList P = L.First;
+    while (P != NULL) {
+        JadwalInfo* j = (JadwalInfo*) P->info;
+        printf("%d. ID: %d | Mulai: %02d:%02d | Selesai: %02d:%02d | Film: %s\n",
+            index,
+            j->id,
+            j->Start.jam, j->Start.menit,
+            j->End.jam, j->End.menit,
+            j->film->judul);
+            
+        P = P->next;
+        index++;
+    }
+}
+
+
 // Deskripsi : Prosedur untuk mengubah info Jadwal pada node
 // IS : menerima address node dan dataBaru sebagai JadwalInfo
 // FS : mengubah info Jadwal pada node dan memperbarui file
 void UbahJadwal(address node, JadwalInfo jadwalBaru) {
+    JadwalInfo* oldInfo = (JadwalInfo*) node->info;
+    JadwalInfo* newInfo = (JadwalInfo*) malloc(sizeof(TeaterInfo));
 
+    if (!newInfo) return;
+
+    *newInfo = jadwalBaru;
+    UbahNode(node, (infotype)newInfo);
+
+    // EditJadwalKeFile(newInfo, oldInfo);
+
+    printf("Jadwal '%d:%d' berhasil diubah dan disimpan ke file.\n", oldInfo->Start.jam, oldInfo->Start.menit);
 }
 
 // Deskripsi : Prosedur untuk menghapus Jadwal dari teater
