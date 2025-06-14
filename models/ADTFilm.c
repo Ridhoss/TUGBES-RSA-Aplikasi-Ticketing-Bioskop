@@ -16,10 +16,36 @@ void dealokasiFilm(FilmInfo* f) {
     free(f);
 }
 
+
+int editFilmById(List* L, int id, const char* judulBaru, const char* produserBaru, const char* deskripsiBaru) {
+    addressList P = L->First;
+
+    while (P != NULL) {
+        FilmInfo* film = (FilmInfo*)P->info;
+
+        if (film->idFilm == id) {
+            if (judulBaru && strlen(judulBaru) > 0)
+                strcpy(film->judul, judulBaru);
+
+            if (produserBaru && strlen(produserBaru) > 0)
+                strcpy(film->produser, produserBaru);
+
+            if (deskripsiBaru && strlen(deskripsiBaru) > 0)
+                strcpy(film->deskripsi, deskripsiBaru);
+
+            return 1;
+        }
+
+        P = P->next;
+    }
+
+    return 0;
+}
+
 // Tambah film ke list
 void tambahFilm(List* L, const char* judul, const char* produser, const char* deskripsi) {
     FilmInfo* film = malloc(sizeof(FilmInfo));
-    film->idFilm = 0; // Agar auto-increment saat simpan
+    film->idFilm = 0;
     strcpy(film->judul, judul);
     strcpy(film->produser, produser);
     strcpy(film->deskripsi, deskripsi);
@@ -125,13 +151,34 @@ FilmInfo* cariFilm(List L, int id) {
     return NULL;
 }
 
-void printFilm(List L) {
+addressList cariFilmByJudul(List L, const char* title) {
     addressList P = L.First;
+
     while (P != NULL) {
         FilmInfo* film = (FilmInfo*)(P->info);
-        printf("ID: %d\njudul: %s\nProduser: %s\nDeskripsi: %s\n\n",
-               film->idFilm, film->judul, film->produser, film->deskripsi);
+        if (strcmp(film->judul, title) == 0) {
+            return P;
+        }
         P = P->next;
     }
-    printf("Film tidak tersedia!\n");
+
+    return NULL;
+}
+
+
+void printFilm(List L) {
+    addressList P = L.First;
+    if (P == NULL) {
+        printf("Film tidak tersedia!\n");
+        return;
+    }
+
+    while (P != NULL) {
+        FilmInfo* film = (FilmInfo*)(P->info);
+            printf("ID         : %d\n", film->idFilm);
+            printf("Judul      : %s\n", film->judul);
+            printf("Produser   : %s\n", film->produser);
+            printf("Deskripsi  : %s\n", film->deskripsi);
+        P = P->next;
+    }
 }

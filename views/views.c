@@ -639,14 +639,19 @@ void HalamanManipulasiFilm(List *L) {
     int pilihan;
     int id;
     FilmInfo data;
+    char buffer[255];
+    char judulBaru[100] = "";
+    char produserBaru[100] = "";
+    char deskripsiBaru[255] = "";
     do {
         printf("\n=== Halaman Manipulasi Film ===\n");
         printf("1. Tampilkan semua film\n");
-        printf("2. Tambah film baru\n");
-        printf("3. Hapus film berdasarkan ID\n");
-        printf("4. Cari film berdasarkan ID\n");
-        printf("5. Keluar\n");
-        printf("Pilih opsi (1-5): ");
+        printf("2. Tambah Film baru\n");
+        printf("3. Edit Film\n");
+        printf("4. Hapus Film\n");
+        printf("5. Cari Film\n");
+        printf("6. Keluar\n");
+        printf("Pilih opsi (1-6): ");
         scanf("%d", &pilihan);
         getchar();
 
@@ -677,6 +682,41 @@ void HalamanManipulasiFilm(List *L) {
             break;
 
         case 3:
+            printf("\n--- Edit Film ---\n");
+            printf("Masukkan ID film yang ingin diedit: ");
+            scanf("%d", &id);
+            while (getchar() != '\n');
+
+            printf("Masukkan judul baru (Enter untuk skip): ");
+            fgets(buffer, sizeof(buffer), stdin);
+            if (buffer[0] != '\n') {
+                buffer[strcspn(buffer, "\n")] = '\0';
+                strcpy(judulBaru, buffer);
+            }
+
+            printf("Masukkan produser baru (Enter untuk skip): ");
+            fgets(buffer, sizeof(buffer), stdin);
+            if (buffer[0] != '\n') {
+                buffer[strcspn(buffer, "\n")] = '\0';
+                strcpy(produserBaru, buffer);
+            }
+
+            printf("Masukkan deskripsi baru (Enter untuk skip): ");
+            fgets(buffer, sizeof(buffer), stdin);
+            if (buffer[0] != '\n') {
+                buffer[strcspn(buffer, "\n")] = '\0';
+                strcpy(deskripsiBaru, buffer);
+            }
+
+            if (editFilmById(L, id, judulBaru, produserBaru, deskripsiBaru)) {
+                printf("Film berhasil diperbarui!\n");
+                simpanKeFile(*L, "/database/film.txt");
+            } else {
+                printf("Film dengan ID %d tidak ditemukan.\n", id);
+            }
+            
+            break;
+        case 4:
             printf("\n--- Hapus Film ---\n");
             printf("Masukkan ID film yang ingin dihapus: ");
             scanf("%d", &id);
@@ -685,24 +725,28 @@ void HalamanManipulasiFilm(List *L) {
             printf("Film dengan ID %d dihapus (jika ada).\n", id);
             break;
 
-        case 4:
+        case 5:
             printf("\n--- Cari Film ---\n");
-            printf("Masukkan ID film yang ingin dicari: ");
-            scanf("%d", &id);
-            getchar();
-            FilmInfo* hasil = cariFilm(*L, id);
+            char judul[100];
+            printf("Masukkan judul film yang ingin dicari: ");
+            fgets(judul, sizeof(judul), stdin);
+            judul[strcspn(judul, "\n")] = 0;
+
+            addressList hasil = cariFilmByJudul(*L, judul);
             if (hasil != NULL) {
                 printf("Film ditemukan:\n");
-                printf("ID         : %d\n", hasil->idFilm);
-                printf("Judul      : %s\n", hasil->judul);
-                printf("Produser   : %s\n", hasil->produser);
-                printf("Deskripsi  : %s\n", hasil->deskripsi);
+                FilmInfo* film = (FilmInfo*)(hasil->info);
+                printf("ID         : %d\n", film->idFilm);
+                printf("Judul      : %s\n", film->judul);
+                printf("Produser   : %s\n", film->produser);
+                printf("Deskripsi  : %s\n", film->deskripsi);
             } else {
-                printf("Film dengan ID %d tidak ditemukan.\n", id);
+                printf("Film dengan judul \"%s\" tidak ditemukan.\n", judul);
             }
+
             break;
 
-        case 5:
+        case 6:
             printf("Keluar dari halaman manipulasi film.\n");
             break;
 
@@ -710,5 +754,5 @@ void HalamanManipulasiFilm(List *L) {
             printf("Pilihan tidak valid. Silakan pilih 1-5.\n");
             break;
         }
-    } while (pilihan != 5);
+    } while (pilihan != 6);
 }
