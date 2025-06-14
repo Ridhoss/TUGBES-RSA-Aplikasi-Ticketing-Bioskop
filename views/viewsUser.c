@@ -3,25 +3,29 @@
 void HalamanMenuUser(address root, List *L) {
     int idKotaDipilih;
     char namaKota[100];
+    address kotaNode;
     
     printf("===================================================\n");
     printf("||          SELAMAT DATANG DI BIOSKOP            ||\n");
     printf("===================================================\n");
     PrintKota(root, 0);
     
-    printf("\n>> Pilih kota: ");
-    scanf("%d", &idKotaDipilih);
-    address kotaNode = SearchKotaById(root, &idKotaDipilih);
+    do {
+        printf("\n>> Pilih kota: ");
+        InputString(namaKota);
+
+        kotaNode = SearchKotaByName(root, namaKota);
+
+        if (!kotaNode) {
+            printf("Kota '%s' tidak ditemukan. Silakan coba lagi.\n", namaKota);
+        }
+    } while (!kotaNode);
 
     int pilihan;
     do {
         printf("===================================================\n");
-        if (kotaNode != NULL) {
-            KotaInfo* info = (KotaInfo*)(kotaNode->info);
-            printf("          MENU USER - Kota: %s\n", info->nama        );
-        } else {
-            printf("Kota dengan ID %d tidak ditemukan.\n", idKotaDipilih);
-        }
+        KotaInfo* info = (KotaInfo*)(kotaNode->info);
+        printf("           Menu User - Kota : %s            \n", info->nama);
         printf("===================================================\n");
         printf("||                                               ||\n");
         printf("||     1. Cari dan pilih film                    ||\n");
@@ -36,14 +40,15 @@ void HalamanMenuUser(address root, List *L) {
         scanf("%d", &pilihan);
 
         switch (pilihan) {
-            case 1:
-                {KotaInfo* info = (KotaInfo*)(kotaNode->info);
+            case 1: {
+                KotaInfo* info = (KotaInfo*)(kotaNode->info);
                 printf("\n=== Film yang tersedia di %s ===\n", info->nama);
                 printFilm(*L); 
 
-                break;}
+                break;
+            }
             case 2:
-                printUpcomingFilmsByKota(root, idKotaDipilih);
+                printUpcomingFilmsByKota(root, kotaNode);
                 
                 break;
             case 3:

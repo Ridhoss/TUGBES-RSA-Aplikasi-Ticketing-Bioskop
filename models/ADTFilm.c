@@ -208,19 +208,18 @@ void printFilm(List L) {
     }
 }
 
-void printUpcomingFilmsByKota(address root, int idKota) {
+void printUpcomingFilmsByKota(address root, address kotaNode) {
     if (root == NULL) {
         printf("Data kota kosong.\n");
         return;
     }
 
-    address nodeKota = SearchKotaById(root, &idKota);
-    if (nodeKota == NULL) {
-        printf("Kota dengan ID %d tidak ditemukan.\n", idKota);
+    if (kotaNode == NULL) {
+        printf("Kota tidak ditemukan.\n");
         return;
     }
 
-    KotaInfo* kotaInfo = (KotaInfo*)nodeKota->info;
+    KotaInfo* kotaInfo = (KotaInfo*)kotaNode->info;
 
     date today;
     GetToday(&today);
@@ -228,7 +227,7 @@ void printUpcomingFilmsByKota(address root, int idKota) {
     printf("\n=== Daftar Film Upcoming di Kota %s ===\n", kotaInfo->nama);
     boolean adaFilm = false;
 
-    address bioskop = nodeKota->fs;
+    address bioskop = kotaNode->fs;
     while (bioskop != NULL) {
         address teater = bioskop->fs;
         while (teater != NULL) {

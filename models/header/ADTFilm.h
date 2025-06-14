@@ -31,7 +31,7 @@ void hapusFilm(List* L, int id);
 addressList cariFilm(List L, int id);
 addressList cariFilmByJudul(List L, const char* title);
 void printFilm(List L);
-void printUpcomingFilmsByKota(address root, int idKota);
+void printUpcomingFilmsByKota(address root, address kotaNode);
 void simpanKeFile(List L, const char* filename);
 
 #endif
