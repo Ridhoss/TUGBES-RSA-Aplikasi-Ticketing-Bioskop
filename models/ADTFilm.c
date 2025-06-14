@@ -1,6 +1,9 @@
 #include "header/ADTFilm.h"
 #include "header/ADTList.h"
 #include "header/ADTAkun.h"
+#include "header/ADTJadwal.h"
+#include "header/ADTTree.h"
+#include "../library/date.h"
 
 const char *films = "database/film.txt";
 
@@ -200,5 +203,45 @@ void printFilm(List L) {
             printf("Deskripsi  : %s\n", film->deskripsi);
             printf("Durasi     : %d jam %d menit\n", film->durasi.jam, film->durasi.menit);
         P = P->next;
+    }
+}
+
+void printUpcomingFilms(address root) {
+    date today;
+    GetToday(&today);
+    int found = 0;
+
+    void traverseTree(address node) {
+        if (node == NULL) return;
+
+        if (node->type == JADWAL) {
+            JadwalInfo* jadwal = (JadwalInfo*)(node->info);
+            int selisih = DifferenceDate(today, jadwal->tanggal);
+
+            if (selisih > 2 && jadwal->film != NULL) {
+                FilmInfo* film = jadwal->film;
+
+                printf("ID Film         : %d\n", film->idFilm);
+                printf("Judul           : %s\n", film->judul);
+                printf("Produser        : %s\n", film->produser);
+                printf("Deskripsi       : %s\n", film->deskripsi);
+                printf("Durasi          : %02d:%02d\n", film->durasi.jam, film->durasi.menit);
+                printf("Tanggal Tayang  : %02d-%02d-%04d\n",
+                       jadwal->tanggal.Tgl, jadwal->tanggal.Bln, jadwal->tanggal.Thn);
+                printf("------------------------------------\n");
+
+                found = 1;
+            }
+        }
+
+        traverseTree(node->fs);
+        traverseTree(node->nb);
+    }
+
+    printf("=== Daftar Film Upcoming (belum tayang dalam 2 hari ke depan) ===\n");
+    traverseTree(root);
+
+    if (!found) {
+        printf("Tidak ada film upcoming.\n");
     }
 }

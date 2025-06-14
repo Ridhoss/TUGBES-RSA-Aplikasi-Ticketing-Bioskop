@@ -5,7 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "ADTList.h"
+#include "ADTTree.h"
 #include "../../library/timing.h"
+#include "../../library/boolean.h"
 
 extern const char *films;
 // Struct utama untuk informasi film
@@ -29,6 +31,7 @@ void hapusFilm(List* L, int id);
 addressList cariFilm(List L, int id);
 addressList cariFilmByJudul(List L, const char* title);
 void printFilm(List L);
+void printUpcomingFilms(address root);
 void simpanKeFile(List L, const char* filename);
 
 #endif

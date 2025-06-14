@@ -1,12 +1,14 @@
 #include "header/viewsUser.h"
 
 void HalamanMenuUser(address root, List *L) {
+    int idKotaDipilih;
+    List listJadwal;
+    
     printf("===================================================\n");
     printf("||          SELAMAT DATANG DI BIOSKOP            ||\n");
     printf("===================================================\n");
     PrintKota(root, 0);
-
-    int idKotaDipilih;
+    
     printf("\n>> Pilih kota: ");
     scanf("%d", &idKotaDipilih);
     address kotaNode = SearchKotaById(root, &idKotaDipilih);
@@ -42,7 +44,7 @@ void HalamanMenuUser(address root, List *L) {
                 printFilm(*L); 
                 break;}
             case 2:
-                printf("belum tersedia)\n");
+                printUpcomingFilms(root);
                 break;
             case 3:
                  printf("belum tersedia)\n");
