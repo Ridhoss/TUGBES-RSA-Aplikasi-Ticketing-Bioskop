@@ -16,7 +16,7 @@ void SimpanKotaKeFile(const KotaInfo* kota) {
 }
 
 // Deskripsi : fungsi untuk mencari kota dalam file
-// IS : menerima informasi kota sebagai string   
+// IS : menerima informasi kota  
 // FS : mengembalikan 1 jika kota ditemukan, 0 jika tidak ditemukan
 int SearchKotaFile(const KotaInfo* kota) {
     FILE* file = fopen("database/kota.txt", "r");

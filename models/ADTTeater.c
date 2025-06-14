@@ -16,7 +16,7 @@ void SimpanTeaterKeFile(const int* idKota, const int* idBioskop, const TeaterInf
 }
 
 // Deskripsi : fungsi untuk mencari teater dalam file
-// IS : menerima informasi teater sebagai string   
+// IS : menerima informasi teater  
 // FS : mengembalikan 1 jika teater ditemukan, 0 jika tidak ditemukan
 int SearchTeaterFile(const TeaterInfo* teater) {
     FILE* file = fopen("database/teater.txt", "r");

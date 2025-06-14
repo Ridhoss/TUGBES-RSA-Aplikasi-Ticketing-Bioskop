@@ -25,6 +25,208 @@ void SimpanJadwalKeFile(const int* idKota, const int* idBioskop, const int* idTe
     }
 }
 
+// Deskripsi : fungsi untuk mencari jadwal dalam file
+// IS : menerima informasi jadwal  
+// FS : mengembalikan 1 jika jadwal ditemukan, 0 jika tidak ditemukan
+int SearchJadwalFile(const JadwalInfo* jadwal) {
+    FILE* file = fopen("database/jadwal.txt", "r");
+    if (!file) return 0;
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+
+        int id, idKota, idBioskop, idTeater, idFilm;
+        TimeInfo start, end;
+        date tanggal;
+
+        int readData = sscanf(
+            buffer, "%d|%d|%d|%d|%d/%d/%d|%d:%d|%d:%d|%d|",
+            &id, &idKota, &idBioskop, &idTeater,
+            &tanggal.Tgl, &tanggal.Bln, &tanggal.Thn,
+            &start.jam, &start.menit,
+            &end.jam, &end.menit,
+            &idFilm
+        );
+
+        if (readData == 12) {
+            if (id == jadwal->id) {
+                fclose(file);
+                return 1;
+            }
+        }
+    }
+
+    fclose(file);
+    return 0;
+}
+
+// Deskripsi : Prosedur untuk mengedit info jadwal dalam file
+// IS : menerima info lama dan info baru
+// FS : mengubah info jadwal dalam file "database/jadwal.txt"
+void EditJadwalKeFile(const JadwalInfo* jadwal, const JadwalInfo* jadwalLama) {
+    if (!SearchJadwalFile(jadwalLama)) {
+        printf("Jadwal %d:%d tidak ditemukan. Tidak dapat melakukan edit.\n", jadwalLama->Start.jam, jadwalLama->Start.menit);
+        return;
+    }
+
+    FILE* file = fopen("database/jadwal.txt", "r");
+    FILE* temp = fopen("database/temp.txt", "w");
+    if (!file || !temp) return;
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+
+        int id, idKota, idBioskop, idTeater, idFilm;
+        TimeInfo start, end;
+        date tanggal;
+
+        sscanf(
+            buffer, "%d|%d|%d|%d|%d/%d/%d|%d:%d|%d:%d|%d|",
+            &id, &idKota, &idBioskop, &idTeater,
+            &tanggal.Tgl, &tanggal.Bln, &tanggal.Thn,
+            &start.jam, &start.menit,
+            &end.jam, &end.menit,
+            &idFilm
+        );
+
+        if (id == jadwalLama->id) {
+
+            fprintf(
+                file, "%d|%d|%d|%d|%d/%d/%d|%02d:%02d|%02d:%02d|%d|\n", 
+                id, 
+                idKota, 
+                idBioskop, 
+                idTeater, 
+                jadwal->tanggal.Tgl, jadwal->tanggal.Bln, jadwal->tanggal.Thn,
+                jadwal->Start.jam, jadwal->Start.menit,
+                jadwal->End.jam, jadwal->End.menit,
+                jadwal->film->idFilm
+            );
+        } else {
+            fprintf(temp, "%s\n", buffer);
+        }
+    }
+
+    fclose(file);
+    fclose(temp);
+
+    remove("database/jadwal.txt");
+    rename("database/temp.txt", "database/jadwal.txt");
+
+    printf("Jadwal berhasil dirubah di file\n");
+}
+
+// Deskripsi : Prosedur untuk menghapus jadwal dari file
+// IS : menerima info jadwal
+// FS : menghapus info jadwal dari file "database/jadwal.txt"
+void HapusJadwalKeFile(const JadwalInfo* jadwalLama) {
+    if (!SearchJadwalFile(jadwalLama)) {
+        printf("Jadwal %d:%d tidak ditemukan. Tidak dapat melakukan edit.\n", jadwalLama->Start.jam, jadwalLama->Start.menit);
+        return;
+    }
+
+    FILE* file = fopen("database/jadwal.txt", "r");
+    FILE* temp = fopen("database/temp.txt", "w");
+    if (!file || !temp) return;
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+
+        int id, idKota, idBioskop, idTeater, idFilm;
+        TimeInfo start, end;
+        date tanggal;
+
+        sscanf(
+            buffer, "%d|%d|%d|%d|%d/%d/%d|%d:%d|%d:%d|%d|",
+            &id, &idKota, &idBioskop, &idTeater,
+            &tanggal.Tgl, &tanggal.Bln, &tanggal.Thn,
+            &start.jam, &start.menit,
+            &end.jam, &end.menit,
+            &idFilm
+        );
+
+        if (id != jadwalLama->id) {
+
+            fprintf(temp, "%s\n", buffer);
+        }
+    }
+
+    fclose(file);
+    fclose(temp);
+
+    remove("database/jadwal.txt");
+    rename("database/temp.txt", "database/jadwal.txt");
+
+    printf("Jadwal berhasil di hapus dari file\n");
+}
+
+// Deskripsi : Prosedur untuk mengosongkan file jadwal.txt
+// IS : membuka file "database/jadwal.txt" dalam mode tulis
+// FS : mengosongkan isi file
+void KosongkanFileJadwal() {
+    FILE* file = fopen("database/jadwal.txt", "w");
+    if (file != NULL) {
+        fclose(file);
+        printf("File jadwal.txt berhasil dikosongkan.\n");
+    } else {
+        printf("Gagal mengosongkan file jadwal.txt.\n");
+    }
+}
+
+// Deskripsi : Prosedur untuk memuat data jadwal dari file
+// IS : membuka file "database/jadwal.txt" dalam mode baca
+// FS : membaca setiap baris dari file dan menambahkannya ke tree
+void LoadJadwal(address root) {
+    FILE* file = fopen("database/jadwal.txt", "r");
+    if (!file) {
+        printf("File jadwal.txt tidak ditemukan atau gagal dibuka.\n");
+        return;
+    }
+
+    JadwalInfo jadwal;
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+
+        int id, idKota, idBioskop, idTeater, idFilm;
+        TimeInfo start, end;
+        date tanggal;
+
+        int readData = sscanf(
+            buffer, "%d|%d|%d|%d|%d/%d/%d|%d:%d|%d:%d|%d|",
+            &id, &idKota, &idBioskop, &idTeater,
+            &tanggal.Tgl, &tanggal.Bln, &tanggal.Thn,
+            &start.jam, &start.menit,
+            &end.jam, &end.menit,
+            &idFilm
+        );
+
+        if (readData == 12) {
+            address kota = SearchKotaById(root, &idKota);
+            if (kota != NULL) {
+                address bioskop = SearchBioskopById(kota, &idBioskop);
+                if (bioskop != NULL) {
+                    address teater = SearchTeaterById(kota, &idTeater);
+                    if(teater != NULL){
+                        jadwal.id = id;
+                        jadwal.Start = start;
+                        jadwal.End = end;
+                        jadwal.tanggal = tanggal;
+                        
+                        TambahJadwal(teater, jadwal);
+                    }
+                }
+            }
+        }
+    }
+
+    fclose(file);
+}
+
 // Deskripsi : Prosedur untuk mengambil id terakhir dari data file
 // IS : membuka file "database/jadwal.txt" dalam mode baca
 // FS : membaca setiap baris dari file dan mencari id paling besar

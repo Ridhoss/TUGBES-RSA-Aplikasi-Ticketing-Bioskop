@@ -1,6 +1,6 @@
 #include "header/views.h"
 
-void HalamanMenuAdmin(){
+void HalamanMenuAdmin() {
 
     char* rootStr = (char*) malloc(strlen("Head") + 1);
     strcpy(rootStr, "Head");
@@ -11,7 +11,7 @@ void HalamanMenuAdmin(){
         return;
     }
 
-    LoadKota(root);
+    LoadKota(root);     
     LoadBioskop(root);
     LoadTeater(root);
 

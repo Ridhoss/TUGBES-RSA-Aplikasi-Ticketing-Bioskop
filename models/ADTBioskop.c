@@ -16,7 +16,7 @@ void SimpanBioskopKeFile(const int* idkota, const BioskopInfo* bioskop) {
 }
 
 // Deskripsi : fungsi untuk mencari bioskop dalam file
-// IS : menerima informasi bioskop sebagai string   
+// IS : menerima informasi bioskop 
 // FS : mengembalikan 1 jika bioskop ditemukan, 0 jika tidak ditemukan
 int SearchBioskopFile(const BioskopInfo* bioskop) {
     FILE* file = fopen("database/bioskop.txt", "r");
