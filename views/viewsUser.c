@@ -6,17 +6,22 @@ void HalamanMenuUser(address root, List *L) {
     printf("===================================================\n");
     PrintKota(root, 0);
 
-    char kotaDipilih[100];
+    int idKotaDipilih;
     printf("\n>> Pilih kota: ");
-    scanf(" %[^\n]", kotaDipilih); 
-
+    scanf("%d", &idKotaDipilih);
+    address kotaNode = SearchKotaById(root, &idKotaDipilih);
 
     // printf("\n=== Film yang sedang tayang di %s ===\n", kotaDipilih);
 
     int pilihan;
     do {
         printf("===================================================\n");
-        printf("          MENU USER - Kota: %s\n", kotaDipilih        );
+        if (kotaNode != NULL) {
+            KotaInfo* info = (KotaInfo*)(kotaNode->info);
+            printf("          MENU USER - Kota: %s\n", info->nama        );
+        } else {
+            printf("Kota dengan ID %d tidak ditemukan.\n", idKotaDipilih);
+        }
         printf("===================================================\n");
         printf("||                                               ||\n");
         printf("||     1. Cari dan pilih film                    ||\n");
@@ -32,9 +37,10 @@ void HalamanMenuUser(address root, List *L) {
 
         switch (pilihan) {
             case 1:
-                printf("\n=== Film yang tersedia di %s ===\n", kotaDipilih);
+                {KotaInfo* info = (KotaInfo*)(kotaNode->info);
+                printf("\n=== Film yang tersedia di %s ===\n", info->nama);
                 printFilm(*L); 
-                break;
+                break;}
             case 2:
                 printf("belum tersedia)\n");
                 break;
