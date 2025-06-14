@@ -41,7 +41,6 @@ int main() {
                 HalamanMenuAdmin(root, &L);
             } else if (akunLogin->role == 1) {
                 HalamanMenuUser(root, &L);
-                HalamanMenuUser(root, L);
             } else {
                 printf("Role tidak dikenali. Hubungi admin sistem.\n");
             }
