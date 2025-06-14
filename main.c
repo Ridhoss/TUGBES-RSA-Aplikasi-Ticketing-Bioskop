@@ -9,10 +9,25 @@
 #include "views/header/Auth.h"
 
 int main() {
+
+    char* rootStr = (char*) malloc(strlen("Head") + 1);
+    strcpy(rootStr, "Head");
+    address root = CreateTree((infotype)rootStr, ROOT);
+
+    if (root == NULL) {
+        printf("Gagal membuat tree.\n");
+        return 0;
+    }
+
+    LoadKota(root);
+    LoadBioskop(root);
+    LoadTeater(root);
+
+
     int loggedIn = 0;  // status login, 0 = belum login
     int idLogin = 1; // 1 = sudah login
     HalamanAwal(&loggedIn, &idLogin);
-    HalamanMenuAdmin();
+    HalamanMenuAdmin(root);
     
     return 0;
 }

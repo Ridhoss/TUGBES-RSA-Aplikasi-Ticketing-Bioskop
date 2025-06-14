@@ -12,10 +12,10 @@
 #include "../../models/header/ADTTeater.h"
 
 
+void HalamanMenuAdmin(address root);
 void HalamanManipulasiKota(address root);
 void HalamanManipulasiBioskop(address root);
 void HalamanManipulasiTeater(address root, address nodeKota);
-void HalamanMenuAdmin();
 
 
 
