@@ -208,54 +208,61 @@ void printFilm(List L) {
     }
 }
 
-void printUpcomingFilmsByKota(address root, address kotaNode) {
-    if (root == NULL) {
-        printf("Data kota kosong.\n");
-        return;
-    }
-
+void printUpcomingFilmsByKota(address kotaNode) {
     if (kotaNode == NULL) {
         printf("Kota tidak ditemukan.\n");
         return;
     }
 
     KotaInfo* kotaInfo = (KotaInfo*)kotaNode->info;
-
     date today;
     GetToday(&today);
+
+    List listJadwal;
+    AmbilSeluruhJadwalKotaKeList(kotaNode, &listJadwal);
 
     printf("\n=== Daftar Film Upcoming di Kota %s ===\n", kotaInfo->nama);
     boolean adaFilm = false;
 
-    address bioskop = kotaNode->fs;
-    while (bioskop != NULL) {
-        address teater = bioskop->fs;
-        while (teater != NULL) {
-            address jadwal = teater->fs;
-            while (jadwal != NULL) {
-                JadwalInfo* info = (JadwalInfo*)jadwal->info;
-                int selisih = DifferenceDate(today, info->tanggal);
-                if (selisih >= 0 && selisih <= 2) {
-                    FilmInfo* film = info->film;
-                    printf("----------------------------------------------\n");
-                    printf("Judul      : %s\n", film->judul);
-                    printf("Produser   : %s\n", film->produser);
-                    printf("Deskripsi  : %s\n", film->deskripsi);
-                    printf("Durasi     : %02d:%02d\n", film->durasi.jam, film->durasi.menit);
-                    printf("Tanggal    : %02d-%02d-%d\n", info->tanggal.Tgl, info->tanggal.Bln, info->tanggal.Thn);
-                    printf("Teater     : %s\n", ((TeaterInfo*)teater->info)->nama);
-                    printf("Bioskop    : %s\n", ((BioskopInfo*)bioskop->info)->nama);
-                    adaFilm = true;
+    addressList p = listJadwal.First;
+    while (p != NULL) {
+        address jadwalNode = p->info;
+        JadwalInfo* jadwalInfo = (JadwalInfo*)jadwalNode->info;
+
+        int selisih = DifferenceDate(today, jadwalInfo->tanggal);
+        if (selisih >= 1 && selisih <= 2) {
+            // cari teater dan bioskop yang memuat jadwalNode
+            address bioskop = kotaNode->fs;
+            while (bioskop != NULL) {
+                address teater = bioskop->fs;
+                while (teater != NULL) {
+                    address jadwal = teater->fs;
+                    while (jadwal != NULL) {
+                        if (jadwal == jadwalNode) {
+                            FilmInfo* film = jadwalInfo->film;
+                            printf("----------------------------------------------\n");
+                            printf("Judul      : %s\n", film->judul);
+                            printf("Produser   : %s\n", film->produser);
+                            printf("Deskripsi  : %s\n", film->deskripsi);
+                            printf("Durasi     : %02d:%02d\n", film->durasi.jam, film->durasi.menit);
+                            printf("Tanggal    : %02d-%02d-%d\n", jadwalInfo->tanggal.Tgl, jadwalInfo->tanggal.Bln, jadwalInfo->tanggal.Thn);
+                            printf("Teater     : %s\n", ((TeaterInfo*)teater->info)->nama);
+                            printf("Bioskop    : %s\n", ((BioskopInfo*)bioskop->info)->nama);
+                            adaFilm = true;
+                            break;
+                        }
+                        jadwal = jadwal->nb;
+                    }
+                    teater = teater->nb;
                 }
-                jadwal = jadwal->nb;
+                bioskop = bioskop->nb;
             }
-            teater = teater->nb;
         }
-        bioskop = bioskop->nb;
+
+        p = p->next;
     }
 
     if (!adaFilm) {
         printf("Tidak ada film yang akan tayang dalam 2 hari ke depan di kota %s.\n", kotaInfo->nama);
     }
 }
-
