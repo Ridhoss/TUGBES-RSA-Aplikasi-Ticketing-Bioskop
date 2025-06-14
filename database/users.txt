@@ -1,6 +1,0 @@
-<<<<<<< HEAD
-1|sasa|sasa123|082130308398|bandung|0|1
-=======
-1,sasa,123,08452451,jl. satria raya,0,1
-2|salma|123|2310|dsaa|0|1
->>>>>>> 5b4a9d66d189e9f0c16b6ea767d9d5bb99b5274a

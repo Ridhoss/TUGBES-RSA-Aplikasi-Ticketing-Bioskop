@@ -9,11 +9,20 @@ int BacaFileAkun(Akun *akun){
     if (file == NULL) return 0;
 
     int index = 0;
-    while (fscanf(file, "%d,%49[^,],%49[^,],%15[^,],%49[^,],%d,%d\n", 
-                &akun[index].id, akun[index].username, 
-                akun[index].password, akun[index].phone, 
-                akun[index].alamat, &akun[index].saldo,&akun[index].role ) == 7) {
-        index++;
+    char line[256];
+    while (fgets(line, sizeof(line), file)) {
+        line[strcspn(line, "\n")] = 0; 
+        if (sscanf(line, "%d|%49[^|]|%49[^|]|%14[^|]|%99[^|]|%d|%d",
+            &akun[index].id,
+            akun[index].username,
+            akun[index].password,
+            akun[index].phone,
+            akun[index].alamat,
+            &akun[index].saldo,
+            &akun[index].role) == 7) {
+                
+            index++;
+        }
     }
     fclose(file);
     return index;
@@ -26,7 +35,7 @@ int CekDuplikat(const char *username) {
     char line[256];
     while (fgets(line, sizeof(line), file)) {
         char file_username[50];
-        sscanf(line, "%*d,%49[^,]", file_username);
+        sscanf(line, "%*d|%49[^|]", file_username);
         if (strcmp(username, file_username) == 0) {
             fclose(file);
             return 1;
@@ -44,7 +53,7 @@ int get_last_id() {
     char line[256];
     while (fgets(line, sizeof(line), file)) {
         int temp_id;
-        sscanf(line, "%d,", &temp_id);
+        sscanf(line, "%d|", &temp_id);
         if (temp_id > last_id) {
             last_id = temp_id;
         }

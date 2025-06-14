@@ -8,6 +8,7 @@
 #include "models/header/ADTAkun.h"
 #include "models/header/ADTFilm.h"
 #include "views/header/views.h"
+// #include "views/header/viewsUser.h"
 #include "views/header/Auth.h"
 
 int main() {
@@ -29,12 +30,15 @@ int main() {
     loadFilm(&L, films);
     LoadJadwal(root, L);
 
-    int loggedIn = 0;
-    int idLogin = 0;
+    int loggedIn = 0; 
+    int idLogin = 0; 
+
     HalamanAwal(&loggedIn, &idLogin);
 
 
     HalamanMenuAdmin(root, &L);
+
+
     
     return 0;
 }

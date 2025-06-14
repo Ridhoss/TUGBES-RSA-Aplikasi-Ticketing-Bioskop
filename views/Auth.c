@@ -65,9 +65,9 @@ void HalamanLogin(int *loggedIn, int *idLogin){
     printf("=======================\n");
 
     printf("Masukan Username: ");
-    scanf("%s", username);
+    scanf(" %s", username);
     printf("Masukan Password: ");
-    scanf("%s", password);
+    scanf(" %s", password);
 
     *loggedIn = Login(username, password, akun, total_akun, idLogin);
     
