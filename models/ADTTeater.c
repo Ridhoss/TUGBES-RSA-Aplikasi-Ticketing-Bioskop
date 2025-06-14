@@ -298,9 +298,8 @@ void DeleteTeater(address teater) {
     teaterLama.harga = oldInfo->harga;
 
     address nodeBioskop = teater->pr;
-    address nodeKota = nodeBioskop ? nodeBioskop->pr : NULL;
 
-    if (nodeBioskop && nodeKota) {
+    if (nodeBioskop) {
         HapusTeaterKeFile(&teaterLama);
 
         DeleteNode(&nodeBioskop, teater);

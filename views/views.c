@@ -526,6 +526,7 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
 
         switch (pil) {
             case 1: {
+                // Tambah jadwal
 
                 int pilTam;
                 int runningTam = 1;
@@ -626,12 +627,11 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
                     }
                 }
 
-                // Tambah jadwal
-
                 break;
             }
             case 2: {
                 // Ubah Informasi jadwal
+                
                 date tanggalCari;
                 TimeInfo jamCari;
 
@@ -697,6 +697,41 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
             case 3: {
                 // Hapus jadwal
 
+                date tanggalCari;
+                TimeInfo jamCari;
+
+                PrintJadwal(nodeTeater, 0);
+
+                printf("Masukkan tanggal yang ingin diubah ( dd/mm/yyyy ): ");
+                scanf("%d/%d/%d", &tanggalCari.Tgl, &tanggalCari.Bln, &tanggalCari.Thn);
+
+                List listJadwalTgl;
+                AmbilJadwalTeaterTanggalKeList(nodeTeater, tanggalCari, &listJadwalTgl);
+
+                if (ListEmpty(listJadwalTgl)) {
+                    printf("Tidak ada jadwal pada tanggal %d/%d/%d.\n", tanggalCari.Tgl, tanggalCari.Bln, tanggalCari.Thn);
+
+                    DelAll(&listJadwalTgl);
+                    break;
+                }
+
+                TampilkanListJadwal(listJadwalTgl);
+
+                printf("Pilih jadwal yang ingin dihapus ( jam:menit ): ");
+                scanf("%d:%d", &jam, &menit);
+                SetTime(&jamCari, jam, menit);
+
+                address jadwalLama = SearchJadwalByName(nodeTeater, &tanggalCari, &jamCari);
+
+                if(!jadwalLama){
+                    printf("Jadwal tidak ditemukan.\n");
+
+                    DelAll(&listJadwalTgl);
+                    break;
+                }
+
+                DeleteJadwal(jadwalLama);
+
                 break;
             }
             case 4: {
@@ -704,10 +739,29 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
 
                 break;
             }
-            case 5:
+            case 5: {
                 // Cari jadwal                
+                date tanggalCari;
+                TimeInfo jamCari;
+
+                printf("Masukkan tanggal jadwal yang ingin dicari ( dd/mm/yyyy ): ");
+                scanf("%d/%d/%d", &tanggalCari.Tgl, &tanggalCari.Bln, &tanggalCari.Thn);
+
+                printf("Masukan jam jadwal yang ingin dicari ( jam:menit ): ");
+                scanf("%d:%d", &jam, &menit);
+                SetTime(&jamCari, jam, menit);
+
+                address jadwalHasil = SearchJadwalByName(nodeTeater, &tanggalCari, &jamCari);
+                
+                if (jadwalHasil != NULL) {
+                    JadwalInfo* jadwal = (JadwalInfo*)jadwalHasil->info;
+                    printf("Jadwal dengan jam %d:%d pada tanggal %d/%d/%d Ditemukan.\n", jadwal->Start.jam, jadwal->Start.menit, jadwal->tanggal.Tgl, jadwal->tanggal.Bln, jadwal->tanggal.Thn);
+                } else {
+                    printf("Jadwal dengan jam %d:%d pada tanggal %d/%d/%d tidak ditemukan.\n", jamCari.jam, jamCari.menit, tanggalCari.Tgl, tanggalCari.Bln, tanggalCari.Thn);
+                }
 
                 break;
+            }
             case 6:
                 // Tampilkan Semua jadwal
                 PrintJadwal(nodeTeater, 0);

@@ -456,11 +456,12 @@ void TampilkanListJadwal(List L) {
     addressList P = L.First;
     while (P != NULL) {
         JadwalInfo* j = (JadwalInfo*) P->info;
-        printf("%d. ID: %d | Mulai: %02d:%02d | Selesai: %02d:%02d | Film: %s\n",
+        printf("%d. ID: %d | Mulai: %02d:%02d | Selesai: %02d:%02d | Tanggal: %d/%d/%d | Film: %s\n",
             index,
             j->id,
             j->Start.jam, j->Start.menit,
             j->End.jam, j->End.menit,
+            j->tanggal.Tgl, j->tanggal.Bln, j->tanggal.Thn,
             j->film->judul);
             
         P = P->next;
@@ -514,14 +515,42 @@ void UbahJadwal(address node, JadwalInfo jadwalBaru) {
 // IS : menerima address Jadwal
 // FS : menghapus node Jadwal dari tree dan juga dari file
 void DeleteJadwal(address jadwal) {
+    if (jadwal == NULL) return;
 
+    JadwalInfo* oldInfo = (JadwalInfo*) jadwal->info;
+
+    JadwalInfo jadwalLama;
+    jadwalLama.id = oldInfo->id;
+    jadwalLama.Start = oldInfo->Start;
+    jadwalLama.End = oldInfo->End;
+    jadwalLama.tanggal = oldInfo->tanggal;
+    jadwalLama.film = oldInfo->film;
+    memcpy(jadwalLama.kursi, oldInfo->kursi, sizeof(oldInfo->kursi));
+    jadwalLama.jumlahBaris = oldInfo->jumlahBaris;
+    jadwalLama.jumlahKolom = oldInfo->jumlahKolom;
+
+    address nodeTeater = jadwal->pr;
+
+    if (nodeTeater) {
+        HapusJadwalKeFile(&jadwalLama);
+
+        DeleteNode(&nodeTeater, jadwal);
+
+        printf("Jadwal '%d:%d' berhasil dihapus.\n", jadwalLama.Start.jam, jadwalLama.Start.menit);
+    }
 }
 
 // Deskripsi : Prosedur untuk menghapus semua jadwal dari teater
 // IS : menerima address teater
 // FS : menghapus semua node jadwal dari tree dan juga mengosongkan file jadwal
 void DeleteAllJadwal(address teater) {
+    if (IsTreeEmpty(teater)) {
+        printf("Biioskop tidak valid atau kosong.\n");
+        return;
+    }
 
+    DeleteAllKeepRoot(teater);
+    KosongkanFileJadwal();
 }
 
 // Deskripsi : Fungsi untuk membandingkan dua Jadwal berdasarkan start
@@ -546,25 +575,31 @@ int CompareJadwal(infotype a, infotype b) {
 // IS : menerima dua infotype yang berisi JadwalInfo
 // FS : mengembalikan nilai 0 jika Jadwal sama, dan 1 jika Jadwal berbeda
 int CompareJadwalId(infotype a, infotype b) {
+    JadwalInfo* jadwal1 = (JadwalInfo*) a;
+    JadwalInfo* jadwal2 = (JadwalInfo*) b;
 
+    return jadwal1->id - jadwal2->id;
 }
 
 // Deskripsi : Fungsi untuk mencari Jadwal berdasarkan start
 // IS : menerima address teater dan namaJadwal sebagai string
 // FS : mengembalikan address dari node yang sesuai, atau NULL jika tidak ditemukan
 address SearchJadwalByName(address teater, const date* tanggal, const TimeInfo* start) {
-    JadwalInfo dummy;
-    dummy.tanggal = *tanggal;
-    dummy.Start = *start;
+    JadwalInfo target;
+    target.tanggal = *tanggal;
+    target.Start = *start;
 
-    return Search(teater, (infotype)&dummy, CompareJadwal, JADWAL);
+    return Search(teater, (infotype)&target, CompareJadwal, JADWAL);
 }
 
 // Deskripsi : Fungsi untuk mencari Jadwal berdasarkan id
 // IS : menerima address teater dan namaJadwal sebagai string
 // FS : mengembalikan address dari node yang sesuai, atau NULL jika tidak ditemukan
 address SearchJadwalById(address teater, const int* idJadwal) {
+    JadwalInfo target;
+    target.id = *idJadwal;
 
+    return Search(teater, (infotype)&target, CompareJadwalId, JADWAL);
 }
 
 // Deskripsi : Prosedur untuk mencetak daftar jadwal
