@@ -3,7 +3,7 @@
 void HalamanMenuUser(address root, List *L) {
     StackMenu stackMenu;
     CreateStack(&stackMenu);
-    // Push(&stackMenu, "Pilih Kota");
+    Push(&stackMenu, "Pilih Kota");
 
     printf("===================================================\n");
     printf("||          SELAMAT DATANG DI BIOSKOP            ||\n");
@@ -14,6 +14,8 @@ void HalamanMenuUser(address root, List *L) {
     printf("\n>> Pilih kota: ");
     scanf(" %[^\n]", kotaDipilih); 
 
+    Pop(&stackMenu);
+    Push(&stackMenu, "Menu Utama");
 
     // printf("\n=== Film yang sedang tayang di %s ===\n", kotaDipilih);
 
@@ -36,35 +38,36 @@ void HalamanMenuUser(address root, List *L) {
         scanf("%d", &pilihan);
 
         switch (pilihan) {
-            //    case 0:
-                    // Pop(&stackMenu);
-            //         if (IsEmptyStack(stackMenu)) {
-            //             printf("Kembali ke halaman pemilihan kota...\n");
-            //             HalamanMenuUser(root, L);
-            //             return;
-            //         } else {
-            //             printf("Kembali ke menu sebelumnya: %s\n", Top(stackMenu));
-            //         }
+               case 0:
+                    Pop(&stackMenu);
+                    if (IsEmptyStack(stackMenu)) {
+                        printf("Kembali ke halaman pemilihan kota...\n");
+                        HalamanMenuUser(root, L);
+                        return;
+                    }
+                    // else {
+                    //     printf("Kembali ke menu sebelumnya: %s\n", Top(stackMenu));
+                    // }
                     
-            //         break;
+                    break;
             case 1:
-                // Push(&stackMenu, "Cari & Pilih Film");
+                Push(&stackMenu, "Cari & Pilih Film");
                 printf("\n=== Film yang tersedia di %s ===\n", kotaDipilih);
                 printFilm(*L); 
-                // Pop(&stackMenu);
+                Pop(&stackMenu);
 
                 break;
             case 2:
-                // Push(&stackMenu, "Upcoming Film");
+                Push(&stackMenu, "Upcoming Film");
                 printf(">> Fitur belum tersedia\n");
                 // printUpcomingFilmsByKota();
-                // Pop(&stackMenu);
+                Pop(&stackMenu);
 
                 break;
             case 3:
-                // Push(&stackMenu, "Cari Jadwal");
+                Push(&stackMenu, "Cari Jadwal");
                 printf("belum tersedia)\n");
-                // Pop(&stackMenu);
+                Pop(&stackMenu);
 
                 break;
             case 4:
