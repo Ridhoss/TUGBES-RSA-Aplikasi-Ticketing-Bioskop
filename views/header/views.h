@@ -13,12 +13,12 @@
 #include "../../models/header/ADTFilm.h"
 #include "../../models/header/ADTJadwal.h"
 
+void HalamanMenuAdmin(address root);
 void HalamanManipulasiKota(address root);
 void HalamanManipulasiBioskop(address root);
 void HalamanManipulasiTeater(address root, address nodeKota);
 void HalamanManipulasiJadwal(address root, address nodeKota, address nodeBioskop);
 void HalamanManipulasiFilm(List *L);
-void HalamanMenuAdmin();
 
 
 

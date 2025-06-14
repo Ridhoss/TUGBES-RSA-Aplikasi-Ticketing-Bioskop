@@ -1,19 +1,6 @@
 #include "header/views.h"
 
-void HalamanMenuAdmin() {
-
-    char* rootStr = (char*) malloc(strlen("Head") + 1);
-    strcpy(rootStr, "Head");
-    address root = CreateTree((infotype)rootStr, ROOT);
-
-    if (root == NULL) {
-        printf("Gagal membuat tree.\n");
-        return;
-    }
-
-    LoadKota(root);     
-    LoadBioskop(root);
-    LoadTeater(root);
+void HalamanMenuAdmin(address root) {
 
     char parentName[100], childName[100];
     char pilihan;
