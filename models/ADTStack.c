@@ -3,5 +3,10 @@
 #include <stdlib.h>
 
 
-// void CreateStack(StackMenu *S);
-// bool IsEmptyStack(StackMenu S);
+void CreateStack(StackMenu *S) {
+    CreateList(S);
+}
+
+bool IsEmptyStack(StackMenu S) {
+    return ListEmpty(S);
+}

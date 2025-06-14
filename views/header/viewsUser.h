@@ -12,6 +12,7 @@
 #include "../../models/header/ADTTeater.h"
 #include "../../models/header/ADTFilm.h"
 #include "../../models/header/ADTJadwal.h"
+#include "../../models/header/ADTStack.h"
 
 void HalamanMenuUser(address root, List *L);
 
