@@ -29,7 +29,7 @@ int SearchJadwalFile(const JadwalInfo* jadwal);
 void EditJadwalKeFile(const JadwalInfo* jadwal, const JadwalInfo* jadwalLama);
 void HapusJadwalKeFile(const JadwalInfo* jadwalLama);
 void KosongkanFileJadwal();
-void LoadJadwal(address root);
+void LoadJadwal(address root, List ListFilm);
 int AmbilIdJadwalTerakhir();
 
 address AlokasiJadwal(JadwalInfo X);
