@@ -13,9 +13,10 @@
 typedef List StackMenu;
 
 void CreateStack(StackMenu *S);
-bool IsEmptyStack(StackMenu S);
-// void Push(StackMenu *S, const char *menu);
-// void Pop(StackMenu *S);
-// char* Top(StackMenu S);
+boolean IsEmptyStack(StackMenu S);
+
+void Push(StackMenu *S, const char *menu);
+void Pop(StackMenu *S);
+char* Top(StackMenu S);
 
 #endif
