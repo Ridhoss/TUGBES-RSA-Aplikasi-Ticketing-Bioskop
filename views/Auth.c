@@ -1,4 +1,5 @@
 #include "header/Auth.h"
+#include <stdlib.h>
 
 void HalamanRegister(Akun *akun, int role){
 
@@ -101,11 +102,10 @@ void HalamanAwal(int *loggedIn, int *idLogin) {
             int role = 1;
             DaftarAkun(role);
         } else if (masuk == 3) {
-            *loggedIn = 2;
-            break;
+            printf("Anda Berhasil Keluar Dari Aplikasi\n");
+            exit(0);
         } else {
             printf("Error 404. Input Tidak Diketahui\n");
         }
     }
 }
-
