@@ -255,17 +255,6 @@ int AmbilIdJadwalTerakhir() {
     return idTerakhir;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // modul utama
 
 // Deskripsi : Fungsi untuk Alokasi memori JadwalInfo

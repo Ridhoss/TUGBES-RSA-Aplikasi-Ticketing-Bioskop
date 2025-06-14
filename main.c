@@ -19,10 +19,14 @@ int main() {
         printf("Gagal membuat tree.\n");
         return 0;
     }
+    
+    List L;
+    CreateList(&L);
 
     LoadKota(root);
     LoadBioskop(root);
     LoadTeater(root);
+    loadFilm(&L, films);
 
 
     int loggedIn = 0;  // status login, 0 = belum login
