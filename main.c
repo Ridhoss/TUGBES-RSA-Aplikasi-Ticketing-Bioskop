@@ -8,7 +8,7 @@
 #include "models/header/ADTAkun.h"
 #include "models/header/ADTFilm.h"
 #include "views/header/views.h"
-// #include "views/header/viewsUser.h"
+#include "views/header/viewsUser.h"
 #include "views/header/Auth.h"
 
 int main() {
@@ -34,9 +34,20 @@ int main() {
     int idLogin = 0; 
 
     HalamanAwal(&loggedIn, &idLogin);
-
-
-    HalamanMenuAdmin(root, &L);
+    if (loggedIn) {
+        Akun* akunLogin = CariAkunById(idLogin);
+        if (akunLogin != NULL) {
+            if (akunLogin->role == 0) {
+                HalamanMenuAdmin(root, &L);
+            } else if (akunLogin->role == 1) {
+                HalamanMenuUser(root, L);
+            } else {
+                printf("Role tidak dikenali. Hubungi admin sistem.\n");
+            }
+        } else {
+            printf("Akun tidak ditemukan.\n");
+        }
+    }
 
 
     

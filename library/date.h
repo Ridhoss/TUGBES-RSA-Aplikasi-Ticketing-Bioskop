@@ -87,4 +87,6 @@ date AddDays(date D, int n);
 
 const char* NamaHari(date D);
 
+boolean isSameDate(date D1, date D2);
+
 #endif

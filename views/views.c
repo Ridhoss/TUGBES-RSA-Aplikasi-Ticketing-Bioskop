@@ -7,14 +7,20 @@ void HalamanMenuAdmin(address root, List *L) {
 
     
     do {
-        printf("\nMenu:\n");
-        printf("1. Manipulasi Kota\n");
-        printf("2. Manipulasi Bioskop\n");
-        printf("3. Manipulasi Film\n");
-        printf("4. -\n");
-        printf("5. -\n");
-        printf("6. Keluar\n");
-        printf("Pilih opsi (1-6): ");
+        printf("===================================================\n");
+        printf("||                MENU ADMIN                     ||\n");
+        printf("===================================================\n");
+        printf("||                                               ||\n");
+        printf("||     1. Manipulasi Kota                        ||\n");
+        printf("||     2. Manipulasi Bioskop                     ||\n");
+        printf("||     3. Manipulasi Film                        ||\n");
+        printf("||     4. -                                      ||\n");
+        printf("||     5. -                                      ||\n");
+        printf("||     6. Keluar                                 ||\n");
+        printf("||                                               ||\n");
+        printf("|| Silakan pilih menu (1-6):                     ||\n");
+        printf("===================================================\n");
+        printf(">> ");
         scanf(" %c", &pilihan);
 
         switch (pilihan) {
