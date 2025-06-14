@@ -1,6 +1,11 @@
 #include "header/ADTFilm.h"
 #include "header/ADTList.h"
 #include "header/ADTAkun.h"
+#include "header/ADTJadwal.h"
+#include "header/ADTTeater.h"
+#include "header/ADTBioskop.h"
+#include "header/ADTTree.h"
+#include "../library/date.h"
 
 const char *films = "database/film.txt";
 
@@ -202,3 +207,56 @@ void printFilm(List L) {
         P = P->next;
     }
 }
+
+void printUpcomingFilmsByKota(address root, int idKota) {
+    if (root == NULL) {
+        printf("Data kota kosong.\n");
+        return;
+    }
+
+    address nodeKota = SearchKotaById(root, &idKota);
+    if (nodeKota == NULL) {
+        printf("Kota dengan ID %d tidak ditemukan.\n", idKota);
+        return;
+    }
+
+    KotaInfo* kotaInfo = (KotaInfo*)nodeKota->info;
+
+    date today;
+    GetToday(&today);
+
+    printf("\n=== Daftar Film Upcoming di Kota %s ===\n", kotaInfo->nama);
+    boolean adaFilm = false;
+
+    address bioskop = nodeKota->fs;
+    while (bioskop != NULL) {
+        address teater = bioskop->fs;
+        while (teater != NULL) {
+            address jadwal = teater->fs;
+            while (jadwal != NULL) {
+                JadwalInfo* info = (JadwalInfo*)jadwal->info;
+                int selisih = DifferenceDate(today, info->tanggal);
+                if (selisih >= 0 && selisih <= 2) {
+                    FilmInfo* film = info->film;
+                    printf("----------------------------------------------\n");
+                    printf("Judul      : %s\n", film->judul);
+                    printf("Produser   : %s\n", film->produser);
+                    printf("Deskripsi  : %s\n", film->deskripsi);
+                    printf("Durasi     : %02d:%02d\n", film->durasi.jam, film->durasi.menit);
+                    printf("Tanggal    : %02d-%02d-%d\n", info->tanggal.Tgl, info->tanggal.Bln, info->tanggal.Thn);
+                    printf("Teater     : %s\n", ((TeaterInfo*)teater->info)->nama);
+                    printf("Bioskop    : %s\n", ((BioskopInfo*)bioskop->info)->nama);
+                    adaFilm = true;
+                }
+                jadwal = jadwal->nb;
+            }
+            teater = teater->nb;
+        }
+        bioskop = bioskop->nb;
+    }
+
+    if (!adaFilm) {
+        printf("Tidak ada film yang akan tayang dalam 2 hari ke depan di kota %s.\n", kotaInfo->nama);
+    }
+}
+

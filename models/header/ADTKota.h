@@ -33,7 +33,7 @@ void UbahKota(address dataLama, KotaInfo dataBaru);
 
 void DeleteKota(address kota);
 void DeleteAllKota(address root);
-
+    
 int CompareKota(infotype a, infotype b);
 int CompareKotaId(infotype a, infotype b);
 address SearchKotaByName(address root, const char* namaKota);
