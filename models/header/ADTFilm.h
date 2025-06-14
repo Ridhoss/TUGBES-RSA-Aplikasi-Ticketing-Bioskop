@@ -27,7 +27,7 @@ void TambahFilm(List* L, FilmInfo filmBaru);
 void TambahFilmBaru(List* L, const char* judul, const char* produser, const char* deskripsi, int jam, int menit);
 void editFilm(List* L, int id, FilmInfo newData);
 void hapusFilm(List* L, int id);
-FilmInfo* cariFilm(List L, int id);
+addressList cariFilm(List L, int id);
 addressList cariFilmByJudul(List L, const char* title);
 void printFilm(List L);
 void simpanKeFile(List L, const char* filename);

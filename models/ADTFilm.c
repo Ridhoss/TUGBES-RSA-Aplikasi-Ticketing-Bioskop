@@ -186,12 +186,12 @@ int get_last_film_id(const char* filename) {
 }
 
 // Cari film berdasarkan id (return pointer ke FilmInfo)
-FilmInfo* cariFilm(List L, int id) {
+addressList cariFilm(List L, int id) {
     addressList P = L.First;
     while (P != NULL) {
         FilmInfo* film = (FilmInfo*)(P->info);
         if (film->idFilm == id) {
-            return film;
+            return P;
         }
         P = P->next;
     }

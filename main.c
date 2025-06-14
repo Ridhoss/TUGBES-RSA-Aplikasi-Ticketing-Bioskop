@@ -28,11 +28,10 @@ int main() {
     LoadTeater(root);
     loadFilm(&L, films);
 
-
     int loggedIn = 0;  // status login, 0 = belum login
     int idLogin = 1; // 1 = sudah login
     HalamanAwal(&loggedIn, &idLogin);
-    HalamanMenuAdmin(root);
+    HalamanMenuAdmin(root, &L);
     
     return 0;
 }

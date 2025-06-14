@@ -1,6 +1,6 @@
 #include "header/views.h"
 
-void HalamanMenuAdmin(address root) {
+void HalamanMenuAdmin(address root, List *L) {
 
     char parentName[100], childName[100];
     char pilihan;
@@ -29,6 +29,7 @@ void HalamanMenuAdmin(address root) {
                 break;
             }
             case '3': {
+                HalamanManipulasiFilm(L);
 
                 break;
             }
@@ -555,7 +556,7 @@ void HalamanManipulasiJadwal(address root, address nodeKota, address nodeBioskop
                                 
                                 SetTime(&starTime, jam, menit);
 
-                                jadwalBaru.film = filmBaru;
+                                // jadwalBaru.film = filmBaru;
                                 jadwalBaru.tanggal = tglBaru;
                                 jadwalBaru.Start = starTime;
                                 
