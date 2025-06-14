@@ -282,7 +282,7 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
 
     PrintBioskop(nodeKota, 0);
 
-    printf("Masukkan nama bioskop yang ingin dimanipulasi teaterya: ");
+    printf("Masukkan nama bioskop yang ingin dimanipulasi teaternya: ");
     InputString(namaBioskop);
 
     address nodeBioskop = SearchBioskopByName(nodeKota, namaBioskop);
@@ -602,7 +602,7 @@ void HalamanManipulasiFilm(List *L) {
             fgets(data.deskripsi, sizeof(data.deskripsi), stdin);
             data.deskripsi[strcspn(data.deskripsi, "\n")] = 0;
 
-            tambahFilm(L, data.judul, data.produser, data.deskripsi);
+            TambahFilmBaru(L, data.judul, data.produser, data.deskripsi);
 
             printf("Film berhasil ditambahkan.\n");
             break;
@@ -636,7 +636,7 @@ void HalamanManipulasiFilm(List *L) {
 
             if (editFilmById(L, id, judulBaru, produserBaru, deskripsiBaru)) {
                 printf("Film berhasil diperbarui!\n");
-                simpanKeFile(*L, "/database/film.txt");
+                simpanKeFile(*L, films);
             } else {
                 printf("Film dengan ID %d tidak ditemukan.\n", id);
             }

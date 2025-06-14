@@ -17,6 +17,38 @@ void dealokasiFilm(FilmInfo* f) {
 }
 
 
+void loadFilm(List* L, const char* filename) {
+    printf("Trying to open: %s\n", filename);
+    FILE* file = fopen(filename, "r");
+    if (!file) {
+        printf("File '%s' tidak ditemukan atau gagal dibuka.\n", filename);
+        return;
+    }
+
+    FilmInfo data;
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        buffer[strcspn(buffer, "\n")] = 0;
+
+        int parsed = sscanf(buffer, "%d|%[^|]|%[^|]|%[^\n]",
+                            &data.idFilm, data.judul, data.produser, data.deskripsi);
+
+        printf("BACA: '%s'\n", buffer);
+        if (parsed == 4) {
+            printf(" → Parsed OK: ID=%d, Judul=%s\n", data.idFilm, data.judul);
+            FilmInfo* filmPtr = alokasiFilm(data);
+            if (filmPtr != NULL) {
+                InsLast(L, filmPtr);
+            }
+        } else {
+            printf(" → Parsed GAGAL (%d fields)\n", parsed);
+        }
+    }
+
+    fclose(file);
+}
+
+
 int editFilmById(List* L, int id, const char* judulBaru, const char* produserBaru, const char* deskripsiBaru) {
     addressList P = L->First;
 
@@ -43,26 +75,27 @@ int editFilmById(List* L, int id, const char* judulBaru, const char* produserBar
 }
 
 // Tambah film ke list
-void tambahFilm(List* L, const char* judul, const char* produser, const char* deskripsi) {
-    FilmInfo* film = malloc(sizeof(FilmInfo));
-    film->idFilm = 0;
-    strcpy(film->judul, judul);
-    strcpy(film->produser, produser);
-    strcpy(film->deskripsi, deskripsi);
-
-    addressList newNode = malloc(sizeof(struct tElmtList));
-    newNode->info = film;
-    newNode->next = NULL;
-
-    if (L->First == NULL) {
-        L->First = newNode;
-    } else {
-        addressList last = L->First;
-        while (last->next != NULL) {
-            last = last->next;
-        }
-        last->next = newNode;
+void TambahFilm(List* L, FilmInfo filmBaru) {
+    FilmInfo* node = alokasiFilm(filmBaru);
+    if (node == NULL) {
+        printf("Gagal mengalokasikan node Film.\n");
+        return;
     }
+
+    InsLast(L, node);
+    printf("Film '%s' berhasil ditambahkan ke list.\n", filmBaru.judul);
+}
+
+void TambahFilmBaru(List* L, const char* judul, const char* produser, const char* deskripsi) {
+    FilmInfo filmBaru;
+    filmBaru.idFilm = get_last_film_id(films) + 1;
+    strcpy(filmBaru.judul, judul);
+    strcpy(filmBaru.produser, produser);
+    strcpy(filmBaru.deskripsi, deskripsi);
+
+    TambahFilm(L, filmBaru);
+
+    // Tambahkan juga ke file
     simpanKeFile(*L, films);
 }
 
@@ -95,7 +128,7 @@ void hapusFilm(List* L, int id) {
 }
 
 void simpanKeFile(List L, const char* filename) {
-    FILE* file = fopen(films, "w");
+    FILE* file = fopen(filename, "w");
     if (file == NULL) {
         printf("Gagal membuka file\n");
         return;
@@ -120,7 +153,7 @@ void simpanKeFile(List L, const char* filename) {
 }
 
 int get_last_film_id(const char* filename) {
-    FILE* file = fopen(films, "r");
+    FILE* file = fopen(filename, "r");
     if (file == NULL) return 0; 
 
     int last_id = 0;

@@ -23,14 +23,16 @@ int main() {
         printf("Gagal membuat tree.\n");
         return 1;
     }
+    
+    List L;
+    CreateList(&L);
 
     // Load data dari database
     LoadKota(root);
     LoadBioskop(root);
     LoadTeater(root);
+    loadFilm(&L, films);
 
-    List L;
-    CreateList(&L);
 
     char parentName[100], childName[100];
     char pilihan;
