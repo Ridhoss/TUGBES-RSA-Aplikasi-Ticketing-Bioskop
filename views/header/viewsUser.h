@@ -13,6 +13,6 @@
 #include "../../models/header/ADTFilm.h"
 #include "../../models/header/ADTJadwal.h"
 
-void HalamanMenuUser(address root);
+void HalamanMenuUser(address root, List daftarFilm);
 
 #endif 

@@ -1,6 +1,6 @@
 #include "header/viewsUser.h"
 
-void HalamanMenuUser(address root) {
+void HalamanMenuUser(address root, List daftarFilm) {
     printf("===================================================\n");
     printf("||          SELAMAT DATANG DI BIOSKOP            ||\n");
     printf("===================================================\n");
@@ -12,11 +12,6 @@ void HalamanMenuUser(address root) {
 
 
     // printf("\n=== Film yang sedang tayang di %s ===\n", kotaDipilih);
-  
-    List daftarFilm;
-    CreateList(&daftarFilm);
-    loadFilm(&daftarFilm, "database/film.txt");
-
 
     int pilihan;
     do {

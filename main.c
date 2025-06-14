@@ -39,7 +39,7 @@ int main() {
             if (akunLogin->role == 0) {
                 HalamanMenuAdmin(root, &L);
             } else if (akunLogin->role == 1) {
-                HalamanMenuUser(root);
+                HalamanMenuUser(root, L);
             } else {
                 printf("Role tidak dikenali. Hubungi admin sistem.\n");
             }
