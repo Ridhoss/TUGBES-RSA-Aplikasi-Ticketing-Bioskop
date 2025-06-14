@@ -629,6 +629,7 @@ void HalamanManipulasiFilm(List *L) {
     int jamBaru = -1;
     int menitBaru = -1;
     char buffer[255];
+    char judulCari[100] = "";
     char judulBaru[100] = "";
     char produserBaru[100] = "";
     char deskripsiBaru[255] = "";
@@ -678,51 +679,63 @@ void HalamanManipulasiFilm(List *L) {
 
         case 3:
             printf("\n--- Edit Film ---\n");
-            printf("Masukkan ID film yang ingin diedit: ");
-            scanf("%d", &id);
-            while (getchar() != '\n');
+            printf("Masukkan judul film yang ingin diedit: ");
+            fgets(judulCari, sizeof(judulCari), stdin);
+            judulCari[strcspn(judulCari, "\n")] = 0;
 
+            addressList filmLama = cariFilmByJudul(*L, judulCari);
+            if (filmLama == NULL) {
+                printf("Film dengan judul \"%s\" tidak ditemukan.\n", judulCari);
+                break;
+            }
+
+            // Salin data lama dulu
+            FilmInfo filmBaru = *(FilmInfo*)(filmLama->info);
+
+            // Input perubahan
             printf("Masukkan judul baru (Enter untuk skip): ");
             fgets(buffer, sizeof(buffer), stdin);
             if (buffer[0] != '\n') {
                 buffer[strcspn(buffer, "\n")] = '\0';
-                strcpy(judulBaru, buffer);
+                strcpy(filmBaru.judul, buffer);
             }
 
             printf("Masukkan produser baru (Enter untuk skip): ");
             fgets(buffer, sizeof(buffer), stdin);
             if (buffer[0] != '\n') {
                 buffer[strcspn(buffer, "\n")] = '\0';
-                strcpy(produserBaru, buffer);
+                strcpy(filmBaru.produser, buffer);
             }
 
             printf("Masukkan deskripsi baru (Enter untuk skip): ");
             fgets(buffer, sizeof(buffer), stdin);
             if (buffer[0] != '\n') {
                 buffer[strcspn(buffer, "\n")] = '\0';
-                strcpy(deskripsiBaru, buffer);
+                strcpy(filmBaru.deskripsi, buffer);
             }
 
-            printf("Jam (Enter untuk skip): ");
+            printf("Jam durasi baru (Enter untuk skip): ");
             fgets(buffer, sizeof(buffer), stdin);
             if (buffer[0] != '\n') {
                 buffer[strcspn(buffer, "\n")] = '\0';
-                jamBaru = atoi(buffer);
-            }
-
-            printf("Menit (Enter untuk skip): ");
-            fgets(buffer, sizeof(buffer), stdin);
-            if (buffer[0] != '\n') {
-                buffer[strcspn(buffer, "\n")] = '\0';
-                menitBaru = atoi(buffer);
-            }
-
-            if (editFilmById(L, id, judulBaru, produserBaru, deskripsiBaru, jamBaru, menitBaru)) {
-                printf("Film berhasil diperbarui!\n");
-                simpanKeFile(*L, films);
+                filmBaru.durasi.jam = atoi(buffer);
             } else {
-                printf("Film dengan ID %d tidak ditemukan.\n", id);
+                filmBaru.durasi.jam = -1; // skip
             }
+
+            printf("Menit durasi baru (Enter untuk skip): ");
+            fgets(buffer, sizeof(buffer), stdin);
+            if (buffer[0] != '\n') {
+                buffer[strcspn(buffer, "\n")] = '\0';
+                filmBaru.durasi.menit = atoi(buffer);
+            } else {
+                filmBaru.durasi.menit = -1; // skip
+            }
+
+            editFilmByName(filmBaru, filmLama);
+            printf("Film berhasil diperbarui!\n");
+            simpanKeFile(*L, films);
+
             
             break;
         case 4:

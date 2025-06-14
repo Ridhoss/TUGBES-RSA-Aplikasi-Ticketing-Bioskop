@@ -1,1 +1,1 @@
-1,sasa,123,08452451,jl. satria raya,0,1
+1|sasa|sasa123|082130308398|bandung|0|1

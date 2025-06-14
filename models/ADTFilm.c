@@ -52,37 +52,7 @@ void loadFilm(List* L, const char* filename) {
 }
 
 
-int editFilmById(List* L, int id, const char* judulBaru, const char* produserBaru, const char* deskripsiBaru, int jamBaru, int menitBaru) {
-    addressList P = L->First;
 
-    while (P != NULL) {
-        FilmInfo* film = (FilmInfo*)P->info;
-
-        if (film->idFilm == id) {
-            if (judulBaru && strlen(judulBaru) > 0)
-                strcpy(film->judul, judulBaru);
-
-            if (produserBaru && strlen(produserBaru) > 0)
-                strcpy(film->produser, produserBaru);
-
-            if (deskripsiBaru && strlen(deskripsiBaru) > 0)
-                strcpy(film->deskripsi, deskripsiBaru);
-
-            if (jamBaru >= 0) {
-                film->durasi.jam = jamBaru;
-            }
-            if (menitBaru >= 0 && menitBaru < 60) {
-                film->durasi.menit = menitBaru;
-            }
-
-            return 1;
-        }
-
-        P = P->next;
-    }
-
-    return 0;
-}
 
 // Tambah film ke list
 void TambahFilm(List* L, FilmInfo filmBaru) {
@@ -110,20 +80,29 @@ void TambahFilmBaru(List* L, const char* judul, const char* produser, const char
     simpanKeFile(*L, films);
 }
 
-// Edit film berdasarkan id
-void editFilm(List* L, int id, FilmInfo newData) {
-    addressList P = L->First;
-    while (P != NULL) {
-        FilmInfo* film = (FilmInfo*)(P->info);
-        if (film->idFilm == id) {
-            *film = newData;
-            
-            simpanKeFile(*L, films);
-            return;
-        }
-        P = P->next;
-    }
+// Edit film
+void editFilmByName(FilmInfo filmBaru, addressList filmLama) {
+    if (filmLama == NULL) return;
+
+    FilmInfo* film = (FilmInfo*)(filmLama->info);
+
+    // Hanya ubah jika data baru tidak kosong
+    if (strlen(filmBaru.judul) > 0)
+        strcpy(film->judul, filmBaru.judul);
+
+    if (strlen(filmBaru.produser) > 0)
+        strcpy(film->produser, filmBaru.produser);
+
+    if (strlen(filmBaru.deskripsi) > 0)
+        strcpy(film->deskripsi, filmBaru.deskripsi);
+
+    if (filmBaru.durasi.jam >= 0)
+        film->durasi.jam = filmBaru.durasi.jam;
+
+    if (filmBaru.durasi.menit >= 0 && filmBaru.durasi.menit < 60)
+        film->durasi.menit = filmBaru.durasi.menit;
 }
+
 
 // Hapus film berdasarkan id
 void hapusFilm(List* L, int id) {
