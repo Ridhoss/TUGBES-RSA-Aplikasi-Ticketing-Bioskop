@@ -2,6 +2,8 @@
 #include "header/ADTList.h"
 #include "header/ADTAkun.h"
 #include "header/ADTJadwal.h"
+#include "header/ADTTeater.h"
+#include "header/ADTBioskop.h"
 #include "header/ADTTree.h"
 #include "../library/date.h"
 
@@ -206,42 +208,55 @@ void printFilm(List L) {
     }
 }
 
-void printUpcomingFilms(address root) {
+void printUpcomingFilmsByKota(address root, int idKota) {
+    if (root == NULL) {
+        printf("Data kota kosong.\n");
+        return;
+    }
+
+    address nodeKota = SearchKotaById(root, &idKota);
+    if (nodeKota == NULL) {
+        printf("Kota dengan ID %d tidak ditemukan.\n", idKota);
+        return;
+    }
+
+    KotaInfo* kotaInfo = (KotaInfo*)nodeKota->info;
+
     date today;
     GetToday(&today);
-    int found = 0;
 
-    void traverseTree(address node) {
-        if (node == NULL) return;
+    printf("\n=== Daftar Film Upcoming di Kota %s ===\n", kotaInfo->nama);
+    boolean adaFilm = false;
 
-        if (node->type == JADWAL) {
-            JadwalInfo* jadwal = (JadwalInfo*)(node->info);
-            int selisih = DifferenceDate(today, jadwal->tanggal);
-
-            if (selisih > 2 && jadwal->film != NULL) {
-                FilmInfo* film = jadwal->film;
-
-                printf("ID Film         : %d\n", film->idFilm);
-                printf("Judul           : %s\n", film->judul);
-                printf("Produser        : %s\n", film->produser);
-                printf("Deskripsi       : %s\n", film->deskripsi);
-                printf("Durasi          : %02d:%02d\n", film->durasi.jam, film->durasi.menit);
-                printf("Tanggal Tayang  : %02d-%02d-%04d\n",
-                       jadwal->tanggal.Tgl, jadwal->tanggal.Bln, jadwal->tanggal.Thn);
-                printf("------------------------------------\n");
-
-                found = 1;
+    address bioskop = nodeKota->fs;
+    while (bioskop != NULL) {
+        address teater = bioskop->fs;
+        while (teater != NULL) {
+            address jadwal = teater->fs;
+            while (jadwal != NULL) {
+                JadwalInfo* info = (JadwalInfo*)jadwal->info;
+                int selisih = DifferenceDate(today, info->tanggal);
+                if (selisih >= 0 && selisih <= 2) {
+                    FilmInfo* film = info->film;
+                    printf("----------------------------------------------\n");
+                    printf("Judul      : %s\n", film->judul);
+                    printf("Produser   : %s\n", film->produser);
+                    printf("Deskripsi  : %s\n", film->deskripsi);
+                    printf("Durasi     : %02d:%02d\n", film->durasi.jam, film->durasi.menit);
+                    printf("Tanggal    : %02d-%02d-%d\n", info->tanggal.Tgl, info->tanggal.Bln, info->tanggal.Thn);
+                    printf("Teater     : %s\n", ((TeaterInfo*)teater->info)->nama);
+                    printf("Bioskop    : %s\n", ((BioskopInfo*)bioskop->info)->nama);
+                    adaFilm = true;
+                }
+                jadwal = jadwal->nb;
             }
+            teater = teater->nb;
         }
-
-        traverseTree(node->fs);
-        traverseTree(node->nb);
+        bioskop = bioskop->nb;
     }
 
-    printf("=== Daftar Film Upcoming (belum tayang dalam 2 hari ke depan) ===\n");
-    traverseTree(root);
-
-    if (!found) {
-        printf("Tidak ada film upcoming.\n");
+    if (!adaFilm) {
+        printf("Tidak ada film yang akan tayang dalam 2 hari ke depan di kota %s.\n", kotaInfo->nama);
     }
 }
+

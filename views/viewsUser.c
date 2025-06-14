@@ -2,7 +2,7 @@
 
 void HalamanMenuUser(address root, List *L) {
     int idKotaDipilih;
-    List listJadwal;
+    char namaKota[100];
     
     printf("===================================================\n");
     printf("||          SELAMAT DATANG DI BIOSKOP            ||\n");
@@ -12,8 +12,6 @@ void HalamanMenuUser(address root, List *L) {
     printf("\n>> Pilih kota: ");
     scanf("%d", &idKotaDipilih);
     address kotaNode = SearchKotaById(root, &idKotaDipilih);
-
-    // printf("\n=== Film yang sedang tayang di %s ===\n", kotaDipilih);
 
     int pilihan;
     do {
@@ -44,7 +42,7 @@ void HalamanMenuUser(address root, List *L) {
                 printFilm(*L); 
                 break;}
             case 2:
-                printUpcomingFilms(root);
+                printUpcomingFilmsByKota(root, idKotaDipilih);
                 break;
             case 3:
                  printf("belum tersedia)\n");
