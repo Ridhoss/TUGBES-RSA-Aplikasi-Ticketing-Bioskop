@@ -147,9 +147,9 @@ void HalamanManipulasiBioskop(address root) {
         return;
     }
 
-    PrintBioskop(nodeKota, 0);
     while (running) {
-        printf("\n==== Manipulasi Bioskop (Kota: %s) ====\n", namaKota);
+        KotaInfo* kotaData = (KotaInfo*) nodeKota->info;
+        printf("\n==== Manipulasi Bioskop (Kota: %s) ====\n", kotaData->nama);
         printf("1. Tambah Bioskop\n");
         printf("2. Ubah Informasi Bioskop\n");
         printf("3. Hapus Bioskop\n");
@@ -289,12 +289,12 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
 
     if (nodeBioskop == NULL) {
         printf("Bioskop '%s' tidak ditemukan.\n", namaBioskop);
-
         return;
     }
 
     while (running) {
-        printf("\n==== Menu Manipulasi Teater Bioskop %s ====\n", nodeBioskop->info);
+        BioskopInfo* bioskopData = (BioskopInfo*) nodeBioskop->info;
+        printf("\n==== Menu Manipulasi Teater Bioskop %s ====\n", bioskopData->nama);
         printf("1. Tambah Teater\n");
         printf("2. Ubah Informasi Teater\n");
         printf("3. Hapus Teater\n");
@@ -405,7 +405,7 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                 break;
             case 7:
                 // halaman manipulasi Jadwal 
-                HalamanManipulasiJadwal(root, nodeBioskop);
+                HalamanManipulasiJadwal(root, nodeKota, nodeBioskop);
 
                 break;
             case 8:
@@ -420,7 +420,7 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
     }
 }
 
-void HalamanManipulasiJadwal(address root, address nodeBioskop) {
+void HalamanManipulasiJadwal(address root, address nodeKota, address nodeBioskop) {
     char namaTeater[100];
 
     JadwalInfo jadwalBaru;
@@ -436,6 +436,8 @@ void HalamanManipulasiJadwal(address root, address nodeBioskop) {
     strcpy(filmBaru->judul, "Test Film1");
     strcpy(filmBaru->produser, "Test Produser 1");
     strcpy(filmBaru->deskripsi, "Ini film horror");
+    filmBaru->durasi.jam = 1;
+    filmBaru->durasi.menit = 30;
 
     int pil;
     int running = 1;
@@ -498,10 +500,12 @@ void HalamanManipulasiJadwal(address root, address nodeBioskop) {
 
                                 jadwalBaru.film = filmBaru;
                                 jadwalBaru.tanggal = tglBaru;
-                                jadwalBaru.start = starTime;
+                                jadwalBaru.Start = starTime;
                                 
                                 PrintObjDate(jadwalBaru.tanggal);
-                                PrintTime(jadwalBaru.start);
+                                PrintTime(jadwalBaru.Start);
+
+                                TambahJadwalBaru(nodeKota, nodeBioskop, nodeTeater, jadwalBaru);
                             }
 
                             break;

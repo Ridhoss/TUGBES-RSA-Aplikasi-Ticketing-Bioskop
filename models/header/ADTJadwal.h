@@ -15,16 +15,16 @@
 
 typedef struct {
     int id;
-    TimeInfo start;
+    TimeInfo Start;
     TimeInfo End;
     date tanggal;
-    char kursi[20][20]; 
     FilmInfo *film;
+    char kursi[20][20]; 
     int jumlahBaris;
     int jumlahKolom;
 } JadwalInfo;
 
-void SimpanJadwalKeFile(const int* idKota, const int* idBioskop, const int* idTeater, const int* idFilm, const JadwalInfo* jadwal);
+void SimpanJadwalKeFile(const int* idKota, const int* idBioskop, const int* idTeater, const JadwalInfo* jadwal);
 int SearchJadwalFile(const JadwalInfo* jadwal);
 void EditJadwalKeFile(const JadwalInfo* jadwal, const JadwalInfo* jadwalLama);
 void HapusJadwalKeFile(const JadwalInfo* jadwalLama);

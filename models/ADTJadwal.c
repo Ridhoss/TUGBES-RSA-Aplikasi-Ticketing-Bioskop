@@ -5,11 +5,21 @@
 // Deskripsi : Prosedur untuk menyimpan data jadwal ke file
 // IS : menerima pointer ke JadwalInfo
 // FS : menyimpan id kota, film, teater, dan bioskop serta informasi jadwal ke dalam file "database/jadwal.txt"
-void SimpanJadwalKeFile(const int* idKota, const int* idBioskop, const int* idTeater, const int* idFilm, const JadwalInfo* jadwal) {
+void SimpanJadwalKeFile(const int* idKota, const int* idBioskop, const int* idTeater, const JadwalInfo* jadwal) {
     FILE* file = fopen("database/jadwal.txt", "a");
     if (file != NULL) {
-        // fprintf(file, "%d|%d|%d|%d|%s|%s|%d|\n", jadwal->id, *idKota, *idBioskop, *idTeater, jadwal->start, jadwal->end, *idFilm);
-        // fclose(file); 
+        fprintf(
+            file, "%d|%d|%d|%d|%d/%d/%d|%02d:%02d|%02d:%02d|%d|\n", 
+            jadwal->id, 
+            *idKota, 
+            *idBioskop, 
+            *idTeater, 
+            jadwal->tanggal.Tgl, jadwal->tanggal.Bln, jadwal->tanggal.Thn,
+            jadwal->Start.jam, jadwal->Start.menit,
+            jadwal->End.jam, jadwal->End.menit,
+            jadwal->film->idFilm
+        );
+        fclose(file); 
     } else {
         printf("Gagal menyimpan teater ke file.\n");
     }
@@ -95,7 +105,7 @@ void TambahJadwal(address teater, JadwalInfo jadwalBaru) {
 
     AddChild(teater, node->info, JADWAL);
     
-    printf("Jadwal '%s' berhasil ditambahkan.\n", jadwalBaru.start);
+    printf("Jadwal berhasil ditambahkan.\n");
 }
 
 // Deskripsi : Prosedur untuk menambah jadwal baru dan menyimpannya ke file
@@ -105,16 +115,16 @@ void TambahJadwalBaru(address kota, address bioskop, address teater, JadwalInfo 
     int idBaru = AmbilIdJadwalTerakhir() + 1;
     jadwalBaru.id = idBaru;
 
-    TambahJadwal(teater, jadwalBaru);
+    jadwalBaru.End = TambahWaktu(jadwalBaru.Start, jadwalBaru.film->durasi);
 
-    int idFilm = 1;
+    TambahJadwal(teater, jadwalBaru);
 
     KotaInfo* kInfo = (KotaInfo*) kota->info;
     BioskopInfo* bInfo = (BioskopInfo*) bioskop->info;
     TeaterInfo* tInfo = (TeaterInfo*) teater->info;
-    SimpanJadwalKeFile(&kInfo->id, &bInfo->id, &tInfo->id, &idFilm, &jadwalBaru);
+    SimpanJadwalKeFile(&kInfo->id, &bInfo->id, &tInfo->id, &jadwalBaru);
 
-    printf("Jadwal '%s' berhasil ditambahkan dan disimpan ke file.\n", jadwalBaru.start);
+    printf("Jadwal berhasil ditambahkan dan disimpan ke file.\n");
 }
 
 // Deskripsi : prosedur untuk menginisialisasi array 2 dimensi

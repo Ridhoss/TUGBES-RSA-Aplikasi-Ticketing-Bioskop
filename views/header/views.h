@@ -17,7 +17,7 @@
 void HalamanManipulasiKota(address root);
 void HalamanManipulasiBioskop(address root);
 void HalamanManipulasiTeater(address root, address nodeKota);
-void HalamanManipulasiJadwal(address root, address nodeBioskop);
+void HalamanManipulasiJadwal(address root, address nodeKota, address nodeBioskop);
 void HalamanManipulasiFilm(List *L);
 
 
