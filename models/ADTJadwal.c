@@ -292,6 +292,10 @@ void DeAlokasiJadwal(address P) {
     }
 }
 
+
+
+
+
 // Deskripsi : Prosedur untuk menambah Jadwal ke dalam teater
 // IS : menerima address teater dan info Jadwal serta info film
 // FS : menambah node baru Jadwal menjadi anak dari node teater dalam tree
@@ -374,6 +378,13 @@ void InisialisasiKursi(JadwalInfo *jadwal, address teaterAddress) {
     }
 }
 
+
+
+
+
+
+
+
 // Deskripsi : mengambil jadwal teater dari tree dijadikan linkedlist
 // IS : menerima node teater dan list
 // FS : List jadwal terisi dengan jadwal yang ada di teater yang dikirim
@@ -429,6 +440,9 @@ boolean AdaJadwalBentrok(List L, date tanggal, TimeInfo start, TimeInfo end, int
     return false;
 }
 
+// Deskripsi : mengambil jadwal teater dari tree dijadikan linkedlist berdasarkan tanggal
+// IS : menerima node teater dan list
+// FS : List jadwal terisi dengan jadwal yang ada di teater yang dikirim
 void AmbilJadwalTeaterTanggalKeList(address teater, date tanggal, List* hasil) {
     CreateList(hasil);
 
@@ -449,6 +463,9 @@ void AmbilJadwalTeaterTanggalKeList(address teater, date tanggal, List* hasil) {
     }
 }
 
+// Deskripsi : mengambil jadwal teater dari tree dijadikan linkedlist berdasarkan film
+// IS : menerima node teater dan list
+// FS : List jadwal terisi dengan jadwal yang ada di teater yang dikirim
 void AmbilJadwalTeaterFilmKeList(address teater, addressList filmNode, List* hasil) {
     CreateList(hasil);
 
@@ -471,7 +488,9 @@ void AmbilJadwalTeaterFilmKeList(address teater, addressList filmNode, List* has
     }
 }
 
-
+// Deskripsi : menampilkan isi list untuk print jadwal
+// IS : menerima list jadwal
+// FS : menampilkan daftar jadwal di console
 void TampilkanListJadwal(List L) {
     if (ListEmpty(L)) {
         printf("Tidak ada jadwal ditemukan.\n");
@@ -494,6 +513,13 @@ void TampilkanListJadwal(List L) {
         index++;
     }
 }
+
+
+
+
+
+
+
 
 
 // Deskripsi : Prosedur untuk mengubah info Jadwal pada node
@@ -607,7 +633,7 @@ int CompareJadwalId(infotype a, infotype b) {
     return jadwal1->id - jadwal2->id;
 }
 
-// Deskripsi : Fungsi untuk mencari Jadwal berdasarkan start
+// Deskripsi : Fungsi untuk mencari Jadwal berdasarkan start dan tanggal
 // IS : menerima address teater dan namaJadwal sebagai string
 // FS : mengembalikan address dari node yang sesuai, atau NULL jika tidak ditemukan
 address SearchJadwalByName(address teater, const date* tanggal, const TimeInfo* start) {
