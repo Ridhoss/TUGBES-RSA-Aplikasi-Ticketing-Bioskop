@@ -94,7 +94,7 @@ void EditJadwalKeFile(const JadwalInfo* jadwal, const JadwalInfo* jadwalLama) {
         if (id == jadwalLama->id) {
 
             fprintf(
-                file, "%d|%d|%d|%d|%d/%d/%d|%02d:%02d|%02d:%02d|%d|\n", 
+                temp, "%d|%d|%d|%d|%d/%d/%d|%02d:%02d|%02d:%02d|%d|\n", 
                 id, 
                 idKota, 
                 idBioskop, 
@@ -260,6 +260,13 @@ int AmbilIdJadwalTerakhir() {
     return idTerakhir;
 }
 
+
+
+
+
+
+
+
 // modul utama
 
 // Deskripsi : Fungsi untuk Alokasi memori JadwalInfo
@@ -327,7 +334,7 @@ void TambahJadwalBaru(address kota, address bioskop, address teater, JadwalInfo 
         jadwalBaru.tanggal = TambahHari(dataJadwal.tanggal, i);
         jadwalBaru.End = TambahWaktu(jadwalBaru.Start, jadwalBaru.film->durasi);
 
-        if (AdaJadwalBentrok(listJadwal, jadwalBaru.tanggal, jadwalBaru.Start, jadwalBaru.End)) {
+        if (AdaJadwalBentrok(listJadwal, jadwalBaru.tanggal, jadwalBaru.Start, jadwalBaru.End, jadwalBaru.id)) {
             printf("Jadwal gagal ditambahkan untuk tanggal %d/%d/%d karena bentrok.\n", jadwalBaru.tanggal.Tgl, jadwalBaru.tanggal.Bln, jadwalBaru.tanggal.Thn);
 
             continue;
@@ -387,7 +394,7 @@ void AmbilJadwalTeaterKeList(address nodeTeater, List* L) {
 // Deskripsi : mengecek apakah jadwal bentrok dengan jadwal yang sudah ada atau tidak
 // IS : menerima node list, tanggal, timeinfo start dan end jadwal yang baru
 // FS : mengembalikan true jika ada jadwal bentrok dan false jika tidak ada jadwal bentrok
-boolean AdaJadwalBentrok(List L, date tanggal, TimeInfo start, TimeInfo end) {
+boolean AdaJadwalBentrok(List L, date tanggal, TimeInfo start, TimeInfo end, int idKecuali) {
     addressList P = L.First;
 
     int startBaru = ConvertMenit(start);
@@ -395,6 +402,11 @@ boolean AdaJadwalBentrok(List L, date tanggal, TimeInfo start, TimeInfo end) {
 
     while (P != NULL) {
         JadwalInfo* j = (JadwalInfo*) P->info;
+
+        if (j->id == idKecuali) {
+            P = P->next;
+            continue;
+        }
 
         if (j->tanggal.Tgl == tanggal.Tgl &&
             j->tanggal.Bln == tanggal.Bln &&
@@ -417,13 +429,9 @@ boolean AdaJadwalBentrok(List L, date tanggal, TimeInfo start, TimeInfo end) {
 void AmbilJadwalTeaterTanggalKeList(address teater, date tanggal, List* hasil) {
     CreateList(hasil);
 
-    List semua;
-    CreateList(&semua);
-    AmbilJadwalTeaterKeList(teater, &semua);
-
-    addressList P = semua.First;
-    while (P != NULL) {
-        JadwalInfo* j = (JadwalInfo*) P->info;
+    address nodeJadwal = teater->fs;
+    while (nodeJadwal != NULL) {
+        JadwalInfo* j = (JadwalInfo*) nodeJadwal->info;
 
         if (j->tanggal.Tgl == tanggal.Tgl &&
             j->tanggal.Bln == tanggal.Bln &&
@@ -434,10 +442,8 @@ void AmbilJadwalTeaterTanggalKeList(address teater, date tanggal, List* hasil) {
             InsLast(hasil, (infotype) salinan);
         }
 
-        P = P->next;
+        nodeJadwal = nodeJadwal->nb;
     }
-
-    DelAll(&semua);
 }
 
 void TampilkanListJadwal(List L) {
@@ -468,14 +474,38 @@ void TampilkanListJadwal(List L) {
 // FS : mengubah info Jadwal pada node dan memperbarui file
 void UbahJadwal(address node, JadwalInfo jadwalBaru) {
     JadwalInfo* oldInfo = (JadwalInfo*) node->info;
-    JadwalInfo* newInfo = (JadwalInfo*) malloc(sizeof(TeaterInfo));
+    JadwalInfo* newInfo = (JadwalInfo*) malloc(sizeof(JadwalInfo));
+
+    address nodeTeater = node->pr;
+    if (nodeTeater == NULL || nodeTeater->type != TEATER) {
+        printf("Error: nodeTeater tidak valid!\n");
+        return;
+    }
+
+    List listJadwal;
+    AmbilJadwalTeaterTanggalKeList(nodeTeater, oldInfo->tanggal, &listJadwal);
 
     if (!newInfo) return;
+
+    jadwalBaru.id = oldInfo->id;
+    jadwalBaru.End = TambahWaktu(jadwalBaru.Start, jadwalBaru.film->durasi);
+    jadwalBaru.tanggal = oldInfo->tanggal;
+    memcpy(jadwalBaru.kursi, oldInfo->kursi, sizeof(oldInfo->kursi));
+    jadwalBaru.jumlahBaris = oldInfo->jumlahBaris;
+    jadwalBaru.jumlahKolom = oldInfo->jumlahKolom;
+
+    if (AdaJadwalBentrok(listJadwal, jadwalBaru.tanggal, jadwalBaru.Start, jadwalBaru.End, jadwalBaru.id)) {
+        
+        printf("Jadwal gagal ditambahkan untuk tanggal %d/%d/%d karena bentrok.\n", jadwalBaru.tanggal.Tgl, jadwalBaru.tanggal.Bln, jadwalBaru.tanggal.Thn);
+        return;
+    }
 
     *newInfo = jadwalBaru;
     UbahNode(node, (infotype)newInfo);
 
-    // EditJadwalKeFile(newInfo, oldInfo);
+    EditJadwalKeFile(newInfo, oldInfo);
+
+    DelAll(&listJadwal);
 
     printf("Jadwal '%d:%d' berhasil diubah dan disimpan ke file.\n", oldInfo->Start.jam, oldInfo->Start.menit);
 }
@@ -498,7 +528,18 @@ void DeleteAllJadwal(address teater) {
 // IS : menerima dua infotype yang berisi JadwalInfo
 // FS : mengembalikan nilai 0 jika Jadwal sama, dan 1 jika Jadwal berbeda
 int CompareJadwal(infotype a, infotype b) {
+    JadwalInfo* ja = (JadwalInfo*)a;
+    JadwalInfo* jb = (JadwalInfo*)b;
 
+    if (ja->tanggal.Tgl == jb->tanggal.Tgl &&
+        ja->tanggal.Bln == jb->tanggal.Bln &&
+        ja->tanggal.Thn == jb->tanggal.Thn &&
+        ja->Start.jam == jb->Start.jam &&
+        ja->Start.menit == jb->Start.menit) {
+        return 0;
+    }
+
+    return 1;
 }
 
 // Deskripsi : Fungsi untuk membandingkan dua Jadwal berdasarkan id
@@ -511,8 +552,12 @@ int CompareJadwalId(infotype a, infotype b) {
 // Deskripsi : Fungsi untuk mencari Jadwal berdasarkan start
 // IS : menerima address teater dan namaJadwal sebagai string
 // FS : mengembalikan address dari node yang sesuai, atau NULL jika tidak ditemukan
-address SearchJadwalByName(address teater, const char* namaJadwal) {
+address SearchJadwalByName(address teater, const date* tanggal, const TimeInfo* start) {
+    JadwalInfo dummy;
+    dummy.tanggal = *tanggal;
+    dummy.Start = *start;
 
+    return Search(teater, (infotype)&dummy, CompareJadwal, JADWAL);
 }
 
 // Deskripsi : Fungsi untuk mencari Jadwal berdasarkan id

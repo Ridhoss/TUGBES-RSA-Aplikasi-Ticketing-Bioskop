@@ -39,7 +39,7 @@ void TambahJadwal(address teater, JadwalInfo jadwalBaru);
 void TambahJadwalBaru(address kota, address bioskop, address teater, JadwalInfo jadwalBaru, int jmlHari);
 void InisialisasiKursi(JadwalInfo *jadwal, address teaterAddress);
 void AmbilJadwalTeaterKeList(address nodeTeater, List* L);
-boolean AdaJadwalBentrok(List L, date tanggal, TimeInfo start, TimeInfo end);
+boolean AdaJadwalBentrok(List L, date tanggal, TimeInfo start, TimeInfo end, int idKecuali);
 void AmbilJadwalTeaterTanggalKeList(address teater, date tanggal, List* hasil);
 void TampilkanListJadwal(List L);
 
@@ -50,7 +50,7 @@ void DeleteAllJadwal(address teater);
 
 int CompareJadwal(infotype a, infotype b);
 int CompareJadwalId(infotype a, infotype b);
-address SearchJadwalByName(address teater, const char* namaJadwal);
+address SearchJadwalByName(address teater, const date* tanggal, const TimeInfo* start);
 address SearchJadwalById(address teater, const int* idJadwal);
 
 void PrintJadwal(address node, int level);

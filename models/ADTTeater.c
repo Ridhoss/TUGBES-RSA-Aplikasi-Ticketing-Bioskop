@@ -273,6 +273,8 @@ void UbahTeater(address node, TeaterInfo dataBaru) {
 
     if (!newInfo) return;
 
+    dataBaru.id = oldInfo->id;
+
     *newInfo = dataBaru;
     UbahNode(node, (infotype)newInfo);
 

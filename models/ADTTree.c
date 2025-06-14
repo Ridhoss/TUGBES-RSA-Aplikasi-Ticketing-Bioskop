@@ -193,7 +193,7 @@ void PrintChildrenOnly(address node, int level) {
             printf("- id: %d Teater: %s || Jumlah Kursi: %d || Harga: %d\n", info->id, info->nama, info->jumlahKursi, info->harga);
         } else if (child->type == JADWAL) {
             JadwalInfo* info = (JadwalInfo*) child->info;
-            printf("- id: %d Jadwal Pukul: %d:%d || Tanggal: %d/%d/%d\n", info->id, info->Start.jam, info->Start.menit, info->tanggal.Tgl, info->tanggal.Bln, info->tanggal.Thn);
+            printf("- id: %d Jadwal Pukul: %d:%d || Tanggal: %d/%d/%d || Film: %s\n", info->id, info->Start.jam, info->Start.menit, info->tanggal.Tgl, info->tanggal.Bln, info->tanggal.Thn, info->film->judul);
         }
         // PrintTree(child->fs, level + 1);
         child = child->nb;

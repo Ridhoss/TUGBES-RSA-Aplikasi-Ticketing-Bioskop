@@ -2,4 +2,4 @@
 3|1|XXI Ciwalk|
 4|1|CGV Pasir Kaliki|
 5|1|XXI Botanica|
-6|2|cgv|
+6|2|cgvn|
