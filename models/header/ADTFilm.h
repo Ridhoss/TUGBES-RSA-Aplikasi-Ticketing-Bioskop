@@ -34,4 +34,7 @@ void printFilm(List L);
 void printUpcomingFilmsByKota(address kotaNode);
 void simpanKeFile(List L, const char* filename);
 
+void GetFilmByKota(address KotaNode, List *ListFilmKota);
+boolean ApakahFilmSudahAda(List L, FilmInfo* target);
+
 #endif

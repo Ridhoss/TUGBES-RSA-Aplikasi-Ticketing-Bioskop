@@ -4,6 +4,7 @@ void HalamanMenuUser(address root, List *L) {
     int idKotaDipilih;
     char namaKota[100];
     address kotaNode;
+    List tampilFilm;
     
     printf("===================================================\n");
     printf("||          SELAMAT DATANG DI BIOSKOP            ||\n");
@@ -43,7 +44,13 @@ void HalamanMenuUser(address root, List *L) {
             case 1: {
                 KotaInfo* info = (KotaInfo*)(kotaNode->info);
                 printf("\n=== Film yang tersedia di %s ===\n", info->nama);
-                printFilm(*L); 
+                GetFilmByKota(kotaNode, &tampilFilm);
+
+                if (ListEmpty(tampilFilm)) {
+                    printf("Tidak ada film yang sedang tayang di kota ini.\n");
+                } else {
+                    printFilm(tampilFilm);
+                }
 
                 break;
             }

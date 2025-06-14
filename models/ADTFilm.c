@@ -266,3 +266,43 @@ void printUpcomingFilmsByKota(address kotaNode) {
         printf("Tidak ada film yang akan tayang dalam 2 hari ke depan di kota %s.\n", kotaInfo->nama);
     }
 }
+
+void GetFilmByKota(address KotaNode, List *ListFilmKota) {
+    CreateList(ListFilmKota);
+
+    List listJadwal;
+    AmbilSeluruhJadwalKotaKeList(KotaNode, &listJadwal);
+
+    addressList p = listJadwal.First;
+    while (p != NULL) {
+        address nodeJadwal = (address)p->info;
+
+        if (nodeJadwal != NULL && nodeJadwal->info != NULL) {
+            JadwalInfo* jadwal = (JadwalInfo*) nodeJadwal->info;
+
+            if (jadwal->film != NULL && !ApakahFilmSudahAda(*ListFilmKota, jadwal->film)) {
+                FilmInfo* salinanFilm = (FilmInfo*) malloc(sizeof(FilmInfo));
+                if (salinanFilm != NULL) {
+                    *salinanFilm = *(jadwal->film);
+                    InsLast(ListFilmKota, (infotype)salinanFilm);
+                }
+            }
+        }
+
+        p = p->next;
+    }
+
+    DelAll(&listJadwal);
+}
+
+boolean ApakahFilmSudahAda(List L, FilmInfo* target) {
+    addressList P = L.First;
+    while (P != NULL) {
+        FilmInfo* f = (FilmInfo*)P->info;
+        if (strcmp(f->judul, target->judul) == 0) {
+            return true;
+        }
+        P = P->next;
+    }
+    return false;
+}

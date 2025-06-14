@@ -657,6 +657,9 @@ void TampilkanListJadwal(List L) {
     }
 }
 
+// Deskripsi : mengambil jadwal teater dari tree dijadikan linkedlist berdasarkan kota
+// IS : menerima node teater dan list
+// FS : List jadwal terisi dengan jadwal yang ada di teater yang dikirim
 void AmbilSeluruhJadwalKotaKeList(address kota, List* hasil) {
     CreateList(hasil);
 
@@ -670,7 +673,7 @@ void AmbilSeluruhJadwalKotaKeList(address kota, List* hasil) {
             while (nodeJadwal != NULL) {
 
                 InsLast(hasil, (infotype) nodeJadwal);
-                
+
                 nodeJadwal = nodeJadwal->nb;
             }
             nodeTeater = nodeTeater->nb;
