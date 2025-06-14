@@ -386,7 +386,10 @@ void AmbilJadwalTeaterKeList(address nodeTeater, List* L) {
 
     while (nodeJadwal != NULL) {
         JadwalInfo* jadwal = (JadwalInfo*) nodeJadwal->info;
-        InsLast(L, (infotype) jadwal);
+        JadwalInfo* salinan = (JadwalInfo*) malloc(sizeof(JadwalInfo));
+        *salinan = *jadwal;
+
+        InsLast(L, (infotype) salinan);
         nodeJadwal = nodeJadwal->nb;
     }
 }
@@ -445,6 +448,29 @@ void AmbilJadwalTeaterTanggalKeList(address teater, date tanggal, List* hasil) {
         nodeJadwal = nodeJadwal->nb;
     }
 }
+
+void AmbilJadwalTeaterFilmKeList(address teater, addressList filmNode, List* hasil) {
+    CreateList(hasil);
+
+    if (filmNode == NULL) return;
+
+    FilmInfo* targetFilm = (FilmInfo*)filmNode->info;
+
+    address nodeJadwal = teater->fs;
+    while (nodeJadwal != NULL) {
+        JadwalInfo* j = (JadwalInfo*) nodeJadwal->info;
+
+        if (j->film == targetFilm) {
+            JadwalInfo* salinan = (JadwalInfo*) malloc(sizeof(JadwalInfo));
+            *salinan = *j;
+
+            InsLast(hasil, (infotype) salinan);
+        }
+
+        nodeJadwal = nodeJadwal->nb;
+    }
+}
+
 
 void TampilkanListJadwal(List L) {
     if (ListEmpty(L)) {

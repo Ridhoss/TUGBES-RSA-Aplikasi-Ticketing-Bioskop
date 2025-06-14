@@ -518,7 +518,7 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
         printf("3. Hapus Jadwal\n");
         printf("4. Hapus Semua Jadwal\n");
         printf("5. Cari Jadwal\n");
-        printf("6. Tampilkan Semua Jadwal\n");
+        printf("6. Tampilkan Jadwal\n");
         printf("7. Kembali ke Menu Teater\n");
         printf("Pilih: ");
         scanf("%d", &pil);
@@ -702,7 +702,7 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
 
                 PrintJadwal(nodeTeater, 0);
 
-                printf("Masukkan tanggal yang ingin diubah ( dd/mm/yyyy ): ");
+                printf("Masukkan tanggal jadwl yang ingin dihapus ( dd/mm/yyyy ): ");
                 scanf("%d/%d/%d", &tanggalCari.Tgl, &tanggalCari.Bln, &tanggalCari.Thn);
 
                 List listJadwalTgl;
@@ -753,7 +753,8 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
                 break;
             }
             case 5: {
-                // Cari jadwal                
+                // Cari jadwal
+
                 date tanggalCari;
                 TimeInfo jamCari;
 
@@ -775,11 +776,97 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
 
                 break;
             }
-            case 6:
+            case 6:{
                 // Tampilkan Semua jadwal
-                PrintJadwal(nodeTeater, 0);
+
+                List listPrintJadwal;
+                date tanggalCari;
+                int pilPrint;
+                int runningPrint = 1;
+
+                while (runningPrint)
+                {
+                    printf("========= Menu Print Jadwal =========\n");
+                    printf("1. Print Jadwal Berdasarkan Film\n");
+                    printf("2. Print Jadwal Berdasarkan Tanggal\n");
+                    printf("3. Print Semua Jadwal\n");
+                    printf("4. Kembali\n");
+                    printf("Pilih: ");
+                    scanf("%d", &pilPrint);
+                    while (getchar() != '\n');
+
+                    switch (pilPrint) {
+                        case 1: {
+                            printf("===== Daftar Film =====\n");
+                            printFilm(*L);
+                            printf("=======================\n");
+
+                            printf("Pilih Film: ");
+                            InputString(namaFilm);
+
+                            addressList filmTerpilih = cariFilmByJudul(*L, namaFilm);
+
+                            if (!filmTerpilih) {
+                                printf("Film Tidak Ditemukan.\n");
+                                break;
+                            }
+
+                            AmbilJadwalTeaterFilmKeList(nodeTeater, filmTerpilih, &listPrintJadwal);
+
+                            FilmInfo* film = (FilmInfo*)(filmTerpilih->info);
+
+                            if (ListEmpty(listPrintJadwal)) {
+                                printf("Tidak ada jadwal untuk film %s.\n", film->judul);
+
+                                DelAll(&listPrintJadwal);
+                                break;
+                            }
+
+                            printf("===== Daftar Jadwal Film %s =====\n", film->judul);
+                            TampilkanListJadwal(listPrintJadwal);
+
+                            break;
+                        }
+                        case 2: {
+                            printf("Masukkan tanggal jadwal yang ingin di print ( dd/mm/yyyy ): ");
+                            scanf("%d/%d/%d", &tanggalCari.Tgl, &tanggalCari.Bln, &tanggalCari.Thn);
+
+                            AmbilJadwalTeaterTanggalKeList(nodeTeater, tanggalCari, &listPrintJadwal);
+
+                            if (ListEmpty(listPrintJadwal)) {
+                                printf("Tidak ada jadwal pada tanggal %d/%d/%d.\n", tanggalCari.Tgl, tanggalCari.Bln, tanggalCari.Thn);
+
+                                DelAll(&listPrintJadwal);
+                                break;
+                            }
+
+                            printf("===== Daftar Jadwal Tanggal %d/%d/%d =====\n", tanggalCari.Tgl, tanggalCari.Bln, tanggalCari.Thn);
+                            TampilkanListJadwal(listPrintJadwal);
+
+                            break;
+                        }
+                        case 3: {
+                            AmbilJadwalTeaterKeList(nodeTeater, &listPrintJadwal);
+
+                            printf("===== Daftar Jadwal =====\n");
+                            TampilkanListJadwal(listPrintJadwal);
+
+                            break;
+                        }
+                        case 4: {
+                            runningPrint = 0;
+
+                            break;
+                        }
+                        default:
+                            printf("Pilihan tidak valid, silahkan coba lagi\n");
+
+                            break;
+                    }
+                }
 
                 break;
+            }
             case 7:
                 running = 0;
 
