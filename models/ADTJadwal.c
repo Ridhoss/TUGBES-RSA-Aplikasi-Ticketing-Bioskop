@@ -179,7 +179,7 @@ void KosongkanFileJadwal() {
 // Deskripsi : Prosedur untuk memuat data jadwal dari file
 // IS : membuka file "database/jadwal.txt" dalam mode baca
 // FS : membaca setiap baris dari file dan menambahkannya ke tree
-void LoadJadwal(address root) {
+void LoadJadwal(address root, List ListFilm) {
     FILE* file = fopen("database/jadwal.txt", "r");
     if (!file) {
         printf("File jadwal.txt tidak ditemukan atau gagal dibuka.\n");
@@ -216,6 +216,11 @@ void LoadJadwal(address root) {
                         jadwal.Start = start;
                         jadwal.End = end;
                         jadwal.tanggal = tanggal;
+
+                        addressList filmTerpilih = cariFilm(ListFilm, idFilm);
+                        FilmInfo* film = (FilmInfo*)(filmTerpilih->info);
+
+                        jadwal.film = film;
                         
                         TambahJadwal(teater, jadwal);
                     }

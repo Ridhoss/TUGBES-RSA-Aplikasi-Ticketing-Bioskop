@@ -27,10 +27,13 @@ int main() {
     LoadBioskop(root);
     LoadTeater(root);
     loadFilm(&L, films);
+    LoadJadwal(root, L);
 
-    int loggedIn = 0;  // status login, 0 = belum login
-    int idLogin = 1; // 1 = sudah login
+    int loggedIn = 0;
+    int idLogin = 0;
     HalamanAwal(&loggedIn, &idLogin);
+
+
     HalamanMenuAdmin(root, &L);
     
     return 0;

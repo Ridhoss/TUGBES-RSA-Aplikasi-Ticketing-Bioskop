@@ -19,12 +19,12 @@ void HalamanMenuAdmin(address root, List *L) {
 
         switch (pilihan) {
             case '1': {
-                HalamanManipulasiKota(root);
+                HalamanManipulasiKota(root, L);
 
                 break;
             }
             case '2': {
-                HalamanManipulasiBioskop(root);
+                HalamanManipulasiBioskop(root, L);
 
                 break;
             }
@@ -61,7 +61,7 @@ void HalamanMenuAdmin(address root, List *L) {
 
 }
 
-void HalamanManipulasiKota(address root) {
+void HalamanManipulasiKota(address root, List *L) {
     char namaKota[100];
 
     KotaInfo dataBaru;
@@ -184,7 +184,7 @@ void HalamanManipulasiKota(address root) {
     }
 }
 
-void HalamanManipulasiBioskop(address root) {
+void HalamanManipulasiBioskop(address root, List *L) {
     char namaKota[100];
     char namaBioskop[100];
 
@@ -311,7 +311,7 @@ void HalamanManipulasiBioskop(address root) {
 
                 break;
             case 7:
-                HalamanManipulasiTeater(root, nodeKota);
+                HalamanManipulasiTeater(root, L, nodeKota);
 
                 break;
             case 8:
@@ -326,7 +326,7 @@ void HalamanManipulasiBioskop(address root) {
     }
 }
 
-void HalamanManipulasiTeater(address root, address nodeKota) {
+void HalamanManipulasiTeater(address root, List *L, address nodeKota) {
     char namaTeater[100];
     char namaBioskop[100];
 
@@ -463,7 +463,7 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                 break;
             case 7:
                 // halaman manipulasi Jadwal 
-                HalamanManipulasiJadwal(root, nodeKota, nodeBioskop);
+                HalamanManipulasiJadwal(root, L, nodeKota, nodeBioskop);
 
                 break;
             case 8:
@@ -478,24 +478,15 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
     }
 }
 
-void HalamanManipulasiJadwal(address root, address nodeKota, address nodeBioskop) {
+void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address nodeBioskop) {
     char namaTeater[100];
+    char namaFilm[100];
 
     JadwalInfo jadwalBaru;
     TimeInfo starTime, endTime;
     date tglBaru;
 
     int jam, menit, tgl, bln, thn;
-
-    // dummy
-    FilmInfo* filmBaru = (FilmInfo*) malloc(sizeof(FilmInfo));
-
-    filmBaru->idFilm = 1;
-    strcpy(filmBaru->judul, "Test Film1");
-    strcpy(filmBaru->produser, "Test Produser 1");
-    strcpy(filmBaru->deskripsi, "Ini film horror");
-    filmBaru->durasi.jam = 1;
-    filmBaru->durasi.menit = 30;
 
     int pil;
     int running = 1;
@@ -545,10 +536,20 @@ void HalamanManipulasiJadwal(address root, address nodeKota, address nodeBioskop
 
                     switch (pilTam) {
                         case 1: {
-                            printf("Pilih Film: ");
+                            printf("===== Daftar Film =====\n");
+                            printFilm(*L);
+                            printf("=======================\n");
 
-                            if(filmBaru){
-                                printf("Film terpilih\n");
+                            printf("Pilih Film: ");
+                            InputString(namaFilm);
+
+                            addressList filmTerpilih = cariFilmByJudul(*L, namaFilm);
+
+                            if(filmTerpilih){
+                                FilmInfo* film = (FilmInfo*)(filmTerpilih->info);
+
+                                printf("%s film terpilih\n", film->judul);
+
                                 GetToday(&tglBaru);
 
                                 printf("Masukan waktu tayang jadwal film ( jam:menit ): ");
@@ -556,7 +557,7 @@ void HalamanManipulasiJadwal(address root, address nodeKota, address nodeBioskop
                                 
                                 SetTime(&starTime, jam, menit);
 
-                                // jadwalBaru.film = filmBaru;
+                                jadwalBaru.film = film;
                                 jadwalBaru.tanggal = tglBaru;
                                 jadwalBaru.Start = starTime;
                                 
