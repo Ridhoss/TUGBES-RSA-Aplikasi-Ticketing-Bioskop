@@ -737,6 +737,19 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
             case 4: {
                 // Hapus Semua jadwal
 
+                char confirm;
+
+                printf("Apakah Anda yakin ingin menghapus semua jadwal dari teater ini? (y/n): ");
+                scanf(" %c", &confirm);
+                while (getchar() != '\n');
+
+                if (confirm == 'y' || confirm == 'Y') {
+                    DeleteAllJadwal(nodeTeater);
+                    printf("Semua jadwal berhasil dihapus dari kota '%s'.\n", namaTeater);
+                } else {
+                    printf("Batal Menghapus.\n");
+                }
+
                 break;
             }
             case 5: {

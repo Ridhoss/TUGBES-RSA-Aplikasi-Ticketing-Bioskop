@@ -40,9 +40,11 @@ void HalamanMenuUser(address root, List *L) {
                 {KotaInfo* info = (KotaInfo*)(kotaNode->info);
                 printf("\n=== Film yang tersedia di %s ===\n", info->nama);
                 printFilm(*L); 
+
                 break;}
             case 2:
                 printUpcomingFilmsByKota(root, idKotaDipilih);
+                
                 break;
             case 3:
                  printf("belum tersedia)\n");

@@ -545,7 +545,7 @@ void DeleteJadwal(address jadwal) {
 // FS : menghapus semua node jadwal dari tree dan juga mengosongkan file jadwal
 void DeleteAllJadwal(address teater) {
     if (IsTreeEmpty(teater)) {
-        printf("Biioskop tidak valid atau kosong.\n");
+        printf("Teater tidak valid atau kosong.\n");
         return;
     }
 
