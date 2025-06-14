@@ -18,7 +18,7 @@ void InisialisasiWaktu(TimeInfo *T);
 void SetTime(TimeInfo *T, int jam, int menit);
 boolean isValidTime(int jam, int menit);
 
-int ConvertTMenit(TimeInfo T);
+int ConvertMenit(TimeInfo T);
 TimeInfo ConvertTime(int totalMenit);
 TimeInfo TambahWaktu(TimeInfo A, TimeInfo B);
 

@@ -1,6 +1,6 @@
 #include "header/viewsUser.h"
 
-void HalamanMenuUser(address root, List daftarFilm) {
+void HalamanMenuUser(address root, List *L) {
     printf("===================================================\n");
     printf("||          SELAMAT DATANG DI BIOSKOP            ||\n");
     printf("===================================================\n");
@@ -33,7 +33,7 @@ void HalamanMenuUser(address root, List daftarFilm) {
         switch (pilihan) {
             case 1:
                 printf("\n=== Film yang tersedia di %s ===\n", kotaDipilih);
-                printFilm(daftarFilm); 
+                printFilm(*L); 
                 break;
             case 2:
                 printf("belum tersedia)\n");

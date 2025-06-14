@@ -29,15 +29,19 @@ int SearchJadwalFile(const JadwalInfo* jadwal);
 void EditJadwalKeFile(const JadwalInfo* jadwal, const JadwalInfo* jadwalLama);
 void HapusJadwalKeFile(const JadwalInfo* jadwalLama);
 void KosongkanFileJadwal();
-void LoadJadwal(address root);
+void LoadJadwal(address root, List ListFilm);
 int AmbilIdJadwalTerakhir();
 
 address AlokasiJadwal(JadwalInfo X);
 void DeAlokasiJadwal(address P);
 
 void TambahJadwal(address teater, JadwalInfo jadwalBaru);
-void TambahJadwalBaru(address kota, address bioskop, address teater, JadwalInfo jadwalBaru);
+void TambahJadwalBaru(address kota, address bioskop, address teater, JadwalInfo jadwalBaru, int jmlHari);
 void InisialisasiKursi(JadwalInfo *jadwal, address teaterAddress);
+void AmbilJadwalTeaterKeList(address nodeTeater, List* L);
+boolean AdaJadwalBentrok(List L, date tanggal, TimeInfo start, TimeInfo end);
+void AmbilJadwalTeaterTanggalKeList(address teater, date tanggal, List* hasil);
+void TampilkanListJadwal(List L);
 
 void UbahJadwal(address node, JadwalInfo jadwalBaru);
 

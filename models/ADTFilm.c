@@ -16,73 +16,42 @@ void dealokasiFilm(FilmInfo* f) {
     free(f);
 }
 
-
 void loadFilm(List* L, const char* filename) {
     printf("Trying to open: %s\n", filename);
     FILE* file = fopen(filename, "r");
     if (!file) {
-        printf("File '%s' tidak ditemukan atau gagal dibuka.\n", filename);
+        perror("Gagal membuka file");
         return;
     }
 
-    FilmInfo data;
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), file)) {
+        FilmInfo data;
         buffer[strcspn(buffer, "\n")] = 0;
 
-        int parsed = sscanf(buffer, "%d|%[^|]|%[^|]|%[^|]|%d|%d",
-                            &data.idFilm,
-                            data.judul,
-                            data.produser,
-                            data.deskripsi,
-                            &data.durasi.jam,
-                            &data.durasi.menit);
-        printf("BACA: '%s'\n", buffer);
-        if (parsed == 6) {
+        if (sscanf(buffer, "%d|%99[^|]|%99[^|]|%99[^|]|%d|%d",
+                   &data.idFilm,
+                   data.judul,
+                   data.produser,
+                   data.deskripsi,
+                   &data.durasi.jam,
+                   &data.durasi.menit) == 6) {
+            
             FilmInfo* filmPtr = alokasiFilm(data);
-            if (filmPtr != NULL) {
+            if (filmPtr) {
                 InsLast(L, filmPtr);
+            } else {
+                printf(" → Gagal alokasi memori untuk film ID %d\n", data.idFilm);
             }
+
         } else {
-            printf(" → Parsed GAGAL (%d fields)\n", parsed);
+            printf(" → Format tidak valid: %s\n", buffer);
         }
     }
 
     fclose(file);
 }
 
-
-int editFilmById(List* L, int id, const char* judulBaru, const char* produserBaru, const char* deskripsiBaru, int jamBaru, int menitBaru) {
-    addressList P = L->First;
-
-    while (P != NULL) {
-        FilmInfo* film = (FilmInfo*)P->info;
-
-        if (film->idFilm == id) {
-            if (judulBaru && strlen(judulBaru) > 0)
-                strcpy(film->judul, judulBaru);
-
-            if (produserBaru && strlen(produserBaru) > 0)
-                strcpy(film->produser, produserBaru);
-
-            if (deskripsiBaru && strlen(deskripsiBaru) > 0)
-                strcpy(film->deskripsi, deskripsiBaru);
-
-            if (jamBaru >= 0) {
-                film->durasi.jam = jamBaru;
-            }
-            if (menitBaru >= 0 && menitBaru < 60) {
-                film->durasi.menit = menitBaru;
-            }
-
-            return 1;
-        }
-
-        P = P->next;
-    }
-
-    return 0;
-}
 
 // Tambah film ke list
 void TambahFilm(List* L, FilmInfo filmBaru) {
@@ -96,75 +65,78 @@ void TambahFilm(List* L, FilmInfo filmBaru) {
     printf("Film '%s' berhasil ditambahkan ke list.\n", filmBaru.judul);
 }
 
-void TambahFilmBaru(List* L, const char* judul, const char* produser, const char* deskripsi, int jam, int menit) {
-    FilmInfo filmBaru;
+void TambahFilmBaru(List* L, FilmInfo filmBaru) {
     filmBaru.idFilm = get_last_film_id(films) + 1;
-    strcpy(filmBaru.judul, judul);
-    strcpy(filmBaru.produser, produser);
-    strcpy(filmBaru.deskripsi, deskripsi);
-    filmBaru.durasi.jam = jam;
-    filmBaru.durasi.menit = menit;
     TambahFilm(L, filmBaru);
-
-    // Tambahkan juga ke file
     simpanKeFile(*L, films);
 }
 
-// Edit film berdasarkan id
-void editFilm(List* L, int id, FilmInfo newData) {
-    addressList P = L->First;
-    while (P != NULL) {
-        FilmInfo* film = (FilmInfo*)(P->info);
-        if (film->idFilm == id) {
-            *film = newData;
-            
-            simpanKeFile(*L, films);
-            return;
-        }
-        P = P->next;
-    }
+
+// Edit film
+void editFilmByName(FilmInfo filmBaru, addressList filmLama) {
+    if (filmLama == NULL) return;
+
+    FilmInfo* film = (FilmInfo*)(filmLama->info);
+
+    // Hanya ubah jika data baru tidak kosong
+    if (strlen(filmBaru.judul) > 0)
+        strcpy(film->judul, filmBaru.judul);
+
+    if (strlen(filmBaru.produser) > 0)
+        strcpy(film->produser, filmBaru.produser);
+
+    if (strlen(filmBaru.deskripsi) > 0)
+        strcpy(film->deskripsi, filmBaru.deskripsi);
+
+    if (filmBaru.durasi.jam >= 0)
+        film->durasi.jam = filmBaru.durasi.jam;
+
+    if (filmBaru.durasi.menit >= 0 && filmBaru.durasi.menit < 60)
+        film->durasi.menit = filmBaru.durasi.menit;
 }
+
 
 // Hapus film berdasarkan id
 void hapusFilm(List* L, int id) {
-    addressList P = L->First;
-    while (P != NULL) {
-        FilmInfo* film = (FilmInfo*)(P->info);
-        if (film->idFilm == id) {
-            DelP(L, P->info);
-            break;
-        }
-        P = P->next;
+    addressList filmNode = cariFilm(*L, id);
+    if (filmNode != NULL) {
+        DelP(L, filmNode->info);  // Hapus berdasarkan info-nya
+        simpanKeFile(*L, films);
+        printf("Film dengan ID %d berhasil dihapus.\n", id);
+    } else {
+        printf("Film dengan ID %d tidak ditemukan.\n", id);
     }
-    simpanKeFile(*L, films);
 }
+
 
 void simpanKeFile(List L, const char* filename) {
     FILE* file = fopen(filename, "w");
-    if (file == NULL) {
-        printf("Gagal membuka file\n");
+    if (!file) {
+        perror("Gagal membuka file");
         return;
     }
 
-    int current_id =  get_last_film_id(films); // Ambil ID terakhir yang sudah tersimpan
+    int current_id = get_last_film_id(films);
 
-    addressList P = L.First;
-    while (P != NULL) {
+    for (addressList P = L.First; P != NULL; P = P->next) {
         FilmInfo* film = (FilmInfo*)(P->info);
 
         if (film->idFilm == 0) {
-            current_id++;
-            film->idFilm = current_id;
+            film->idFilm = ++current_id;
         }
 
-        fprintf(file, "%d|%s|%s|%s|%d|%d\n", film->idFilm, film->judul, film->produser, film->deskripsi,
-        film->durasi.jam, film->durasi.menit);
-
-        P = P->next;
+        fprintf(file, "%d|%s|%s|%s|%d|%d\n",
+                film->idFilm,
+                film->judul,
+                film->produser,
+                film->deskripsi,
+                film->durasi.jam,
+                film->durasi.menit);
     }
 
     fclose(file);
 }
+
 
 int get_last_film_id(const char* filename) {
     FILE* file = fopen(filename, "r");
@@ -185,7 +157,7 @@ int get_last_film_id(const char* filename) {
     return last_id;
 }
 
-// Cari film berdasarkan id (return pointer ke FilmInfo)
+// Cari film
 addressList cariFilm(List L, int id) {
     addressList P = L.First;
     while (P != NULL) {

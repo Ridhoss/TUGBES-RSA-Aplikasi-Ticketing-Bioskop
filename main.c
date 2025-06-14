@@ -28,6 +28,7 @@ int main() {
     LoadBioskop(root);
     LoadTeater(root);
     loadFilm(&L, films);
+    LoadJadwal(root, L);
 
     int loggedIn = 0; 
     int idLogin = 0; 
@@ -39,7 +40,7 @@ int main() {
             if (akunLogin->role == 0) {
                 HalamanMenuAdmin(root, &L);
             } else if (akunLogin->role == 1) {
-                HalamanMenuUser(root, L);
+                HalamanMenuUser(root, &L);
             } else {
                 printf("Role tidak dikenali. Hubungi admin sistem.\n");
             }
@@ -49,6 +50,5 @@ int main() {
     }
 
 
-    
     return 0;
 }

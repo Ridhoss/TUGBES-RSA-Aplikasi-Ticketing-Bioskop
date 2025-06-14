@@ -25,12 +25,12 @@ void HalamanMenuAdmin(address root, List *L) {
 
         switch (pilihan) {
             case '1': {
-                HalamanManipulasiKota(root);
+                HalamanManipulasiKota(root, L);
 
                 break;
             }
             case '2': {
-                HalamanManipulasiBioskop(root);
+                HalamanManipulasiBioskop(root, L);
 
                 break;
             }
@@ -67,7 +67,7 @@ void HalamanMenuAdmin(address root, List *L) {
 
 }
 
-void HalamanManipulasiKota(address root) {
+void HalamanManipulasiKota(address root, List *L) {
     char namaKota[100];
 
     KotaInfo dataBaru;
@@ -190,7 +190,7 @@ void HalamanManipulasiKota(address root) {
     }
 }
 
-void HalamanManipulasiBioskop(address root) {
+void HalamanManipulasiBioskop(address root, List *L) {
     char namaKota[100];
     char namaBioskop[100];
 
@@ -317,7 +317,7 @@ void HalamanManipulasiBioskop(address root) {
 
                 break;
             case 7:
-                HalamanManipulasiTeater(root, nodeKota);
+                HalamanManipulasiTeater(root, L, nodeKota);
 
                 break;
             case 8:
@@ -332,7 +332,7 @@ void HalamanManipulasiBioskop(address root) {
     }
 }
 
-void HalamanManipulasiTeater(address root, address nodeKota) {
+void HalamanManipulasiTeater(address root, List *L, address nodeKota) {
     char namaTeater[100];
     char namaBioskop[100];
 
@@ -469,7 +469,7 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
                 break;
             case 7:
                 // halaman manipulasi Jadwal 
-                HalamanManipulasiJadwal(root, nodeKota, nodeBioskop);
+                HalamanManipulasiJadwal(root, L, nodeKota, nodeBioskop);
 
                 break;
             case 8:
@@ -484,24 +484,15 @@ void HalamanManipulasiTeater(address root, address nodeKota) {
     }
 }
 
-void HalamanManipulasiJadwal(address root, address nodeKota, address nodeBioskop) {
+void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address nodeBioskop) {
     char namaTeater[100];
+    char namaFilm[100];
 
     JadwalInfo jadwalBaru;
     TimeInfo starTime, endTime;
     date tglBaru;
 
-    int jam, menit, tgl, bln, thn;
-
-    // dummy
-    FilmInfo* filmBaru = (FilmInfo*) malloc(sizeof(FilmInfo));
-
-    filmBaru->idFilm = 1;
-    strcpy(filmBaru->judul, "Test Film1");
-    strcpy(filmBaru->produser, "Test Produser 1");
-    strcpy(filmBaru->deskripsi, "Ini film horror");
-    filmBaru->durasi.jam = 1;
-    filmBaru->durasi.menit = 30;
+    int jam, menit, tgl, bln, thn, jmlHari = 1;
 
     int pil;
     int running = 1;
@@ -551,10 +542,20 @@ void HalamanManipulasiJadwal(address root, address nodeKota, address nodeBioskop
 
                     switch (pilTam) {
                         case 1: {
-                            printf("Pilih Film: ");
+                            printf("===== Daftar Film =====\n");
+                            printFilm(*L);
+                            printf("=======================\n");
 
-                            if(filmBaru){
-                                printf("Film terpilih\n");
+                            printf("Pilih Film: ");
+                            InputString(namaFilm);
+
+                            addressList filmTerpilih = cariFilmByJudul(*L, namaFilm);
+
+                            if(filmTerpilih){
+                                FilmInfo* film = (FilmInfo*)(filmTerpilih->info);
+
+                                printf("%s film terpilih\n", film->judul);
+
                                 GetToday(&tglBaru);
 
                                 printf("Masukan waktu tayang jadwal film ( jam:menit ): ");
@@ -562,19 +563,54 @@ void HalamanManipulasiJadwal(address root, address nodeKota, address nodeBioskop
                                 
                                 SetTime(&starTime, jam, menit);
 
-                                // jadwalBaru.film = filmBaru;
+                                jadwalBaru.film = film;
                                 jadwalBaru.tanggal = tglBaru;
                                 jadwalBaru.Start = starTime;
                                 
                                 PrintObjDate(jadwalBaru.tanggal);
                                 PrintTime(jadwalBaru.Start);
 
-                                TambahJadwalBaru(nodeKota, nodeBioskop, nodeTeater, jadwalBaru);
+                                TambahJadwalBaru(nodeKota, nodeBioskop, nodeTeater, jadwalBaru, jmlHari);
                             }
 
                             break;
                         }
                         case 2: {
+                            printf("===== Daftar Film =====\n");
+                            printFilm(*L);
+                            printf("=======================\n");
+
+                            printf("Pilih Film: ");
+                            InputString(namaFilm);
+
+                            addressList filmTerpilih = cariFilmByJudul(*L, namaFilm);
+
+                            if(filmTerpilih){
+                                FilmInfo* film = (FilmInfo*)(filmTerpilih->info);
+
+                                printf("%s film terpilih\n", film->judul);
+
+                                printf("Masukan tanggal tayang film ( dd/mm/yyyy ): ");
+                                scanf("%d/%d/%d", &tgl, &bln, &thn);
+                                ReadDate(tgl, bln, thn, &tglBaru);
+
+                                printf("Jumlah hari jadwal film tayang: ");
+                                scanf("%d", &jmlHari);
+
+                                printf("Masukan waktu tayang jadwal film ( jam:menit ): ");
+                                scanf("%d:%d", &jam, &menit);
+                                
+                                SetTime(&starTime, jam, menit);
+
+                                jadwalBaru.film = film;
+                                jadwalBaru.tanggal = tglBaru;
+                                jadwalBaru.Start = starTime;
+                                
+                                PrintObjDate(jadwalBaru.tanggal);
+                                PrintTime(jadwalBaru.Start);
+
+                                TambahJadwalBaru(nodeKota, nodeBioskop, nodeTeater, jadwalBaru, jmlHari);
+                            }
 
                             break;
                         }
@@ -596,6 +632,41 @@ void HalamanManipulasiJadwal(address root, address nodeKota, address nodeBioskop
             }
             case 2: {
                 // Ubah Informasi jadwal
+                date tanggalCari;
+                TimeInfo jamTerpilih;
+
+                PrintJadwal(nodeTeater, 0);
+
+                printf("Masukkan tanggal yang ingin diubah ( dd/mm/yyyy ): ");
+                scanf("%d/%d/%d", &tanggalCari.Tgl, &tanggalCari.Bln, &tanggalCari.Thn);
+
+                List listJadwalTgl;
+                AmbilJadwalTeaterTanggalKeList(nodeTeater, tanggalCari, &listJadwalTgl);
+
+                if (ListEmpty(listJadwalTgl)) {
+                    printf("Tidak ada jadwal pada tanggal %d/%d/%d.\n", tanggalCari.Tgl, tanggalCari.Bln, tanggalCari.Thn);
+                    break;
+                }
+
+                TampilkanListJadwal(listJadwalTgl);
+
+                printf("Pilih jadwal yang ingin diubah ( jam:menit ): ");
+                scanf("%d:%d", &jam, &menit);
+                SetTime(&jamTerpilih, jam, menit);
+
+                // JadwalInfo* jadwalLama = (JadwalInfo*) P->info;
+
+                // // Buat salinan dari jadwal lama sebagai dasar
+                // JadwalInfo jadwalBaru = *jadwalLama;
+
+                // printf("Masukkan jam mulai baru (HH MM): ");
+                // scanf("%d %d", &jadwalBaru.Start.jam, &jadwalBaru.Start.menit);
+                // jadwalBaru.End = TambahWaktu(jadwalBaru.Start, jadwalBaru.film->durasi);
+
+                // UbahJadwal(teater, jadwalBaru); // node adalah node teater
+                // printf("Jadwal berhasil diubah.\n");
+
+                DelAll(&listJadwalTgl);
 
                 break;
             }
@@ -615,6 +686,7 @@ void HalamanManipulasiJadwal(address root, address nodeKota, address nodeBioskop
                 break;
             case 6:
                 // Tampilkan Semua jadwal
+                PrintJadwal(nodeTeater, 0);
 
                 break;
             case 7:
@@ -635,6 +707,7 @@ void HalamanManipulasiFilm(List *L) {
     int jamBaru = -1;
     int menitBaru = -1;
     char buffer[255];
+    char judulCari[100] = "";
     char judulBaru[100] = "";
     char produserBaru[100] = "";
     char deskripsiBaru[255] = "";
@@ -659,17 +732,20 @@ void HalamanManipulasiFilm(List *L) {
         case 2:
             printf("\n--- Tambah Film Baru ---\n");
 
+            FilmInfo newFilm;
+            int jam, menit;
+
             printf("Masukkan judul film: ");
-            fgets(data.judul, sizeof(data.judul), stdin);
-            data.judul[strcspn(data.judul, "\n")] = 0;
+            fgets(newFilm.judul, sizeof(newFilm.judul), stdin);
+            newFilm.judul[strcspn(newFilm.judul, "\n")] = 0;
 
             printf("Masukkan produser film: ");
-            fgets(data.produser, sizeof(data.produser), stdin);
-            data.produser[strcspn(data.produser, "\n")] = 0;
+            fgets(newFilm.produser, sizeof(newFilm.produser), stdin);
+            newFilm.produser[strcspn(newFilm.produser, "\n")] = 0;
 
             printf("Masukkan deskripsi film: ");
-            fgets(data.deskripsi, sizeof(data.deskripsi), stdin);
-            data.deskripsi[strcspn(data.deskripsi, "\n")] = 0;
+            fgets(newFilm.deskripsi, sizeof(newFilm.deskripsi), stdin);
+            newFilm.deskripsi[strcspn(newFilm.deskripsi, "\n")] = 0;
 
             printf("Masukkan durasi jam   : ");
             scanf("%d", &jam);
@@ -677,58 +753,74 @@ void HalamanManipulasiFilm(List *L) {
             scanf("%d", &menit);
             getchar();
 
-            TambahFilmBaru(L, data.judul, data.produser, data.deskripsi, jam, menit);
+            newFilm.durasi.jam = jam;
+            newFilm.durasi.menit = menit;
+
+            TambahFilmBaru(L, newFilm);
 
             printf("Film berhasil ditambahkan.\n");
             break;
 
+
         case 3:
             printf("\n--- Edit Film ---\n");
-            printf("Masukkan ID film yang ingin diedit: ");
-            scanf("%d", &id);
-            while (getchar() != '\n');
+            printf("Masukkan judul film yang ingin diedit: ");
+            fgets(judulCari, sizeof(judulCari), stdin);
+            judulCari[strcspn(judulCari, "\n")] = 0;
 
+            addressList filmLama = cariFilmByJudul(*L, judulCari);
+            if (filmLama == NULL) {
+                printf("Film dengan judul \"%s\" tidak ditemukan.\n", judulCari);
+                break;
+            }
+
+            // Salin data lama dulu
+            FilmInfo filmBaru = *(FilmInfo*)(filmLama->info);
+
+            // Input perubahan
             printf("Masukkan judul baru (Enter untuk skip): ");
             fgets(buffer, sizeof(buffer), stdin);
             if (buffer[0] != '\n') {
                 buffer[strcspn(buffer, "\n")] = '\0';
-                strcpy(judulBaru, buffer);
+                strcpy(filmBaru.judul, buffer);
             }
 
             printf("Masukkan produser baru (Enter untuk skip): ");
             fgets(buffer, sizeof(buffer), stdin);
             if (buffer[0] != '\n') {
                 buffer[strcspn(buffer, "\n")] = '\0';
-                strcpy(produserBaru, buffer);
+                strcpy(filmBaru.produser, buffer);
             }
 
             printf("Masukkan deskripsi baru (Enter untuk skip): ");
             fgets(buffer, sizeof(buffer), stdin);
             if (buffer[0] != '\n') {
                 buffer[strcspn(buffer, "\n")] = '\0';
-                strcpy(deskripsiBaru, buffer);
+                strcpy(filmBaru.deskripsi, buffer);
             }
 
-            printf("Jam (Enter untuk skip): ");
+            printf("Jam durasi baru (Enter untuk skip): ");
             fgets(buffer, sizeof(buffer), stdin);
             if (buffer[0] != '\n') {
                 buffer[strcspn(buffer, "\n")] = '\0';
-                jamBaru = atoi(buffer);
-            }
-
-            printf("Menit (Enter untuk skip): ");
-            fgets(buffer, sizeof(buffer), stdin);
-            if (buffer[0] != '\n') {
-                buffer[strcspn(buffer, "\n")] = '\0';
-                menitBaru = atoi(buffer);
-            }
-
-            if (editFilmById(L, id, judulBaru, produserBaru, deskripsiBaru, jamBaru, menitBaru)) {
-                printf("Film berhasil diperbarui!\n");
-                simpanKeFile(*L, films);
+                filmBaru.durasi.jam = atoi(buffer);
             } else {
-                printf("Film dengan ID %d tidak ditemukan.\n", id);
+                filmBaru.durasi.jam = -1; // skip
             }
+
+            printf("Menit durasi baru (Enter untuk skip): ");
+            fgets(buffer, sizeof(buffer), stdin);
+            if (buffer[0] != '\n') {
+                buffer[strcspn(buffer, "\n")] = '\0';
+                filmBaru.durasi.menit = atoi(buffer);
+            } else {
+                filmBaru.durasi.menit = -1; // skip
+            }
+
+            editFilmByName(filmBaru, filmLama);
+            printf("Film berhasil diperbarui!\n");
+            simpanKeFile(*L, films);
+
             
             break;
         case 4:
