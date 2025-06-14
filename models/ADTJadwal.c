@@ -307,21 +307,43 @@ void TambahJadwal(address teater, JadwalInfo jadwalBaru) {
 // Deskripsi : Prosedur untuk menambah jadwal baru dan menyimpannya ke file
 // IS : menerima address kota dan bioskop serta info jadwal dan info film
 // FS : node jadwal ditambahkan ke tree sebagai anak dari node teater, lalu disimpan ke file
-void TambahJadwalBaru(address kota, address bioskop, address teater, JadwalInfo jadwalBaru) {
-    int idBaru = AmbilIdJadwalTerakhir() + 1;
-    jadwalBaru.id = idBaru;
-
-    jadwalBaru.End = TambahWaktu(jadwalBaru.Start, jadwalBaru.film->durasi);
-
-    TambahJadwal(teater, jadwalBaru);
-
+void TambahJadwalBaru(address kota, address bioskop, address teater, JadwalInfo dataJadwal, int jmlHari) {
     KotaInfo* kInfo = (KotaInfo*) kota->info;
     BioskopInfo* bInfo = (BioskopInfo*) bioskop->info;
     TeaterInfo* tInfo = (TeaterInfo*) teater->info;
-    SimpanJadwalKeFile(&kInfo->id, &bInfo->id, &tInfo->id, &jadwalBaru);
 
-    printf("Jadwal berhasil ditambahkan dan disimpan ke file.\n");
+    if (dataJadwal.film == NULL) {
+        printf("Film tidak valid. Gagal menambahkan semua jadwal.\n");
+        return;
+    }
+
+    List listJadwal;
+    AmbilJadwalTeaterKeList(teater, &listJadwal);
+
+    for (int i = 0; i < jmlHari; i++) {
+        JadwalInfo jadwalBaru = dataJadwal;
+
+        jadwalBaru.id = AmbilIdJadwalTerakhir() + 1;
+        jadwalBaru.tanggal = TambahHari(dataJadwal.tanggal, i);
+        jadwalBaru.End = TambahWaktu(jadwalBaru.Start, jadwalBaru.film->durasi);
+
+        if (AdaJadwalBentrok(listJadwal, jadwalBaru.tanggal, jadwalBaru.Start, jadwalBaru.End)) {
+            printf("Jadwal gagal ditambahkan untuk tanggal %d/%d/%d karena bentrok.\n", jadwalBaru.tanggal.Tgl, jadwalBaru.tanggal.Bln, jadwalBaru.tanggal.Thn);
+
+            continue;
+        }
+
+        TambahJadwal(teater, jadwalBaru);
+
+        SimpanJadwalKeFile(&kInfo->id, &bInfo->id, &tInfo->id, &jadwalBaru);
+
+        printf("Jadwal untuk tanggal %d/%d/%d berhasil ditambahkan (ID: %d).\n",
+            jadwalBaru.tanggal.Tgl, jadwalBaru.tanggal.Bln, jadwalBaru.tanggal.Thn, jadwalBaru.id);
+    }
+
+    DelAll(&listJadwal);
 }
+
 
 // Deskripsi : prosedur untuk menginisialisasi array 2 dimensi
 // IS : menerima jadwalInfo dan teaterinfo yang berisi jumlah kursi
@@ -343,6 +365,53 @@ void InisialisasiKursi(JadwalInfo *jadwal, address teaterAddress) {
             }
         }
     }
+}
+
+// Deskripsi : mengambil jadwal teater dari tree dijadikan linkedlist
+// IS : menerima node teater dan list
+// FS : List jadwal terisi dengan jadwal yang ada di teater yang dikirim
+void AmbilJadwalTeaterKeList(address nodeTeater, List* L) {
+    CreateList(L);
+
+    if (nodeTeater == NULL || nodeTeater->fs == NULL) return;
+
+    address nodeJadwal = nodeTeater->fs;
+
+    while (nodeJadwal != NULL) {
+        JadwalInfo* jadwal = (JadwalInfo*) nodeJadwal->info;
+        InsLast(L, (infotype) jadwal);
+        nodeJadwal = nodeJadwal->nb;
+    }
+}
+
+// Deskripsi : mengecek apakah jadwal bentrok dengan jadwal yang sudah ada atau tidak
+// IS : menerima node list, tanggal, timeinfo start dan end jadwal yang baru
+// FS : mengembalikan true jika ada jadwal bentrok dan false jika tidak ada jadwal bentrok
+boolean AdaJadwalBentrok(List L, date tanggal, TimeInfo start, TimeInfo end) {
+    addressList P = L.First;
+
+    int startBaru = ConvertMenit(start);
+    int endBaru = ConvertMenit(end);
+
+    while (P != NULL) {
+        JadwalInfo* j = (JadwalInfo*) P->info;
+
+        if (j->tanggal.Tgl == tanggal.Tgl &&
+            j->tanggal.Bln == tanggal.Bln &&
+            j->tanggal.Thn == tanggal.Thn) {
+
+            int startLama = ConvertMenit(j->Start);
+            int endLama = ConvertMenit(j->End);
+
+            if (startBaru < endLama + 5 && endBaru > startLama - 5) {
+                return true;
+            }
+        }
+
+        P = P->next;
+    }
+
+    return false;
 }
 
 // Deskripsi : Prosedur untuk mengubah info Jadwal pada node

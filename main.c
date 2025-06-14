@@ -33,7 +33,6 @@ int main() {
     int idLogin = 0;
     HalamanAwal(&loggedIn, &idLogin);
 
-
     HalamanMenuAdmin(root, &L);
     
     return 0;
