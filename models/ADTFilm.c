@@ -30,12 +30,15 @@ void loadFilm(List* L, const char* filename) {
     while (fgets(buffer, sizeof(buffer), file)) {
         buffer[strcspn(buffer, "\n")] = 0;
 
-        int parsed = sscanf(buffer, "%d|%[^|]|%[^|]|%[^\n]",
-                            &data.idFilm, data.judul, data.produser, data.deskripsi);
-
+        int parsed = sscanf(buffer, "%d|%[^|]|%[^|]|%[^|]|%d|%d",
+                            &data.idFilm,
+                            data.judul,
+                            data.produser,
+                            data.deskripsi,
+                            &data.durasi.jam,
+                            &data.durasi.menit);
         printf("BACA: '%s'\n", buffer);
-        if (parsed == 4) {
-            printf(" → Parsed OK: ID=%d, Judul=%s\n", data.idFilm, data.judul);
+        if (parsed == 6) {
             FilmInfo* filmPtr = alokasiFilm(data);
             if (filmPtr != NULL) {
                 InsLast(L, filmPtr);
@@ -49,7 +52,7 @@ void loadFilm(List* L, const char* filename) {
 }
 
 
-int editFilmById(List* L, int id, const char* judulBaru, const char* produserBaru, const char* deskripsiBaru) {
+int editFilmById(List* L, int id, const char* judulBaru, const char* produserBaru, const char* deskripsiBaru, int jamBaru, int menitBaru) {
     addressList P = L->First;
 
     while (P != NULL) {
@@ -64,6 +67,13 @@ int editFilmById(List* L, int id, const char* judulBaru, const char* produserBar
 
             if (deskripsiBaru && strlen(deskripsiBaru) > 0)
                 strcpy(film->deskripsi, deskripsiBaru);
+
+            if (jamBaru >= 0) {
+                film->durasi.jam = jamBaru;
+            }
+            if (menitBaru >= 0 && menitBaru < 60) {
+                film->durasi.menit = menitBaru;
+            }
 
             return 1;
         }
@@ -86,13 +96,14 @@ void TambahFilm(List* L, FilmInfo filmBaru) {
     printf("Film '%s' berhasil ditambahkan ke list.\n", filmBaru.judul);
 }
 
-void TambahFilmBaru(List* L, const char* judul, const char* produser, const char* deskripsi) {
+void TambahFilmBaru(List* L, const char* judul, const char* produser, const char* deskripsi, int jam, int menit) {
     FilmInfo filmBaru;
     filmBaru.idFilm = get_last_film_id(films) + 1;
     strcpy(filmBaru.judul, judul);
     strcpy(filmBaru.produser, produser);
     strcpy(filmBaru.deskripsi, deskripsi);
-
+    filmBaru.durasi.jam = jam;
+    filmBaru.durasi.menit = menit;
     TambahFilm(L, filmBaru);
 
     // Tambahkan juga ke file
@@ -106,11 +117,12 @@ void editFilm(List* L, int id, FilmInfo newData) {
         FilmInfo* film = (FilmInfo*)(P->info);
         if (film->idFilm == id) {
             *film = newData;
+            
+            simpanKeFile(*L, films);
             return;
         }
         P = P->next;
     }
-    simpanKeFile(*L, films);
 }
 
 // Hapus film berdasarkan id
@@ -145,7 +157,9 @@ void simpanKeFile(List L, const char* filename) {
             film->idFilm = current_id;
         }
 
-        fprintf(file, "%d|%s|%s|%s\n", film->idFilm, film->judul, film->produser, film->deskripsi);
+        fprintf(file, "%d|%s|%s|%s|%d|%d\n", film->idFilm, film->judul, film->produser, film->deskripsi,
+        film->durasi.jam, film->durasi.menit);
+
         P = P->next;
     }
 
@@ -212,6 +226,7 @@ void printFilm(List L) {
             printf("Judul      : %s\n", film->judul);
             printf("Produser   : %s\n", film->produser);
             printf("Deskripsi  : %s\n", film->deskripsi);
+            printf("Durasi     : %d jam %d menit\n", film->durasi.jam, film->durasi.menit);
         P = P->next;
     }
 }

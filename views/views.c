@@ -562,9 +562,10 @@ void HalamanManipulasiJadwal(address root, address nodeBioskop) {
 }
 
 void HalamanManipulasiFilm(List *L) {
-    int pilihan;
-    int id;
+    int pilihan, id, jam, menit;
     FilmInfo data;
+    int jamBaru = -1;
+    int menitBaru = -1;
     char buffer[255];
     char judulBaru[100] = "";
     char produserBaru[100] = "";
@@ -602,7 +603,13 @@ void HalamanManipulasiFilm(List *L) {
             fgets(data.deskripsi, sizeof(data.deskripsi), stdin);
             data.deskripsi[strcspn(data.deskripsi, "\n")] = 0;
 
-            TambahFilmBaru(L, data.judul, data.produser, data.deskripsi);
+            printf("Masukkan durasi jam   : ");
+            scanf("%d", &jam);
+            printf("Masukkan durasi menit : ");
+            scanf("%d", &menit);
+            getchar();
+
+            TambahFilmBaru(L, data.judul, data.produser, data.deskripsi, jam, menit);
 
             printf("Film berhasil ditambahkan.\n");
             break;
@@ -634,7 +641,21 @@ void HalamanManipulasiFilm(List *L) {
                 strcpy(deskripsiBaru, buffer);
             }
 
-            if (editFilmById(L, id, judulBaru, produserBaru, deskripsiBaru)) {
+            printf("Jam (Enter untuk skip): ");
+            fgets(buffer, sizeof(buffer), stdin);
+            if (buffer[0] != '\n') {
+                buffer[strcspn(buffer, "\n")] = '\0';
+                jamBaru = atoi(buffer);
+            }
+
+            printf("Menit (Enter untuk skip): ");
+            fgets(buffer, sizeof(buffer), stdin);
+            if (buffer[0] != '\n') {
+                buffer[strcspn(buffer, "\n")] = '\0';
+                menitBaru = atoi(buffer);
+            }
+
+            if (editFilmById(L, id, judulBaru, produserBaru, deskripsiBaru, jamBaru, menitBaru)) {
                 printf("Film berhasil diperbarui!\n");
                 simpanKeFile(*L, films);
             } else {
@@ -666,6 +687,8 @@ void HalamanManipulasiFilm(List *L) {
                 printf("Judul      : %s\n", film->judul);
                 printf("Produser   : %s\n", film->produser);
                 printf("Deskripsi  : %s\n", film->deskripsi);
+                printf("Durasi     : %d jam %d menit\n", film->durasi.jam, film->durasi.menit);
+
             } else {
                 printf("Film dengan judul \"%s\" tidak ditemukan.\n", judul);
             }

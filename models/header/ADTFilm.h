@@ -21,10 +21,10 @@ FilmInfo* alokasiFilm(FilmInfo data);
 void dealokasiFilm(FilmInfo* f);
 
 void loadFilm(List* L, const char* filename);
-int editFilmById(List* L, int id, const char* judulBaru, const char* produserBaru, const char* deskripsiBaru);
+int editFilmById(List* L, int id, const char* judulBaru, const char* produserBaru, const char* deskripsiBaru, int jamBaru, int menitBaru);
 int get_last_film_id(const char* filename);
 void TambahFilm(List* L, FilmInfo filmBaru);
-void TambahFilmBaru(List* L, const char* judul, const char* produser, const char* deskripsi);
+void TambahFilmBaru(List* L, const char* judul, const char* produser, const char* deskripsi, int jam, int menit);
 void editFilm(List* L, int id, FilmInfo newData);
 void hapusFilm(List* L, int id);
 FilmInfo* cariFilm(List L, int id);
