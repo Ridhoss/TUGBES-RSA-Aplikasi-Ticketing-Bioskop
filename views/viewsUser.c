@@ -3,6 +3,7 @@
 void HalamanMenuUser(address root, List *L) {
     StackMenu stackMenu;
     CreateStack(&stackMenu);
+    Push(&stackMenu, "Menu Utama");
 
     date selectedDate;
     GetToday(&selectedDate);
@@ -31,8 +32,8 @@ void HalamanMenuUser(address root, List *L) {
 
     int pilihan;
     do {
-        printf("===================================================\n");
         KotaInfo* info = (KotaInfo*)(kotaNode->info);
+        printf("===================================================\n");
         printf("           Menu User - Kota : %s       \n", info->nama);
         printf("===================================================\n");
         printf("||                                               ||\n");
@@ -46,16 +47,19 @@ void HalamanMenuUser(address root, List *L) {
         printf("===================================================\n");
         printf(">> ");
         scanf("%d", &pilihan);
+        getchar();
         
         switch (pilihan) {
             case 1: {
                 KotaInfo* info = (KotaInfo*)(kotaNode->info);
+                Push(&stackMenu, "Cari dan pilih film");
                 printf("===================================================\n");
                 printf("         Film yang tersedia di %s      \n", info->nama);
                 GetFilmByKota(kotaNode, &tampilFilm);
 
                 if (ListEmpty(tampilFilm)) {
                     printf("Tidak ada film yang sedang tayang di kota ini.\n");
+                    Pop(&stackMenu);
 
                     break;
                 } else {
@@ -67,19 +71,27 @@ void HalamanMenuUser(address root, List *L) {
                 InputString(namaFilm);
 
                 addressList filmTerpilih = cariFilmByJudul(*L, namaFilm);
+                if (filmTerpilih == NULL) {
+                    printf("Film tidak ditemukan.\n");
+                    Pop(&stackMenu);
+                    break;
+                }
 
                 HalamanPilihJadwal(root, L, kotaNode, filmTerpilih, selectedDate);
+                Pop(&stackMenu);
 
                 break;
             }
             case 2:{
                 KotaInfo* info = (KotaInfo*)(kotaNode->info);
+                Push(&stackMenu, "Lihat film upcoming");
                 printf("===================================================\n");
                 printf("         Film yang upcoming di %s      \n", info->nama);
                 GetFilmUpcoming(kotaNode, &tampilFilm);
                 
                 if (ListEmpty(tampilFilm)) {
                     printf("Tidak ada film yang upcoming di kota ini.\n");
+                    Pop(&stackMenu);
                     
                     break;
                 } else {
@@ -91,25 +103,47 @@ void HalamanMenuUser(address root, List *L) {
                 InputString(namaFilm);
 
                 addressList filmTerpilih = cariFilmByJudul(*L, namaFilm);
+                if (filmTerpilih == NULL) {
+                    printf("Film tidak ditemukan.\n");
+                    Pop(&stackMenu);
+                    break;
+                }
+
                 FilmInfo* infoFilm = (FilmInfo*)(filmTerpilih->info);
                 date tanggalTayang = CariTanggalTayangPertama(kotaNode, infoFilm);
 
                 HalamanPilihJadwal(root, L, kotaNode, filmTerpilih, tanggalTayang);
+                Pop(&stackMenu);
 
                 break;
             }
             case 3:
-                printf("belum tersedia)\n");
+                Push(&stackMenu, "Cari jadwal film");
+                printf("Fitur belum tersedia\n");
+                Pop(&stackMenu);
 
                 break;
             case 4:
-                printf("belum tersedia)\n");
+                Push(&stackMenu, "Lihat daftar pesanan");
+                printf("Fitur belum tersedia\n");
+                Pop(&stackMenu);
 
                 break;
-            case 5:
-                printf("Terima kasih telah menggunakan aplikasi.\n");
-                
+            case 5: {
+                char konfirmasi[5];
+                printf("Apakah Anda yakin ingin logout? (y/n): ");
+                scanf("%s", konfirmasi);
+                if (strcmp(konfirmasi, "y") == 0 || strcmp(konfirmasi, "Y") == 0) {
+                    printf("Logout berhasil.\n");
+                    Logout(&loggedIn);
+                    idLogin = -1;   
+                    HalamanAwal();  
+                    return;
+                } else {
+                    printf("Kembali ke menu.\n");
+                }
                 break;
+            }
             default:
                 printf("Pilihan tidak valid!\n");
         }
