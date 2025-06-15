@@ -24,6 +24,11 @@ typedef struct {
     int jumlahKolom;
 } JadwalInfo;
 
+typedef struct {
+    char kolom;
+    int baris;
+} Kursi;
+
 void SimpanJadwalKeFile(const int* idKota, const int* idBioskop, const int* idTeater, const JadwalInfo* jadwal);
 int SearchJadwalFile(const JadwalInfo* jadwal);
 void EditJadwalKeFile(const JadwalInfo* jadwal, const JadwalInfo* jadwalLama);

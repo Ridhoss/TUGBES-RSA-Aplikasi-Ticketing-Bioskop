@@ -516,11 +516,14 @@ void InisialisasiKursi(JadwalInfo *jadwal, address teaterAddress) {
     int kolom = 10;
     int baris = (jumlahKursi + kolom - 1) / kolom;
 
+    jadwal->jumlahBaris = baris;
+    jadwal->jumlahKolom = kolom;
+
     for (int i = 0; i < baris; i++) {
         for (int j = 0; j < kolom; j++) {
             int index = i * kolom + j;
             if (index < jumlahKursi) {
-                jadwal->kursi[i][j] = '0';
+                jadwal->kursi[i][j] = 'O';
             } else {
                 jadwal->kursi[i][j] = 'X';
             }

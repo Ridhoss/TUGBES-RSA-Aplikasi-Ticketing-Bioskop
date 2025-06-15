@@ -213,5 +213,63 @@ void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList fil
 
 
 void HalamanPilihKursi(address root, List *L, address nodeJadwal) {
+    if (nodeJadwal == NULL || nodeJadwal->info == NULL) {
+        printf("Data jadwal tidak ditemukan.\n");
+        return;
+    }
 
+    JadwalInfo* jadwalInfo = (JadwalInfo*)(nodeJadwal->info);
+    FilmInfo* infoFilm = jadwalInfo->film;
+
+    printf("Jumlah Baris: %d, Kolom: %d\n", jadwalInfo->jumlahBaris, jadwalInfo->jumlahKolom); // debug
+
+    printf("===================================================\n");
+    printf("||           PILIH BIOSKOP DAN JADWAL            ||\n");
+    printf("===================================================\n");
+    printf("Judul      : %s\n", infoFilm->judul);
+    printf("Produser   : %s\n", infoFilm->produser);
+    printf("Deskripsi  : %s\n", infoFilm->deskripsi);
+    printf("Durasi     : %d menit\n", ConvertMenit(infoFilm->durasi));
+    printf("Tanggal    : %02d-%02d-%04d\n", jadwalInfo->tanggal.Tgl, jadwalInfo->tanggal.Bln, jadwalInfo->tanggal.Thn);
+    printf("Jam        : %02d:%02d\n", jadwalInfo->Start.jam, jadwalInfo->Start.menit);
+    printf("===================================================\n");
+
+    printf("Tampilan Kursi (O = kosong, X = terisi)\n\n");
+
+    printf("    ");
+    for (int j = 0; j < jadwalInfo->jumlahKolom; j++) {
+        printf(" %c ", 'A' + j);
+    }
+    printf("\n");
+
+    for (int i = 0; i < jadwalInfo->jumlahBaris; i++) {
+        printf("%2d  ", i + 1);
+        for (int j = 0; j < jadwalInfo->jumlahKolom; j++) {
+            printf(" %c ", jadwalInfo->kursi[i][j]);
+        }
+        printf("\n");
+    }
+
+    printf("===================================================\n");
+
+    // Meminta input dari pengguna
+    Kursi pilih;
+    printf("Masukkan kursi (contoh 4C): ");
+    scanf("%d%c", &pilih.baris, &pilih.kolom);
+
+    int i = pilih.baris - 1;
+    int j = pilih.kolom - 'A';
+
+    if (i < 0 || i >= jadwalInfo->jumlahBaris || 
+        j < 0 || j >= jadwalInfo->jumlahKolom) {
+        printf("Pilihan kursi tidak valid.\n");
+        return;
+    }
+
+    if (jadwal->kursi[i][j] == '0') {
+        jadwal->kursi[i][j] = 'X';
+        printf("Kursi %d%c berhasil dipesan!\n", pilih.baris, pilih.kolom);
+    } else {
+        printf("Kursi %d%c sudah terisi.\n", pilih.baris, pilih.kolom);
+    }
 }
