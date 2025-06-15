@@ -55,7 +55,7 @@ void HalamanMenuUser(address root, List *L) {
                 break;
             }
             case 2:
-                printUpcomingFilmsByKota(kotaNode);
+                PrintFilmUpcoming(kotaNode);
                 
                 break;
             case 3:
