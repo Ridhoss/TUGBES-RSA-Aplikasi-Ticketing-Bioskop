@@ -104,12 +104,16 @@ void HalamanAwal() {
         if (masuk == 1) {
             HalamanLogin();
             if (loggedIn) break;
+
         } else if (masuk == 2) {
             int role = 1;
             DaftarAkun(role);
+            
         } else if (masuk == 3) {
             printf("Anda Berhasil Keluar Dari Aplikasi\n");
-            exit(0);
+
+            return;
+
         } else {
             printf("Error 404. Input Tidak Diketahui\n");
         }

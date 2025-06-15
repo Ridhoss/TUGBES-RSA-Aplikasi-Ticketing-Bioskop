@@ -334,3 +334,55 @@ date CariTanggalTayangPertama(address kotaNode, FilmInfo* film) {
     return hasil;
 }
 
+void GetFilmByRangeWaktu(address kotaNode, date selectedDate, TimeInfo jamAwal, TimeInfo jamAkhir, List *ListFilm) {
+    if (kotaNode == NULL || ListFilm == NULL) return;
+
+    CreateList(ListFilm);
+
+    List listJadwal;
+    AmbilSeluruhJadwalKotaKeList(kotaNode, &listJadwal);
+
+    List semuaFilm;
+    CreateList(&semuaFilm);
+
+    addressList p = listJadwal.First;
+    while (p != NULL) {
+        address nodeJadwal = (address)p->info;
+        if (nodeJadwal != NULL && nodeJadwal->info != NULL) {
+            JadwalInfo* jadwal = (JadwalInfo*) nodeJadwal->info;
+            if (jadwal->film != NULL) {
+
+                if (isSameDate(jadwal->tanggal, selectedDate) &&
+                    CompareTime(jadwal->Start, jamAwal) >= 0 &&
+                    CompareTime(jadwal->Start, jamAkhir) <= 0) {
+                    
+                    if (!ApakahFilmSudahAda(semuaFilm, jadwal->film)) {
+                        FilmInfo* salinan = (FilmInfo*) malloc(sizeof(FilmInfo));
+                        if (salinan != NULL) {
+                            *salinan = *(jadwal->film);
+                            InsLast(&semuaFilm, (infotype)salinan);
+                        }
+                    }
+                }
+            }
+        }
+        p = p->next;
+    }
+
+    addressList f = semuaFilm.First;
+    while (f != NULL) {
+        FilmInfo* film = (FilmInfo*) f->info;
+        FilmInfo* salinanFinal = (FilmInfo*) malloc(sizeof(FilmInfo));
+        if (salinanFinal != NULL) {
+            *salinanFinal = *film;
+            InsLast(ListFilm, (infotype)salinanFinal);
+        }
+        f = f->next;
+    }
+
+    DelAll(&listJadwal);
+    DelAll(&semuaFilm);
+}
+
+
+

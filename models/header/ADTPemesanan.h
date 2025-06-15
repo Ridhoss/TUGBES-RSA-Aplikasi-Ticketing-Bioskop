@@ -10,13 +10,14 @@
 
 #include "ADTTree.h"
 #include "ADTJadwal.h"
-
+#include "ADTStack.h"
 
 
 typedef struct {
     int id;
     int idUser;
     int idFilm;
+    date tanggal;
     int jumlahTiket;
     int harga;
     int totalHarga;
@@ -32,6 +33,12 @@ typedef struct {
 void SimpanTransaksiKeFile(Transaksi trx);
 void SimpanDetailTransaksiKeFile(DetailTransaksi detail);
 void LoadKursiTerisi(JadwalInfo* jadwal);
+
+void IsiStackTransaksi(Stack *S, int idUser);
+void IsiStackTransaksiByDate(Stack *S, int idUser, date tanggalTrans);
+void PrintStackTransaksi(Stack S, List filmList);
+void AmbilDetailTransaksi(List *L, int idTransaksi);
+
 
 void AksiTransaksi(address jadwalNode, Kursi kursiDipilih[], int jumlahDipilih, int idUser);
 int BuatIdTransaksiBaru(int idUser, date today);

@@ -1,9 +1,9 @@
 #include "header/viewsUser.h"
 
 void HalamanMenuUser(address root, List *L) {
-    StackMenu stackMenu;
-    CreateStack(&stackMenu);
-    Push(&stackMenu, "Menu Utama");
+    // StackMenu stackMenu;
+    // CreateStack(&stackMenu);
+    // Push(&stackMenu, "Menu Utama");
 
     date selectedDate;
     GetToday(&selectedDate);
@@ -12,6 +12,9 @@ void HalamanMenuUser(address root, List *L) {
     char namaKota[100], namaFilm[100];
     address kotaNode;
     List tampilFilm;
+
+    TimeInfo jamAwal, jamAkhir;
+    int jam, mnt;
 
     
     printf("===================================================\n");
@@ -51,15 +54,17 @@ void HalamanMenuUser(address root, List *L) {
         
         switch (pilihan) {
             case 1: {
+                // Push(&stackMenu, "Cari dan pilih film");
+
                 KotaInfo* info = (KotaInfo*)(kotaNode->info);
-                Push(&stackMenu, "Cari dan pilih film");
                 printf("===================================================\n");
                 printf("         Film yang tersedia di %s      \n", info->nama);
                 GetFilmByKota(kotaNode, &tampilFilm);
 
                 if (ListEmpty(tampilFilm)) {
                     printf("Tidak ada film yang sedang tayang di kota ini.\n");
-                    Pop(&stackMenu);
+
+                    // Pop(&stackMenu);
 
                     break;
                 } else {
@@ -73,26 +78,31 @@ void HalamanMenuUser(address root, List *L) {
                 addressList filmTerpilih = cariFilmByJudul(*L, namaFilm);
                 if (filmTerpilih == NULL) {
                     printf("Film tidak ditemukan.\n");
-                    Pop(&stackMenu);
+
+                    // Pop(&stackMenu);
+
                     break;
                 }
 
                 HalamanPilihJadwal(root, L, kotaNode, filmTerpilih, selectedDate);
-                Pop(&stackMenu);
+
+                // Pop(&stackMenu);
 
                 break;
             }
             case 2:{
+                // Push(&stackMenu, "Lihat film upcoming");
+                
                 KotaInfo* info = (KotaInfo*)(kotaNode->info);
-                Push(&stackMenu, "Lihat film upcoming");
                 printf("===================================================\n");
                 printf("         Film yang upcoming di %s      \n", info->nama);
                 GetFilmUpcoming(kotaNode, &tampilFilm);
                 
                 if (ListEmpty(tampilFilm)) {
                     printf("Tidak ada film yang upcoming di kota ini.\n");
-                    Pop(&stackMenu);
                     
+                    // Pop(&stackMenu);
+
                     break;
                 } else {
                     printFilm(tampilFilm);
@@ -105,7 +115,9 @@ void HalamanMenuUser(address root, List *L) {
                 addressList filmTerpilih = cariFilmByJudul(*L, namaFilm);
                 if (filmTerpilih == NULL) {
                     printf("Film tidak ditemukan.\n");
-                    Pop(&stackMenu);
+
+                    // Pop(&stackMenu);
+
                     break;
                 }
 
@@ -113,23 +125,121 @@ void HalamanMenuUser(address root, List *L) {
                 date tanggalTayang = CariTanggalTayangPertama(kotaNode, infoFilm);
 
                 HalamanPilihJadwal(root, L, kotaNode, filmTerpilih, tanggalTayang);
-                Pop(&stackMenu);
+
+                // Pop(&stackMenu);
 
                 break;
             }
-            case 3:
-                Push(&stackMenu, "Cari jadwal film");
-                Pop(&stackMenu);
+            case 3: {
+                printf("===================================================\n");
+                printf("========== Cari Film Berdasarkan Tanggal ==========\n");
+                printf("===================================================\n");
 
-                
+                do {
+                    printf("Masukkan tanggal nonton film (dd/mm/yyyy): ");
+                    scanf("%d/%d/%d", &selectedDate.Tgl, &selectedDate.Bln, &selectedDate.Thn);
+                    ReadDate(selectedDate.Tgl, selectedDate.Bln, selectedDate.Thn, &selectedDate);
+
+                    if (IsDateLessToday(selectedDate)) {
+                        printf("Tanggal tidak valid! Tidak boleh di bawah hari ini.\n");
+                    }
+
+                } while (IsDateLessToday(selectedDate));
+
+
+                printf("Masukan range jam nonton: \n");
+
+                printf("Dari (hh:mm): ");
+                scanf("%d:%d", &jam, &mnt);
+                SetTime(&jamAwal, jam, mnt);
+
+                printf("Sampai (hh:mm): ");
+                scanf("%d:%d", &jam, &mnt);
+                SetTime(&jamAkhir, jam, mnt);
+
+                KotaInfo* info = (KotaInfo*)(kotaNode->info);
+                printf("===================================================\n");
+                printf("         Film yang tersedia di %s      \n", info->nama);
+
+                GetFilmByRangeWaktu(kotaNode, selectedDate, jamAwal, jamAkhir, &tampilFilm);
+
+                if (ListEmpty(tampilFilm)) {
+                    printf("Tidak ada film yang sedang tayang di kota ini.\n");
+
+                    break;
+                } else {
+                    printFilm(tampilFilm);
+                    printf("===================================================\n");
+                }
+
+                printf("Pilih Film: ");
+                InputString(namaFilm);
+
+                addressList filmTerpilih = cariFilmByJudul(*L, namaFilm);
+                if (filmTerpilih == NULL) {
+                    printf("Film tidak ditemukan.\n");
+                    // Pop(&stackMenu);
+                    break;
+                }
+
+                FilmInfo* infoFilm = (FilmInfo*)(filmTerpilih->info);
+
+                HalamanPilihJadwal(root, L, kotaNode, filmTerpilih, selectedDate);
 
                 break;
-            case 4:
-                Push(&stackMenu, "Lihat daftar pesanan");
-                printf("Fitur belum tersedia\n");
-                Pop(&stackMenu);
+            }
+            case 4: { 
+                printf("===================================================\n");
+                printf("============== Menu History Pemesanan =============\n");
+                printf("===================================================\n");
+
+                date tanggalCari;
+                int pilPrint;
+                int runningPrint = 1;
+
+                Stack stackTransaksi;
+                CreateStack(&stackTransaksi);
+
+                while (runningPrint)
+                {
+                    printf("1. Lihat Seluruh History Pemesanan\n");
+                    printf("2. Lihat History Berdasarkan Tanggal\n");
+                    printf("3. Kembali\n");
+                    printf("Pilih: ");
+                    scanf("%d", &pilPrint);
+                    while (getchar() != '\n');
+
+                    switch (pilPrint) {
+                        case 1: {
+                            IsiStackTransaksi(&stackTransaksi, idLogin);
+                            PrintStackTransaksi(stackTransaksi, *L);
+                            DelAll(&stackTransaksi);  
+
+                            break;
+                        }
+                        case 2: {
+                            printf("Masukkan tanggal (dd/mm/yyyy): ");
+                            scanf("%d/%d/%d", &tanggalCari.Tgl, &tanggalCari.Bln, &tanggalCari.Thn);
+                            IsiStackTransaksiByDate(&stackTransaksi, idLogin, tanggalCari);
+                            PrintStackTransaksi(stackTransaksi, *L);
+                            DelAll(&stackTransaksi);
+
+                            break;
+                        }
+                        case 3: {
+                            runningPrint = 0;
+
+                            break;
+                        }
+                        default:
+                            printf("Pilihan tidak valid, silahkan coba lagi\n");
+
+                            break;
+                    }
+                }
 
                 break;
+            }
             case 5: {
                 char konfirmasi[5];
                 printf("Apakah Anda yakin ingin logout? (y/n): ");

@@ -10,13 +10,13 @@
 #include "ADTList.h"
 #include "ADTTree.h"
 
-typedef List StackMenu;
+typedef List Stack;
 
-void CreateStack(StackMenu *S);
-boolean IsEmptyStack(StackMenu S);
+void CreateStack(Stack *S);
+boolean IsEmptyStack(Stack S);
 
-void Push(StackMenu *S, const char *menu);
-void Pop(StackMenu *S);
-char* Top(StackMenu S);
+void Push(Stack *S, infotype data);
+void* Pop(Stack* S);
+void* Top(Stack S);
 
 #endif

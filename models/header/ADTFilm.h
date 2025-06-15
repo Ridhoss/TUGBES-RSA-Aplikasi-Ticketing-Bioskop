@@ -43,4 +43,6 @@ void GetFilmUpcoming(address KotaNode, List *ListFilmKota);
 
 date CariTanggalTayangPertama(address kotaNode, FilmInfo* film);
 
+void GetFilmByRangeWaktu(address kotaNode, date selectedDate, TimeInfo jamAwal, TimeInfo jamAkhir, List *ListFilm);
+
 #endif

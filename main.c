@@ -45,5 +45,11 @@ int main() {
             printf("Akun tidak ditemukan.\n");
         }
     }
+
+
+    DeleteAll(root);
+    DelAll(&L);
+    free(rootStr);
+
     return 0;
 }

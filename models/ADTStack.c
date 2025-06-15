@@ -3,31 +3,27 @@
 #include <stdlib.h>
 
 
-void CreateStack(StackMenu *S) {
+void CreateStack(Stack *S) {
     CreateList(S);
 }
 
-boolean IsEmptyStack(StackMenu S) {
+boolean IsEmptyStack(Stack S) {
     return ListEmpty(S);
 }
 
-void Push(StackMenu *S, const char *menu) {
-    char *newMenu = (char *)malloc(strlen(menu) + 1);
-    strcpy(newMenu, menu);
-    InsFirst(S, newMenu); 
+void Push(Stack* S, infotype data) {
+    InsFirst(S, data);
 }
 
-void Pop(StackMenu *S) {
-    if (!IsEmptyStack(*S)) {
-        char *temp;
-        DelFirst(S, (infotype *)&temp);  
-        free(temp);  
-    }
+void* Pop(Stack* S) {
+    infotype temp;
+    DelFirst(S, &temp);
+    return temp;
 }
 
-char* Top(StackMenu S) {
-    if (!IsEmptyStack(S)) {
-        return (char *)S.First->info; 
+void* Top(Stack S) {
+    if (S.First != NULL) {
+        return S.First->info;
     }
     return NULL;
 }
