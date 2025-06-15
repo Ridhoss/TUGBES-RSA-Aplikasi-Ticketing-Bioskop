@@ -591,9 +591,17 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
 
                                 printf("%s film terpilih\n", film->judul);
 
-                                printf("Masukan tanggal tayang film ( dd/mm/yyyy ): ");
-                                scanf("%d/%d/%d", &tgl, &bln, &thn);
-                                ReadDate(tgl, bln, thn, &tglBaru);
+                                do {
+                                    printf("Masukkan tanggal tayang film (dd/mm/yyyy): ");
+                                    scanf("%d/%d/%d", &tgl, &bln, &thn);
+                                    ReadDate(tgl, bln, thn, &tglBaru);
+
+                                    if (IsDateLessToday(tglBaru)) {
+                                        printf("Tanggal tidak valid! Tidak boleh di bawah hari ini.\n");
+                                    }
+
+                                } while (IsDateLessToday(tglBaru));
+
 
                                 printf("Jumlah hari jadwal film tayang: ");
                                 scanf("%d", &jmlHari);

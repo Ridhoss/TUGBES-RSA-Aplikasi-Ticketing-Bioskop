@@ -32,4 +32,6 @@ boolean CekBetweenTime(TimeInfo start, TimeInfo end, TimeInfo new);
 void TimeString(TimeInfo T, char *buffer);
 void PrintTime(TimeInfo T);
 
+boolean ApakahLewatTengahMalam(TimeInfo start, TimeInfo durasi);
+
 #endif 

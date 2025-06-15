@@ -155,10 +155,12 @@ void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList fil
                     address jadwalNode = (address)p->info;
                     JadwalInfo* j = (JadwalInfo*)jadwalNode->info;
 
-                    if (jadwalNode->pr == nodeTeater &&
-                        j->tanggal.Tgl == selectedDate.Tgl &&
-                        j->tanggal.Bln == selectedDate.Bln &&
-                        j->tanggal.Thn == selectedDate.Thn) {
+                    if (jadwalNode->pr == nodeTeater && isSameDate(j->tanggal, selectedDate)) {
+
+                        if (!isDateTimeValid(j->tanggal, j->Start)) {
+                            p = p->next;
+                            continue;
+                        }
 
                         if (!adaJadwalBioskop) {
                             printf("===================================================\n");

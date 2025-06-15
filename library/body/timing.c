@@ -120,3 +120,8 @@ void TimeString(TimeInfo T, char *buffer) {
 void PrintTime(TimeInfo T) {
     printf("%02d:%02d\n", T.jam, T.menit);
 }
+
+boolean ApakahLewatTengahMalam(TimeInfo start, TimeInfo durasi) {
+    TimeInfo end = TambahWaktu(start, durasi);
+    return (end.jam >= 24);
+}

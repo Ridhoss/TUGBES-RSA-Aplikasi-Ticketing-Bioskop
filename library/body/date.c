@@ -258,13 +258,13 @@ boolean IsDateLessToday(date D) {
     date today;
     GetToday(&today);
 
-    if (D.Thn > today.Thn) return true;
-    if (D.Thn < today.Thn) return false;
+    if (D.Thn < today.Thn) return true;
+    if (D.Thn > today.Thn) return false;
 
-    if (D.Bln > today.Bln) return true;
-    if (D.Bln < today.Bln) return false;
+    if (D.Bln < today.Bln) return true;
+    if (D.Bln > today.Bln) return false;
 
-    return D.Tgl >= today.Tgl;
+    return D.Tgl < today.Tgl;
 }
 
 int GetHariDalamMinggu(date d) {

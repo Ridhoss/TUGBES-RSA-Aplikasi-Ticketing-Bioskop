@@ -392,6 +392,12 @@ void TambahJadwalBaru(address kota, address bioskop, address teater, JadwalInfo 
         jadwalBaru.tanggal = TambahHari(dataJadwal.tanggal, i);
         jadwalBaru.End = TambahWaktu(jadwalBaru.Start, jadwalBaru.film->durasi);
 
+        if (ApakahLewatTengahMalam(jadwalBaru.Start, jadwalBaru.film->durasi)) {
+            printf("Jadwal gagal ditambahkan untuk tanggal %d/%d/%d karena melewati tengah malam.\n", 
+                jadwalBaru.tanggal.Tgl, jadwalBaru.tanggal.Bln, jadwalBaru.tanggal.Thn);
+            continue;
+        }
+
         if (AdaJadwalBentrok(listJadwal, jadwalBaru.tanggal, jadwalBaru.Start, jadwalBaru.End, jadwalBaru.id)) {
             printf("Jadwal gagal ditambahkan untuk tanggal %d/%d/%d karena bentrok.\n", jadwalBaru.tanggal.Tgl, jadwalBaru.tanggal.Bln, jadwalBaru.tanggal.Thn);
 
@@ -433,6 +439,12 @@ void UbahJadwal(address node, JadwalInfo jadwalBaru) {
     memcpy(jadwalBaru.kursi, oldInfo->kursi, sizeof(oldInfo->kursi));
     jadwalBaru.jumlahBaris = oldInfo->jumlahBaris;
     jadwalBaru.jumlahKolom = oldInfo->jumlahKolom;
+
+    if (ApakahLewatTengahMalam(jadwalBaru.Start, jadwalBaru.film->durasi)) {
+        printf("Jadwal gagal ditambahkan untuk tanggal %d/%d/%d karena melewati tengah malam.\n", 
+            jadwalBaru.tanggal.Tgl, jadwalBaru.tanggal.Bln, jadwalBaru.tanggal.Thn);
+        return;
+    }
 
     if (AdaJadwalBentrok(listJadwal, jadwalBaru.tanggal, jadwalBaru.Start, jadwalBaru.End, jadwalBaru.id)) {
         
@@ -622,9 +634,7 @@ boolean AdaJadwalBentrok(List L, date tanggal, TimeInfo start, TimeInfo end, int
             continue;
         }
 
-        if (j->tanggal.Tgl == tanggal.Tgl &&
-            j->tanggal.Bln == tanggal.Bln &&
-            j->tanggal.Thn == tanggal.Thn) {
+        if (isSameDate(j->tanggal, tanggal)) {
 
             int startLama = ConvertMenit(j->Start);
             int endLama = ConvertMenit(j->End);
@@ -650,9 +660,7 @@ void AmbilJadwalTeaterTanggalKeList(address teater, date tanggal, List* hasil) {
     while (nodeJadwal != NULL) {
         JadwalInfo* j = (JadwalInfo*) nodeJadwal->info;
 
-        if (j->tanggal.Tgl == tanggal.Tgl &&
-            j->tanggal.Bln == tanggal.Bln &&
-            j->tanggal.Thn == tanggal.Thn) {
+        if (isSameDate(j->tanggal, tanggal)) {
             JadwalInfo* salinan = (JadwalInfo*) malloc(sizeof(JadwalInfo));
             *salinan = *j;
 
