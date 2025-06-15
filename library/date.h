@@ -95,4 +95,8 @@ int CompareDate(date d1, date d2);
 
 boolean IsDateLessToday(date D);
 
+int GetHariDalamMinggu(date d);
+
+boolean IsWeekend(date d);
+
 #endif

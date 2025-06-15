@@ -60,12 +60,17 @@ void AksiTransaksi(address jadwalNode, Kursi kursiDipilih[], int jumlahDipilih, 
     GetToday(&today);
     int idBaru = BuatIdTransaksiBaru(idUser, today);
 
+    int hargaTiket = teater->harga;
+    if (IsWeekend(jadwal->tanggal)) {
+        hargaTiket += 5000;
+    }
+
     Transaksi trx;
     trx.id = idBaru;
     trx.idUser = idUser;
     trx.idFilm = jadwal->film->idFilm;
     trx.jumlahTiket = jumlahDipilih;
-    trx.harga = teater->harga;
+    trx.harga = hargaTiket;
     trx.totalHarga = trx.harga * trx.jumlahTiket;
 
     SimpanTransaksiKeFile(trx);

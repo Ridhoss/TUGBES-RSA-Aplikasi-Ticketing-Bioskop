@@ -3,8 +3,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
+
+#include "../../library/boolean.h"
+#include "../../library/date.h"
 
 #include "ADTTree.h"
 #include "ADTJadwal.h"

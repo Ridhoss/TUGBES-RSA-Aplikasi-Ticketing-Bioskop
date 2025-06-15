@@ -266,3 +266,18 @@ boolean IsDateLessToday(date D) {
 
     return D.Tgl >= today.Tgl;
 }
+
+int GetHariDalamMinggu(date d) {
+    struct tm waktu = {0};
+    waktu.tm_year = d.Thn - 1900;
+    waktu.tm_mon = d.Bln - 1;
+    waktu.tm_mday = d.Tgl;
+
+    mktime(&waktu);
+    return waktu.tm_wday;
+}
+
+boolean IsWeekend(date d) {
+    int hari = GetHariDalamMinggu(d);
+    return (hari == 0 || hari == 6);
+}

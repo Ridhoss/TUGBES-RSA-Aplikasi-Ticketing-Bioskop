@@ -168,9 +168,13 @@ void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList fil
                         }
 
                         if (!adaJadwalTeater) {
+                            int hargaTiket = teater->harga;
+                            if (IsWeekend(selectedDate)) {
+                                hargaTiket += 5000;
+                            }
                             printf("--------------------------------------------------\n");
                             printf("  Teater : %s\n", teater->nama);
-                            printf("  Harga  : Rp%d\n", teater->harga);
+                            printf("  Harga  : Rp%d\n", hargaTiket);
                             printf("    Jam  : ");
                             adaJadwalTeater = 1;
                         }
@@ -355,6 +359,11 @@ void HalamanKonfirmasiPemesanan(address nodeJadwal, Kursi kursiDipilih[], int ju
     TeaterInfo* teater = (TeaterInfo*)nodeJadwal->pr->info;
     BioskopInfo* bioskop = (BioskopInfo*)nodeJadwal->pr->pr->info;
 
+    int hargaTiket = teater->harga;
+    if (IsWeekend(jadwalInfo->tanggal)) {
+        hargaTiket += 5000;
+    }
+
     printf("==========================================\n");
     printf("        KONFIRMASI PEMESANAN TIKET        \n");
     printf("==========================================\n");
@@ -363,9 +372,9 @@ void HalamanKonfirmasiPemesanan(address nodeJadwal, Kursi kursiDipilih[], int ju
     printf("Teater     : %s\n", teater->nama);
     printf("Tanggal    : %02d-%02d-%04d\n", jadwalInfo->tanggal.Tgl, jadwalInfo->tanggal.Bln, jadwalInfo->tanggal.Thn);
     printf("Jam        : %02d:%02d\n", jadwalInfo->Start.jam, jadwalInfo->Start.menit);
-    printf("Harga/tiket: Rp%d\n", teater->harga);
+    printf("Harga/tiket: Rp%d\n", hargaTiket);
     printf("Jumlah     : %d tiket\n", jumlahDipilih);
-    printf("Total Bayar: Rp%d\n", jumlahDipilih * teater->harga);
+    printf("Total Bayar: Rp%d\n", jumlahDipilih * hargaTiket);
     printf("------------------------------------------\n");
     printf("Kursi yang dipilih:\n");
     for (int i = 0; i < jumlahDipilih; i++) {
