@@ -208,55 +208,121 @@ void printFilm(List L) {
     }
 }
 
-void printUpcomingFilmsByKota(address root, int idKota) {
-    if (root == NULL) {
-        printf("Data kota kosong.\n");
+void GetFilmByKota(address KotaNode, List *ListFilmKota) {
+    CreateList(ListFilmKota);
+
+    List listJadwal;
+    AmbilSeluruhJadwalKotaKeList(KotaNode, &listJadwal);
+
+    addressList p = listJadwal.First;
+    while (p != NULL) {
+        address nodeJadwal = (address)p->info;
+
+        if (nodeJadwal != NULL && nodeJadwal->info != NULL) {
+            JadwalInfo* jadwal = (JadwalInfo*) nodeJadwal->info;
+
+            if (jadwal->film != NULL && !ApakahFilmSudahAda(*ListFilmKota, jadwal->film)) {
+                FilmInfo* salinanFilm = (FilmInfo*) malloc(sizeof(FilmInfo));
+                if (salinanFilm != NULL) {
+                    *salinanFilm = *(jadwal->film);
+                    InsLast(ListFilmKota, (infotype)salinanFilm);
+                }
+            }
+        }
+
+        p = p->next;
+    }
+
+    DelAll(&listJadwal);
+}
+
+boolean ApakahFilmSudahAda(List L, FilmInfo* target) {
+    addressList P = L.First;
+    while (P != NULL) {
+        FilmInfo* f = (FilmInfo*)P->info;
+        if (strcmp(f->judul, target->judul) == 0) {
+            return true;
+        }
+        P = P->next;
+    }
+    return false;
+}
+
+void PrintFilmUpcoming(address KotaNode) {
+    if (KotaNode == NULL) {
+        printf("Kota tidak ditemukan.\n");
         return;
     }
 
-    address nodeKota = SearchKotaById(root, &idKota);
-    if (nodeKota == NULL) {
-        printf("Kota dengan ID %d tidak ditemukan.\n", idKota);
-        return;
-    }
-
-    KotaInfo* kotaInfo = (KotaInfo*)nodeKota->info;
+    KotaInfo* infoKota = (KotaInfo*)KotaNode->info;
+    printf("\n=== Daftar Film Upcoming di Kota %s ===\n", infoKota->nama);
 
     date today;
     GetToday(&today);
 
-    printf("\n=== Daftar Film Upcoming di Kota %s ===\n", kotaInfo->nama);
+    List listJadwal;
+    AmbilSeluruhJadwalKotaKeList(KotaNode, &listJadwal);
+
+    List listFilmSudahCetak;
+    CreateList(&listFilmSudahCetak);
+
     boolean adaFilm = false;
 
-    address bioskop = nodeKota->fs;
-    while (bioskop != NULL) {
-        address teater = bioskop->fs;
-        while (teater != NULL) {
-            address jadwal = teater->fs;
-            while (jadwal != NULL) {
-                JadwalInfo* info = (JadwalInfo*)jadwal->info;
-                int selisih = DifferenceDate(today, info->tanggal);
-                if (selisih >= 0 && selisih <= 2) {
-                    FilmInfo* film = info->film;
+    addressList p = listJadwal.First;
+    while (p != NULL) {
+        address nodeJadwal = (address)p->info;
+        JadwalInfo* jadwal = (JadwalInfo*)nodeJadwal->info;
+
+        if (jadwal->film != NULL) {
+            int selisih = DifferenceDate(today, jadwal->tanggal);
+            if (selisih >= 1) {
+                FilmInfo* film = jadwal->film;
+
+                if (!ApakahFilmSudahAda(listFilmSudahCetak, film)) {
+                    // Cari nama bioskop
+                    const char* namaBioskop = "Tidak Diketahui";
+                    address nodeBioskop = KotaNode->fs;
+                    while (nodeBioskop != NULL) {
+                        address nodeTeater = nodeBioskop->fs;
+                        while (nodeTeater != NULL) {
+                            address nodeJ = nodeTeater->fs;
+                            while (nodeJ != NULL) {
+                                if (nodeJ == nodeJadwal) {
+                                    namaBioskop = ((BioskopInfo*)nodeBioskop->info)->nama;
+                                }
+                                nodeJ = nodeJ->nb;
+                            }
+                            nodeTeater = nodeTeater->nb;
+                        }
+                        nodeBioskop = nodeBioskop->nb;
+                    }
+
                     printf("----------------------------------------------\n");
                     printf("Judul      : %s\n", film->judul);
                     printf("Produser   : %s\n", film->produser);
                     printf("Deskripsi  : %s\n", film->deskripsi);
                     printf("Durasi     : %02d:%02d\n", film->durasi.jam, film->durasi.menit);
-                    printf("Tanggal    : %02d-%02d-%d\n", info->tanggal.Tgl, info->tanggal.Bln, info->tanggal.Thn);
-                    printf("Teater     : %s\n", ((TeaterInfo*)teater->info)->nama);
-                    printf("Bioskop    : %s\n", ((BioskopInfo*)bioskop->info)->nama);
+                    printf("Tanggal    : %02d-%02d-%d\n", jadwal->tanggal.Tgl, jadwal->tanggal.Bln, jadwal->tanggal.Thn);
+                    printf("Bioskop    : %s\n", namaBioskop);
                     adaFilm = true;
+
+                    // Masukkan film ke listFilmSudahCetak
+                    FilmInfo* salinan = malloc(sizeof(FilmInfo));
+                    if (salinan != NULL) {
+                        *salinan = *film;
+                        InsLast(&listFilmSudahCetak, (infotype)salinan);
+                    }
                 }
-                jadwal = jadwal->nb;
             }
-            teater = teater->nb;
         }
-        bioskop = bioskop->nb;
+
+        p = p->next;
     }
 
     if (!adaFilm) {
-        printf("Tidak ada film yang akan tayang dalam 2 hari ke depan di kota %s.\n", kotaInfo->nama);
+        printf("Tidak ada film upcoming di kota %s.\n", infoKota->nama);
     }
-}
 
+    DelAll(&listJadwal);
+    DelAll(&listFilmSudahCetak);
+}

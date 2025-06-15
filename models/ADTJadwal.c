@@ -355,173 +355,6 @@ void TambahJadwalBaru(address kota, address bioskop, address teater, JadwalInfo 
     DelAll(&listJadwal);
 }
 
-
-// Deskripsi : prosedur untuk menginisialisasi array 2 dimensi
-// IS : menerima jadwalInfo dan teaterinfo yang berisi jumlah kursi
-// FS : array 2 dimensi terbuat dengan fix 10 kolom, dan membagi jumlah kursi dengan kolom lalu menentukan mana array yang bisa di isi dan tidak (tidak ada kursi)
-void InisialisasiKursi(JadwalInfo *jadwal, address teaterAddress) {
-    TeaterInfo teater = *((TeaterInfo*)(teaterAddress->info));
-
-    int jumlahKursi = teater.jumlahKursi;
-    int kolom = 10;
-    int baris = (jumlahKursi + kolom - 1) / kolom;
-
-    for (int i = 0; i < baris; i++) {
-        for (int j = 0; j < kolom; j++) {
-            int index = i * kolom + j;
-            if (index < jumlahKursi) {
-                jadwal->kursi[i][j] = '0';
-            } else {
-                jadwal->kursi[i][j] = 'X';
-            }
-        }
-    }
-}
-
-
-
-
-
-
-
-
-// Deskripsi : mengambil jadwal teater dari tree dijadikan linkedlist
-// IS : menerima node teater dan list
-// FS : List jadwal terisi dengan jadwal yang ada di teater yang dikirim
-void AmbilJadwalTeaterKeList(address nodeTeater, List* L) {
-    CreateList(L);
-
-    if (nodeTeater == NULL || nodeTeater->fs == NULL) return;
-
-    address nodeJadwal = nodeTeater->fs;
-
-    while (nodeJadwal != NULL) {
-        JadwalInfo* jadwal = (JadwalInfo*) nodeJadwal->info;
-        JadwalInfo* salinan = (JadwalInfo*) malloc(sizeof(JadwalInfo));
-        *salinan = *jadwal;
-
-        InsLast(L, (infotype) salinan);
-        nodeJadwal = nodeJadwal->nb;
-    }
-}
-
-// Deskripsi : mengecek apakah jadwal bentrok dengan jadwal yang sudah ada atau tidak
-// IS : menerima node list, tanggal, timeinfo start dan end jadwal yang baru
-// FS : mengembalikan true jika ada jadwal bentrok dan false jika tidak ada jadwal bentrok
-boolean AdaJadwalBentrok(List L, date tanggal, TimeInfo start, TimeInfo end, int idKecuali) {
-    addressList P = L.First;
-
-    int startBaru = ConvertMenit(start);
-    int endBaru = ConvertMenit(end);
-
-    while (P != NULL) {
-        JadwalInfo* j = (JadwalInfo*) P->info;
-
-        if (j->id == idKecuali) {
-            P = P->next;
-            continue;
-        }
-
-        if (j->tanggal.Tgl == tanggal.Tgl &&
-            j->tanggal.Bln == tanggal.Bln &&
-            j->tanggal.Thn == tanggal.Thn) {
-
-            int startLama = ConvertMenit(j->Start);
-            int endLama = ConvertMenit(j->End);
-
-            if (startBaru < endLama + 5 && endBaru > startLama - 5) {
-                return true;
-            }
-        }
-
-        P = P->next;
-    }
-
-    return false;
-}
-
-// Deskripsi : mengambil jadwal teater dari tree dijadikan linkedlist berdasarkan tanggal
-// IS : menerima node teater dan list
-// FS : List jadwal terisi dengan jadwal yang ada di teater yang dikirim
-void AmbilJadwalTeaterTanggalKeList(address teater, date tanggal, List* hasil) {
-    CreateList(hasil);
-
-    address nodeJadwal = teater->fs;
-    while (nodeJadwal != NULL) {
-        JadwalInfo* j = (JadwalInfo*) nodeJadwal->info;
-
-        if (j->tanggal.Tgl == tanggal.Tgl &&
-            j->tanggal.Bln == tanggal.Bln &&
-            j->tanggal.Thn == tanggal.Thn) {
-            JadwalInfo* salinan = (JadwalInfo*) malloc(sizeof(JadwalInfo));
-            *salinan = *j;
-
-            InsLast(hasil, (infotype) salinan);
-        }
-
-        nodeJadwal = nodeJadwal->nb;
-    }
-}
-
-// Deskripsi : mengambil jadwal teater dari tree dijadikan linkedlist berdasarkan film
-// IS : menerima node teater dan list
-// FS : List jadwal terisi dengan jadwal yang ada di teater yang dikirim
-void AmbilJadwalTeaterFilmKeList(address teater, addressList filmNode, List* hasil) {
-    CreateList(hasil);
-
-    if (filmNode == NULL) return;
-
-    FilmInfo* targetFilm = (FilmInfo*)filmNode->info;
-
-    address nodeJadwal = teater->fs;
-    while (nodeJadwal != NULL) {
-        JadwalInfo* j = (JadwalInfo*) nodeJadwal->info;
-
-        if (j->film == targetFilm) {
-            JadwalInfo* salinan = (JadwalInfo*) malloc(sizeof(JadwalInfo));
-            *salinan = *j;
-
-            InsLast(hasil, (infotype) salinan);
-        }
-
-        nodeJadwal = nodeJadwal->nb;
-    }
-}
-
-// Deskripsi : menampilkan isi list untuk print jadwal
-// IS : menerima list jadwal
-// FS : menampilkan daftar jadwal di console
-void TampilkanListJadwal(List L) {
-    if (ListEmpty(L)) {
-        printf("Tidak ada jadwal ditemukan.\n");
-        return;
-    }
-
-    int index = 1;
-    addressList P = L.First;
-    while (P != NULL) {
-        JadwalInfo* j = (JadwalInfo*) P->info;
-        printf("%d. ID: %d | Mulai: %02d:%02d | Selesai: %02d:%02d | Tanggal: %d/%d/%d | Film: %s\n",
-            index,
-            j->id,
-            j->Start.jam, j->Start.menit,
-            j->End.jam, j->End.menit,
-            j->tanggal.Tgl, j->tanggal.Bln, j->tanggal.Thn,
-            j->film->judul);
-            
-        P = P->next;
-        index++;
-    }
-}
-
-
-
-
-
-
-
-
-
 // Deskripsi : Prosedur untuk mengubah info Jadwal pada node
 // IS : menerima address node dan dataBaru sebagai JadwalInfo
 // FS : mengubah info Jadwal pada node dan memperbarui file
@@ -666,4 +499,185 @@ void PrintJadwal(address node, int level) {
     printf("\nDaftar Jadwal :\n");
 
     PrintChildrenOnly(node, level);
+}
+
+
+
+
+// modul tambahan
+
+// Deskripsi : prosedur untuk menginisialisasi array 2 dimensi
+// IS : menerima jadwalInfo dan teaterinfo yang berisi jumlah kursi
+// FS : array 2 dimensi terbuat dengan fix 10 kolom, dan membagi jumlah kursi dengan kolom lalu menentukan mana array yang bisa di isi dan tidak (tidak ada kursi)
+void InisialisasiKursi(JadwalInfo *jadwal, address teaterAddress) {
+    TeaterInfo teater = *((TeaterInfo*)(teaterAddress->info));
+
+    int jumlahKursi = teater.jumlahKursi;
+    int kolom = 10;
+    int baris = (jumlahKursi + kolom - 1) / kolom;
+
+    for (int i = 0; i < baris; i++) {
+        for (int j = 0; j < kolom; j++) {
+            int index = i * kolom + j;
+            if (index < jumlahKursi) {
+                jadwal->kursi[i][j] = '0';
+            } else {
+                jadwal->kursi[i][j] = 'X';
+            }
+        }
+    }
+}
+
+// Deskripsi : mengambil jadwal teater dari tree dijadikan linkedlist
+// IS : menerima node teater dan list
+// FS : List jadwal terisi dengan jadwal yang ada di teater yang dikirim
+void AmbilJadwalTeaterKeList(address nodeTeater, List* L) {
+    CreateList(L);
+
+    if (nodeTeater == NULL || nodeTeater->fs == NULL) return;
+
+    address nodeJadwal = nodeTeater->fs;
+
+    while (nodeJadwal != NULL) {
+        JadwalInfo* jadwal = (JadwalInfo*) nodeJadwal->info;
+        JadwalInfo* salinan = (JadwalInfo*) malloc(sizeof(JadwalInfo));
+        *salinan = *jadwal;
+
+        InsLast(L, (infotype) salinan);
+        nodeJadwal = nodeJadwal->nb;
+    }
+}
+
+// Deskripsi : mengecek apakah jadwal bentrok dengan jadwal yang sudah ada atau tidak
+// IS : menerima node list, tanggal, timeinfo start dan end jadwal yang baru
+// FS : mengembalikan true jika ada jadwal bentrok dan false jika tidak ada jadwal bentrok
+boolean AdaJadwalBentrok(List L, date tanggal, TimeInfo start, TimeInfo end, int idKecuali) {
+    addressList P = L.First;
+
+    int startBaru = ConvertMenit(start);
+    int endBaru = ConvertMenit(end);
+
+    while (P != NULL) {
+        JadwalInfo* j = (JadwalInfo*) P->info;
+
+        if (j->id == idKecuali) {
+            P = P->next;
+            continue;
+        }
+
+        if (j->tanggal.Tgl == tanggal.Tgl &&
+            j->tanggal.Bln == tanggal.Bln &&
+            j->tanggal.Thn == tanggal.Thn) {
+
+            int startLama = ConvertMenit(j->Start);
+            int endLama = ConvertMenit(j->End);
+
+            if (startBaru < endLama + 5 && endBaru > startLama - 5) {
+                return true;
+            }
+        }
+
+        P = P->next;
+    }
+
+    return false;
+}
+
+// Deskripsi : mengambil jadwal teater dari tree dijadikan linkedlist berdasarkan tanggal
+// IS : menerima node teater dan list
+// FS : List jadwal terisi dengan jadwal yang ada di teater yang dikirim
+void AmbilJadwalTeaterTanggalKeList(address teater, date tanggal, List* hasil) {
+    CreateList(hasil);
+
+    address nodeJadwal = teater->fs;
+    while (nodeJadwal != NULL) {
+        JadwalInfo* j = (JadwalInfo*) nodeJadwal->info;
+
+        if (j->tanggal.Tgl == tanggal.Tgl &&
+            j->tanggal.Bln == tanggal.Bln &&
+            j->tanggal.Thn == tanggal.Thn) {
+            JadwalInfo* salinan = (JadwalInfo*) malloc(sizeof(JadwalInfo));
+            *salinan = *j;
+
+            InsLast(hasil, (infotype) salinan);
+        }
+
+        nodeJadwal = nodeJadwal->nb;
+    }
+}
+
+// Deskripsi : mengambil jadwal teater dari tree dijadikan linkedlist berdasarkan film
+// IS : menerima node teater dan list
+// FS : List jadwal terisi dengan jadwal yang ada di teater yang dikirim
+void AmbilJadwalTeaterFilmKeList(address teater, addressList filmNode, List* hasil) {
+    CreateList(hasil);
+
+    if (filmNode == NULL) return;
+
+    FilmInfo* targetFilm = (FilmInfo*)filmNode->info;
+
+    address nodeJadwal = teater->fs;
+    while (nodeJadwal != NULL) {
+        JadwalInfo* j = (JadwalInfo*) nodeJadwal->info;
+
+        if (j->film == targetFilm) {
+            JadwalInfo* salinan = (JadwalInfo*) malloc(sizeof(JadwalInfo));
+            *salinan = *j;
+
+            InsLast(hasil, (infotype) salinan);
+        }
+
+        nodeJadwal = nodeJadwal->nb;
+    }
+}
+
+// Deskripsi : menampilkan isi list untuk print jadwal
+// IS : menerima list jadwal
+// FS : menampilkan daftar jadwal di console
+void TampilkanListJadwal(List L) {
+    if (ListEmpty(L)) {
+        printf("Tidak ada jadwal ditemukan.\n");
+        return;
+    }
+
+    int index = 1;
+    addressList P = L.First;
+    while (P != NULL) {
+        JadwalInfo* j = (JadwalInfo*) P->info;
+        printf("%d. ID: %d | Mulai: %02d:%02d | Selesai: %02d:%02d | Tanggal: %d/%d/%d | Film: %s\n",
+            index,
+            j->id,
+            j->Start.jam, j->Start.menit,
+            j->End.jam, j->End.menit,
+            j->tanggal.Tgl, j->tanggal.Bln, j->tanggal.Thn,
+            j->film->judul);
+            
+        P = P->next;
+        index++;
+    }
+}
+
+// Deskripsi : mengambil jadwal teater dari tree dijadikan linkedlist berdasarkan kota
+// IS : menerima node teater dan list
+// FS : List jadwal terisi dengan jadwal yang ada di teater yang dikirim
+void AmbilSeluruhJadwalKotaKeList(address kota, List* hasil) {
+    CreateList(hasil);
+
+    if (kota == NULL) return;
+
+    address nodeBioskop = kota->fs;
+    while (nodeBioskop != NULL) {
+        address nodeTeater = nodeBioskop->fs;
+        while (nodeTeater != NULL) {
+            address nodeJadwal = nodeTeater->fs;
+            while (nodeJadwal != NULL) {
+
+                InsLast(hasil, (infotype) nodeJadwal);
+
+                nodeJadwal = nodeJadwal->nb;
+            }
+            nodeTeater = nodeTeater->nb;
+        }
+        nodeBioskop = nodeBioskop->nb;
+    }
 }

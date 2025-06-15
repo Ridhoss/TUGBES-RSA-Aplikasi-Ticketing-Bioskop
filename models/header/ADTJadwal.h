@@ -37,13 +37,6 @@ void DeAlokasiJadwal(address P);
 
 void TambahJadwal(address teater, JadwalInfo jadwalBaru);
 void TambahJadwalBaru(address kota, address bioskop, address teater, JadwalInfo jadwalBaru, int jmlHari);
-void InisialisasiKursi(JadwalInfo *jadwal, address teaterAddress);
-
-void AmbilJadwalTeaterKeList(address nodeTeater, List* L);
-boolean AdaJadwalBentrok(List L, date tanggal, TimeInfo start, TimeInfo end, int idKecuali);
-void AmbilJadwalTeaterTanggalKeList(address teater, date tanggal, List* hasil);
-void AmbilJadwalTeaterFilmKeList(address teater, addressList filmNode, List* hasil);
-void TampilkanListJadwal(List L);
 
 void UbahJadwal(address node, JadwalInfo jadwalBaru);
 
@@ -56,5 +49,13 @@ address SearchJadwalByName(address teater, const date* tanggal, const TimeInfo* 
 address SearchJadwalById(address teater, const int* idJadwal);
 
 void PrintJadwal(address node, int level);
+
+void InisialisasiKursi(JadwalInfo *jadwal, address teaterAddress);
+void AmbilJadwalTeaterKeList(address nodeTeater, List* L);
+boolean AdaJadwalBentrok(List L, date tanggal, TimeInfo start, TimeInfo end, int idKecuali);
+void AmbilJadwalTeaterTanggalKeList(address teater, date tanggal, List* hasil);
+void AmbilJadwalTeaterFilmKeList(address teater, addressList filmNode, List* hasil);
+void TampilkanListJadwal(List L);
+void AmbilSeluruhJadwalKotaKeList(address kota, List* hasil);
 
 #endif
