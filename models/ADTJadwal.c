@@ -1,4 +1,5 @@
 #include "header/ADTJadwal.h"
+#include "header/ADTPemesanan.h"
 
 // modul-modul operasi file
 
@@ -176,6 +177,57 @@ void KosongkanFileJadwal() {
     }
 }
 
+// Deskripsi : Prosedur untuk menghapus semua jadwal yang ada di teater dari file jadwal.txt
+// IS : menerima address teater info
+// FS : menghapus semua data jadwal dari file sesuai teater
+void HapusSemuaJadwalDariFileByTeater(address teater) {
+    TeaterInfo* tInfo = (TeaterInfo*)teater->info;
+
+    FILE* file = fopen("database/jadwal.txt", "r");
+    if (!file) {
+        printf("Gagal membuka file jadwal.txt untuk dibaca.\n");
+        return;
+    }
+
+    FILE* temp = fopen("database/temp.txt", "w");
+    if (!temp) {
+        fclose(file);
+        printf("Gagal membuka file sementara.\n");
+        return;
+    }
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+
+        int id, idKota, idBioskop, idTeater, idFilm;
+        TimeInfo start, end;
+        date tanggal;
+
+        sscanf(
+            buffer, "%d|%d|%d|%d|%d/%d/%d|%d:%d|%d:%d|%d|",
+            &id, &idKota, &idBioskop, &idTeater,
+            &tanggal.Tgl, &tanggal.Bln, &tanggal.Thn,
+            &start.jam, &start.menit,
+            &end.jam, &end.menit,
+            &idFilm
+        );
+
+        if (idTeater != tInfo->id) {
+
+            fputs(buffer, temp);
+        }
+    }
+
+    fclose(file);
+    fclose(temp);
+
+    remove("database/jadwal.txt");
+    rename("database/temp.txt", "database/jadwal.txt");
+
+    printf("Semua jadwal dari teater '%s' berhasil dihapus dari file.\n", tInfo->nama);
+}
+
+
 // Deskripsi : Prosedur untuk memuat data jadwal dari file
 // IS : membuka file "database/jadwal.txt" dalam mode baca
 // FS : membaca setiap baris dari file dan menambahkannya ke tree
@@ -190,7 +242,7 @@ void LoadJadwal(address root, List ListFilm) {
 
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), file)) {
-        buffer[strcspn(buffer, "\n")] = 0;
+        buffer[strcspn(buffer, "\r\n")] = '\0';
 
         int id, idKota, idBioskop, idTeater, idFilm;
         TimeInfo start, end;
@@ -308,11 +360,13 @@ void TambahJadwal(address teater, JadwalInfo jadwalBaru) {
         return;
     }
 
-    InisialisasiKursi((JadwalInfo*) node->info, teater);
+    JadwalInfo* info = (JadwalInfo*) node->info;
+    InisialisasiKursi(info, teater);
+    LoadKursiTerisi(info);
 
     AddChild(teater, node->info, JADWAL);
     
-    printf("Jadwal berhasil ditambahkan.\n");
+    printf("Jadwal berhasil ditambahkan ID: %d.\n", info->id);
 }
 
 // Deskripsi : Prosedur untuk menambah jadwal baru dan menyimpannya ke file
@@ -434,8 +488,8 @@ void DeleteAllJadwal(address teater) {
         return;
     }
 
+    HapusSemuaJadwalDariFileByTeater(teater);
     DeleteAllKeepRoot(teater);
-    KosongkanFileJadwal();
 }
 
 // Deskripsi : Fungsi untuk membandingkan dua Jadwal berdasarkan start

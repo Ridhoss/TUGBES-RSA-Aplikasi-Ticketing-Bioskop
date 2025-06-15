@@ -305,8 +305,11 @@ void DeleteAllKota(address root) {
         return;
     }
 
-    DeleteAllKeepRoot(root);
     KosongkanFileKota();
+    KosongkanFileBioskop();
+    KosongkanFileTeater();
+    KosongkanFileJadwal();
+    DeleteAllKeepRoot(root);
 }
 
 // Deskripsi : Fungsi untuk membandingkan dua kota berdasarkan nama

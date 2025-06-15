@@ -92,4 +92,7 @@ date TambahHari(date D, int hariTambahan);
 boolean isSameDate(date D1, date D2);
 
 boolean IsDateLessToday(date D);
+int CompareDate(date d1, date d2);
+
+boolean IsDateLessToday(date D);
 #endif

@@ -259,4 +259,9 @@ boolean IsDateLessToday(date D) {
     if (D.Bln < today.Bln) return false;
 
     return D.Tgl >= today.Tgl;
+	
+int CompareDate(date d1, date d2) {
+    if (d1.Thn != d2.Thn) return d1.Thn - d2.Thn;
+    if (d1.Bln != d2.Bln) return d1.Bln - d2.Bln;
+    return d1.Tgl - d2.Tgl;
 }

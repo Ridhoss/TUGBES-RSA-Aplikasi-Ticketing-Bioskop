@@ -129,6 +129,63 @@ void KosongkanFileBioskop() {
     }
 }
 
+// Deskripsi : Prosedur untuk menghapus semua bioskop yang ada di kota dari file bioskop.txt
+// IS : menerima address kota info
+// FS : menghapus semua data bioskop dari file sesuai kota
+void HapusSemuaBioskopDariFileByKota(address kota) {
+    KotaInfo* kInfo = (KotaInfo*)kota->info;
+
+    List listBioskop;
+    CreateList(&listBioskop);
+
+    FILE* file = fopen("database/bioskop.txt", "r");
+    if (!file) {
+        printf("Gagal membuka file bioskop.txt untuk dibaca.\n");
+        return;
+    }
+
+    FILE* temp = fopen("database/temp.txt", "w");
+    if (!temp) {
+        fclose(file);
+        printf("Gagal membuka file sementara.\n");
+        return;
+    }
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        int id, idKota;
+        char bioskopNama[100];
+        sscanf(buffer, "%d|%d|%[^|\n]", &id, &idKota, bioskopNama);
+
+        if (idKota != kInfo->id) {
+
+            fputs(buffer, temp);
+        } else if (idKota == kInfo->id) {
+            address nodeBioskop = SearchBioskopById(kota, &id);
+            if (nodeBioskop != NULL) {
+                InsLast(&listBioskop, (infotype)nodeBioskop);
+            }
+        }
+    }
+
+    fclose(file);
+    fclose(temp);
+
+    remove("database/bioskop.txt");
+    rename("database/temp.txt", "database/bioskop.txt");
+
+    addressList p = listBioskop.First;
+    while (p != NULL) {
+        address nodeBioskop = (address)p->info;
+        HapusSemuaTeaterDariFileByBioskop(nodeBioskop);
+        p = p->next;
+    }
+
+    DelAll(&listBioskop);
+
+    printf("Semua bioskop dari kota '%s' berhasil dihapus dari file.\n", kInfo->nama);
+}
+
 // Deskripsi : Prosedur untuk memuat data bioskop dari file
 // IS : membuka file "database/bioskop.txt" dalam mode baca
 // FS : membaca setiap baris dari file dan menambahkannya ke tree
@@ -305,8 +362,8 @@ void DeleteAllBioskop(address kota) {
         return;
     }
 
+    HapusSemuaBioskopDariFileByKota(kota);
     DeleteAllKeepRoot(kota);
-    KosongkanFileBioskop(); 
 }
 
 // Deskripsi : Fungsi untuk membandingkan dua bioskop berdasarkan nama

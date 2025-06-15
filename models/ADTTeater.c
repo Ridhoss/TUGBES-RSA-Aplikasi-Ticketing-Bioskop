@@ -130,6 +130,65 @@ void KosongkanFileTeater() {
     }
 }
 
+// Deskripsi : Prosedur untuk menghapus semua teater yang ada di bioskop dari file teater.txt
+// IS : menerima address bioskop info
+// FS : menghapus semua data teater dari file sesuai bioskop
+void HapusSemuaTeaterDariFileByBioskop(address bioskop) {
+    BioskopInfo* bInfo = (BioskopInfo*)bioskop->info;
+
+    List listTeater;
+    CreateList(&listTeater);
+
+    FILE* file = fopen("database/teater.txt", "r");
+    if (!file) {
+        printf("Gagal membuka file teater.txt untuk dibaca.\n");
+        return;
+    }
+
+    FILE* temp = fopen("database/temp.txt", "w");
+    if (!temp) {
+        fclose(file);
+        printf("Gagal membuka file sementara.\n");
+        return;
+    }
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+
+        int id, idKota, idBioskop, jmlKursi, hargaTeater;
+        char teaterNama[100];
+        sscanf(buffer, "%d|%d|%d|%[^|]|%d|%d|", &id, &idKota, &idBioskop, teaterNama, &jmlKursi, &hargaTeater);
+
+        if (idBioskop != bInfo->id) {
+
+            fputs(buffer, temp);
+        } else if (idBioskop == bInfo->id) {
+
+            address nodeTeater = SearchTeaterById(bioskop, &id);
+            if (nodeTeater != NULL) {
+                InsLast(&listTeater, (infotype)nodeTeater);
+            }
+        }
+    }
+
+    fclose(file);
+    fclose(temp);
+
+    remove("database/teater.txt");
+    rename("database/temp.txt", "database/teater.txt");
+
+    addressList p = listTeater.First;
+    while (p != NULL) {
+        address nodeTeater = (address)p->info;
+        HapusSemuaJadwalDariFileByTeater(nodeTeater);
+        p = p->next;
+    }
+
+    DelAll(&listTeater);
+
+    printf("Semua teater dari bioskop '%s' berhasil dihapus dari file.\n", bInfo->nama);
+}
+
 // Deskripsi : Prosedur untuk memuat data teater dari file
 // IS : membuka file "database/teater.txt" dalam mode baca
 // FS : membaca setiap baris dari file dan menambahkannya ke tree
@@ -317,8 +376,8 @@ void DeleteAllTeater(address bioskop) {
         return;
     }
 
+    HapusSemuaTeaterDariFileByBioskop(bioskop);
     DeleteAllKeepRoot(bioskop);
-    KosongkanFileTeater();
 }
 
 // Deskripsi : Fungsi untuk membandingkan dua Teater berdasarkan nama

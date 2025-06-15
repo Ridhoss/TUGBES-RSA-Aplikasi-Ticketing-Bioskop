@@ -4,6 +4,9 @@ void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin) {
     StackMenu stackMenu;
     CreateStack(&stackMenu);
 
+    date selectedDate;
+    GetToday(&selectedDate);
+
     int idKotaDipilih;
     char namaKota[100], namaFilm[100];
     address kotaNode;
@@ -16,7 +19,7 @@ void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin) {
     PrintKota(root, 0);
     
     do {
-        printf("\n>> Pilih kota: ");
+        printf("\n>> Pilih kota ");
         InputString(namaKota);
 
         kotaNode = SearchKotaByName(root, namaKota);
@@ -53,6 +56,8 @@ void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin) {
 
                 if (ListEmpty(tampilFilm)) {
                     printf("Tidak ada film yang sedang tayang di kota ini.\n");
+
+                    break;
                 } else {
                     printFilm(tampilFilm);
                     printf("===================================================\n");
@@ -63,14 +68,36 @@ void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin) {
 
                 addressList filmTerpilih = cariFilmByJudul(*L, namaFilm);
 
-                HalamanPilihJadwal(root, L, kotaNode, filmTerpilih);
+                HalamanPilihJadwal(root, L, kotaNode, filmTerpilih, selectedDate);
 
                 break;
             }
-            case 2:
-                PrintFilmUpcoming(kotaNode);
+            case 2:{
+                KotaInfo* info = (KotaInfo*)(kotaNode->info);
+                printf("===================================================\n");
+                printf("         Film yang upcoming di %s      \n", info->nama);
+                GetFilmUpcoming(kotaNode, &tampilFilm);
                 
+                if (ListEmpty(tampilFilm)) {
+                    printf("Tidak ada film yang upcoming di kota ini.\n");
+                    
+                    break;
+                } else {
+                    printFilm(tampilFilm);
+                    printf("===================================================\n");
+                }
+
+                printf("Pilih Film: ");
+                InputString(namaFilm);
+
+                addressList filmTerpilih = cariFilmByJudul(*L, namaFilm);
+                FilmInfo* infoFilm = (FilmInfo*)(filmTerpilih->info);
+                date tanggalTayang = CariTanggalTayangPertama(kotaNode, infoFilm);
+
+                HalamanPilihJadwal(root, L, kotaNode, filmTerpilih, tanggalTayang);
+
                 break;
+            }
             case 3:
                 printf("belum tersedia)\n");
 
@@ -89,10 +116,9 @@ void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin) {
     } while (loggedIn);
 }
 
-void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList filmNode) {
+void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList filmNode, date tanggalAwal) {
     FilmInfo* infoFilm = (FilmInfo*)(filmNode->info);
-    date selectedDate;
-    GetToday(&selectedDate);
+    date selectedDate = tanggalAwal;
 
     char namaBioskop[100], namaTeater[100];
     int jam, menit;
@@ -236,6 +262,17 @@ void HalamanPilihKursi(address root, List *L, address nodeJadwal) {
     printf("Jam        : %02d:%02d\n", jadwalInfo->Start.jam, jadwalInfo->Start.menit);
     printf("===================================================\n");
 
+    // Input jumlah tiket
+    int jumlahTiket;
+    printf("Masukkan jumlah tiket yang ingin dipesan (maks 10): ");
+    scanf("%d", &jumlahTiket);
+
+    if (jumlahTiket <= 0 || jumlahTiket > 10) {
+        printf("Jumlah tiket tidak valid (1-10).\n");
+        return;
+    }
+
+
     printf("Tampilan Kursi (O = kosong, X = terisi)\n\n");
 
     printf("    ");
@@ -254,23 +291,14 @@ void HalamanPilihKursi(address root, List *L, address nodeJadwal) {
 
     printf("===================================================\n");
 
-    // Input jumlah tiket
-    int jumlahTiket;
-    printf("Masukkan jumlah tiket yang ingin dipesan (maks 10): ");
-    scanf("%d", &jumlahTiket);
-
-    if (jumlahTiket <= 0 || jumlahTiket > 10) {
-        printf("Jumlah tiket tidak valid (1-10).\n");
-        return;
-    }
 
     Kursi kursiDipilih[10];
     int jumlahDipilih = 0;
 
     for (int k = 0; k < jumlahTiket; k++) {
         Kursi pilih;
-        printf("Pilih kursi ke-%d (contoh 4C): ", k + 1);
-        scanf(" %d%c", &pilih.baris, &pilih.kolom);
+        printf("Pilih kursi ke-%d (contoh A1): ", k + 1);
+        scanf(" %c%d", &pilih.kolom, &pilih.baris);
 
         int i = pilih.baris - 1;
         int j = pilih.kolom - 'A';

@@ -29,7 +29,7 @@ typedef struct {
 
 void SimpanTransaksiKeFile(Transaksi trx);
 void SimpanDetailTransaksiKeFile(DetailTransaksi detail);
-
+void LoadKursiTerisi(JadwalInfo* jadwal);
 
 void AksiTransaksi(address jadwalNode, Kursi kursiDipilih[], int jumlahDipilih, int idUser);
 int BuatIdTransaksiBaru(int idUser, date today);
