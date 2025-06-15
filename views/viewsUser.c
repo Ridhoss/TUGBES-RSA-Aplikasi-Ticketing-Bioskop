@@ -4,6 +4,9 @@ void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin) {
     StackMenu stackMenu;
     CreateStack(&stackMenu);
 
+    date selectedDate;
+    GetToday(&selectedDate);
+
     int idKotaDipilih;
     char namaKota[100], namaFilm[100];
     address kotaNode;
@@ -53,6 +56,8 @@ void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin) {
 
                 if (ListEmpty(tampilFilm)) {
                     printf("Tidak ada film yang sedang tayang di kota ini.\n");
+
+                    break;
                 } else {
                     printFilm(tampilFilm);
                     printf("===================================================\n");
@@ -63,14 +68,36 @@ void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin) {
 
                 addressList filmTerpilih = cariFilmByJudul(*L, namaFilm);
 
-                HalamanPilihJadwal(root, L, kotaNode, filmTerpilih);
+                HalamanPilihJadwal(root, L, kotaNode, filmTerpilih, selectedDate);
 
                 break;
             }
-            case 2:
-                PrintFilmUpcoming(kotaNode);
+            case 2:{
+                KotaInfo* info = (KotaInfo*)(kotaNode->info);
+                printf("===================================================\n");
+                printf("         Film yang upcoming di %s      \n", info->nama);
+                GetFilmUpcoming(kotaNode, &tampilFilm);
                 
+                if (ListEmpty(tampilFilm)) {
+                    printf("Tidak ada film yang upcoming di kota ini.\n");
+                    
+                    break;
+                } else {
+                    printFilm(tampilFilm);
+                    printf("===================================================\n");
+                }
+
+                printf("Pilih Film: ");
+                InputString(namaFilm);
+
+                addressList filmTerpilih = cariFilmByJudul(*L, namaFilm);
+                FilmInfo* infoFilm = (FilmInfo*)(filmTerpilih->info);
+                date tanggalTayang = CariTanggalTayangPertama(kotaNode, infoFilm);
+
+                HalamanPilihJadwal(root, L, kotaNode, filmTerpilih, tanggalTayang);
+
                 break;
+            }
             case 3:
                 printf("belum tersedia)\n");
 
@@ -89,10 +116,9 @@ void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin) {
     } while (loggedIn);
 }
 
-void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList filmNode) {
+void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList filmNode, date tanggalAwal) {
     FilmInfo* infoFilm = (FilmInfo*)(filmNode->info);
-    date selectedDate;
-    GetToday(&selectedDate);
+    date selectedDate = tanggalAwal;
 
     char namaBioskop[100], namaTeater[100];
     int jam, menit;

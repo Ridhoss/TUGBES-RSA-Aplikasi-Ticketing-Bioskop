@@ -17,7 +17,7 @@
 
 
 void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin);
-void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList filmNode);
+void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList filmNode, date tanggalAwal);
 void HalamanPilihKursi(address root, List *L, address nodeJadwal);
 void HalamanKonfirmasiPemesanan(address nodeJadwal, Kursi kursiDipilih[], int jumlahDipilih);
 
