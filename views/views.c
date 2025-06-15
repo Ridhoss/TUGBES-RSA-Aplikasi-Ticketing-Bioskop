@@ -16,7 +16,7 @@ void HalamanMenuAdmin(address root, List *L) {
         printf("||     3. Manipulasi Film                        ||\n");
         printf("||     4. -                                      ||\n");
         printf("||     5. -                                      ||\n");
-        printf("||     6. Keluar                                 ||\n");
+        printf("||     6. Logout                                 ||\n");
         printf("||                                               ||\n");
         printf("|| Silakan pilih menu (1-6):                     ||\n");
         printf("===================================================\n");
@@ -48,7 +48,19 @@ void HalamanMenuAdmin(address root, List *L) {
                 break;
             }
             case '6': {
-                printf("Keluar dari program.\n");
+                char konfirmasi[5];
+                printf("Apakah Anda yakin ingin logout? (y/n): ");
+                scanf("%s", konfirmasi);
+
+                if (strcmp(konfirmasi, "y") == 0 || strcmp(konfirmasi, "Y") == 0) {
+                    printf("Logout berhasil.\n");
+                    Logout(&loggedIn); 
+                    idLogin = -1;
+                    HalamanAwal();
+                    return;
+                } else {
+                    printf("Kembali ke menu.\n");
+                }
                 
                 break;
             }
