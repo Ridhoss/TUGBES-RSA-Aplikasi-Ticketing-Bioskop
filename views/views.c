@@ -543,9 +543,9 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
 
                     switch (pilTam) {
                         case 1: {
-                            printf("===== Daftar Film =====\n");
+                            printf("========= Daftar Film =========\n");
                             printFilm(*L);
-                            printf("=======================\n");
+                            printf("===============================\n");
 
                             printf("Pilih Film: ");
                             InputString(namaFilm);
@@ -577,9 +577,9 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
                             break;
                         }
                         case 2: {
-                            printf("===== Daftar Film =====\n");
+                            printf("========= Daftar Film =========\n");
                             printFilm(*L);
-                            printf("=======================\n");
+                            printf("===============================\n");
 
                             printf("Pilih Film: ");
                             InputString(namaFilm);

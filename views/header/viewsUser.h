@@ -14,5 +14,7 @@
 #include "../../models/header/ADTJadwal.h"
 
 void HalamanMenuUser(address root, List *L);
+void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList filmNode);
+void HalamanPilihKursi(address root, List *L, address nodeJadwal);
 
 #endif 

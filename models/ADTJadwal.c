@@ -681,3 +681,32 @@ void AmbilSeluruhJadwalKotaKeList(address kota, List* hasil) {
         nodeBioskop = nodeBioskop->nb;
     }
 }
+
+void AmbilSeluruhJadwalKotaKeListByFilm(address kota, addressList film, List* hasil) {
+    CreateList(hasil);
+
+    if (kota == NULL || film == NULL) return;
+
+    List semuaJadwal;
+    AmbilSeluruhJadwalKotaKeList(kota, &semuaJadwal);
+
+    FilmInfo* targetFilm = (FilmInfo*)film->info;
+
+    // Filter berdasarkan film
+    addressList p = semuaJadwal.First;
+    while (p != NULL) {
+        address nodeJadwal = (address)p->info;
+        if (nodeJadwal != NULL) {
+            JadwalInfo* infoJadwal = (JadwalInfo*)nodeJadwal->info;
+
+            if (infoJadwal->film == targetFilm) {
+                InsLast(hasil, (infotype)nodeJadwal);
+            }
+        }
+
+        p = p->next;
+    }
+
+    DelAll(&semuaJadwal);
+}
+

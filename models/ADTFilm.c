@@ -199,11 +199,12 @@ void printFilm(List L) {
 
     while (P != NULL) {
         FilmInfo* film = (FilmInfo*)(P->info);
-            printf("ID         : %d\n", film->idFilm);
+            printf("===================================================\n");
             printf("Judul      : %s\n", film->judul);
             printf("Produser   : %s\n", film->produser);
             printf("Deskripsi  : %s\n", film->deskripsi);
-            printf("Durasi     : %d jam %d menit\n", film->durasi.jam, film->durasi.menit);
+            printf("Durasi     : %d\n", ConvertMenit(film->durasi));
+
         P = P->next;
     }
 }

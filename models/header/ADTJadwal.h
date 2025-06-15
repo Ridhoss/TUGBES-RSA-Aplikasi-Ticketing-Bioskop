@@ -57,5 +57,6 @@ void AmbilJadwalTeaterTanggalKeList(address teater, date tanggal, List* hasil);
 void AmbilJadwalTeaterFilmKeList(address teater, addressList filmNode, List* hasil);
 void TampilkanListJadwal(List L);
 void AmbilSeluruhJadwalKotaKeList(address kota, List* hasil);
+void AmbilSeluruhJadwalKotaKeListByFilm(address kota, addressList film, List* hasil);
 
 #endif
