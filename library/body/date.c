@@ -247,3 +247,16 @@ date TambahHari(date D, int hariTambahan) {
 boolean isSameDate(date D1, date D2) {
     return (D1.Tgl == D2.Tgl && D1.Bln == D2.Bln && D1.Thn == D2.Thn);
 }
+
+boolean IsDateLessToday(date D) {
+    date today;
+    GetToday(&today);
+
+    if (D.Thn > today.Thn) return true;
+    if (D.Thn < today.Thn) return false;
+
+    if (D.Bln > today.Bln) return true;
+    if (D.Bln < today.Bln) return false;
+
+    return D.Tgl >= today.Tgl;
+}
