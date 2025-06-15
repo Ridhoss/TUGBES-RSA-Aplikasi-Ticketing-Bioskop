@@ -16,7 +16,7 @@ void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin) {
     PrintKota(root, 0);
     
     do {
-        printf("\n>> Pilih kota: ");
+        printf("\n>> Pilih kota ");
         InputString(namaKota);
 
         kotaNode = SearchKotaByName(root, namaKota);

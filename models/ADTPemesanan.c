@@ -24,6 +24,25 @@ void SimpanDetailTransaksiKeFile(DetailTransaksi detail) {
     }
 }
 
+void LoadKursiTerisi(JadwalInfo* jadwal) {
+    FILE* file = fopen("database/detail_transaksi.txt", "r");
+    if (!file) return;
+
+    char buffer[100];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        int idTransaksi, idJadwal, baris, kolom;
+        if (sscanf(buffer, "%d|%d|%d|%d", &idTransaksi, &idJadwal, &baris, &kolom) == 4) {
+            if (idJadwal == jadwal->id) {
+
+                jadwal->kursi[baris - 1][kolom] = 'X';
+            }
+        }
+    }
+
+    fclose(file);
+}
+
+
 void AksiTransaksi(address jadwalNode, Kursi kursiDipilih[], int jumlahDipilih, int idUser) {
     if (jadwalNode == NULL || jadwalNode->info == NULL) return;
 
@@ -55,7 +74,6 @@ void AksiTransaksi(address jadwalNode, Kursi kursiDipilih[], int jumlahDipilih, 
         int baris = kursiDipilih[i].baris;
         int kolom = kursiDipilih[i].kolom - 'A';
 
-        // tandai kursi sebagai terisi
         jadwal->kursi[baris - 1][kolom] = 'X';
 
         DetailTransaksi dt;
@@ -72,7 +90,8 @@ void AksiTransaksi(address jadwalNode, Kursi kursiDipilih[], int jumlahDipilih, 
 
 int BuatIdTransaksiBaru(int idUser, date today) {
     FILE* file = fopen("database/transaksi.txt", "r");
-    if (!file) return idUser * 1000000 + today.Tgl * 10000 + today.Bln * 100 + (today.Thn % 100) * 1 + 1;
+    if (!file) file = fopen("database/transaksi.txt", "w");
+    if (!file) return -1;
 
     char buffer[200];
     int increment = 0;
@@ -93,6 +112,9 @@ int BuatIdTransaksiBaru(int idUser, date today) {
 
     fclose(file);
 
-    return idUser * 1000000 + today.Tgl * 10000 + today.Bln * 100 + (today.Thn % 100) * 1 + (increment + 1);
+    // Susun ID: [idUser][tanggal][urutan]
+    char finalIdStr[20];
+    sprintf(finalIdStr, "%d%02d%02d%02d%02d", idUser, today.Tgl, today.Bln, today.Thn % 100, increment + 1);
+    return atoi(finalIdStr);
 }
 

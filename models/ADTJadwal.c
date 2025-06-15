@@ -1,4 +1,5 @@
 #include "header/ADTJadwal.h"
+#include "header/ADTPemesanan.h"
 
 // modul-modul operasi file
 
@@ -308,7 +309,9 @@ void TambahJadwal(address teater, JadwalInfo jadwalBaru) {
         return;
     }
 
-    InisialisasiKursi((JadwalInfo*) node->info, teater);
+    JadwalInfo* info = (JadwalInfo*) node->info;
+    InisialisasiKursi(info, teater);
+    LoadKursiTerisi(info);
 
     AddChild(teater, node->info, JADWAL);
     
