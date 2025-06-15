@@ -5,8 +5,11 @@
 #include <ctype.h>
 #include "../../models/header/ADTAkun.h"
 
-void HalamanAwal(int *loggedIn, int *idLogin);
+extern int loggedIn;
+extern int idLogin; 
+
+void HalamanAwal();
 void HalamanRegister(Akun *akun, int role);
-void HalamanLogin(int *loggedIn, int *idLogin);
+void HalamanLogin();
 
 #endif

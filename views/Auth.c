@@ -1,6 +1,9 @@
 #include "header/Auth.h"
 #include <stdlib.h>
 
+int loggedIn = 0; 
+int idLogin = 0; 
+
 void HalamanRegister(Akun *akun, int role){
 
     char password_check[50];
@@ -53,7 +56,7 @@ void HalamanRegister(Akun *akun, int role){
     }
 }
 
-void HalamanLogin(int *loggedIn, int *idLogin){
+void HalamanLogin(){
 
     char username[50];
     char password[50];
@@ -69,9 +72,9 @@ void HalamanLogin(int *loggedIn, int *idLogin){
     printf("Masukan Password: ");
     scanf(" %s", password);
 
-    *loggedIn = Login(username, password, akun, total_akun, idLogin);
+    loggedIn = Login(username, password, akun, total_akun, &idLogin);
     
-    if (*loggedIn) {
+    if (loggedIn) {
         printf("Login berhasil!\n");
     } else {
         printf("=============================\n");
@@ -80,7 +83,7 @@ void HalamanLogin(int *loggedIn, int *idLogin){
     }
 }
 
-void HalamanAwal(int *loggedIn, int *idLogin) {
+void HalamanAwal() {
     int masuk = 0;
 
     for (;;) {
@@ -99,8 +102,8 @@ void HalamanAwal(int *loggedIn, int *idLogin) {
         scanf("%d",&masuk);
 
         if (masuk == 1) {
-            HalamanLogin(loggedIn, idLogin);
-            if (*loggedIn) break;
+            HalamanLogin();
+            if (loggedIn) break;
         } else if (masuk == 2) {
             int role = 1;
             DaftarAkun(role);

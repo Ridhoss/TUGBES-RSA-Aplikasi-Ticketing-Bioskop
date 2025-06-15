@@ -1,6 +1,6 @@
 #include "header/viewsUser.h"
 
-void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin) {
+void HalamanMenuUser(address root, List *L) {
     StackMenu stackMenu;
     CreateStack(&stackMenu);
 
@@ -305,7 +305,7 @@ void HalamanPilihKursi(address root, List *L, address nodeJadwal) {
 
         if (i < 0 || i >= jadwalInfo->jumlahBaris || 
             j < 0 || j >= jadwalInfo->jumlahKolom) {
-            printf("Kursi %d%c tidak valid. Pilih ulang.\n", pilih.baris, pilih.kolom);
+            printf("Kursi %c%d tidak valid. Pilih ulang.\n", pilih.kolom, pilih.baris);
             k--;
             continue;
         }
@@ -320,23 +320,23 @@ void HalamanPilihKursi(address root, List *L, address nodeJadwal) {
         }
 
         if (sudahDipilih) {
-            printf("Kursi %d%c sudah Anda pilih sebelumnya.\n", pilih.baris, pilih.kolom);
+            printf("Kursi %c%d sudah Anda pilih sebelumnya.\n", pilih.kolom, pilih.baris);
             k--;
             continue;
         }
 
         if (jadwalInfo->kursi[i][j] == 'O') {
             kursiDipilih[jumlahDipilih++] = pilih;
-            printf("Kursi %d%c dipilih.\n", pilih.baris, pilih.kolom);
+            printf("Kursi %c%d dipilih.\n", pilih.kolom, pilih.baris);
         } else {
-            printf("Kursi %d%c sudah terisi. Pilih kursi lain.\n", pilih.baris, pilih.kolom);
+            printf("Kursi %c%d sudah terisi. Pilih kursi lain.\n", pilih.kolom, pilih.baris);
             k--;
         }
     }
 
     printf("\nKursi yang Anda pilih:\n");
     for (int i = 0; i < jumlahDipilih; i++) {
-        printf("- %d%c\n", kursiDipilih[i].baris, kursiDipilih[i].kolom);
+        printf("- %c%d\n", kursiDipilih[i].kolom, kursiDipilih[i].baris);
     }
 
     HalamanKonfirmasiPemesanan(nodeJadwal, kursiDipilih, jumlahDipilih);
@@ -369,7 +369,7 @@ void HalamanKonfirmasiPemesanan(address nodeJadwal, Kursi kursiDipilih[], int ju
     printf("------------------------------------------\n");
     printf("Kursi yang dipilih:\n");
     for (int i = 0; i < jumlahDipilih; i++) {
-        printf("- %d%c\n", kursiDipilih[i].baris, kursiDipilih[i].kolom);
+        printf("- %c%d\n", kursiDipilih[i].kolom, kursiDipilih[i].baris);
     }
 
     printf("==========================================\n");
@@ -384,7 +384,7 @@ void HalamanKonfirmasiPemesanan(address nodeJadwal, Kursi kursiDipilih[], int ju
             jadwalInfo->kursi[baris][kolom] = 'X';
         }
 
-        AksiTransaksi(nodeJadwal, kursiDipilih, jumlahDipilih, 1);
+        AksiTransaksi(nodeJadwal, kursiDipilih, jumlahDipilih, idLogin);
 
     } else {
         printf("Pemesanan dibatalkan.\n");
