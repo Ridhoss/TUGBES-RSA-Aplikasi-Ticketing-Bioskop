@@ -14,9 +14,10 @@
 #include "../../models/header/ADTJadwal.h"
 #include "../../models/header/ADTPemesanan.h"
 #include "../../models/header/ADTStack.h"
+#include "Auth.h"
 
 
-void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin);
+void HalamanMenuUser(address root, List *L);
 void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList filmNode, date tanggalAwal);
 void HalamanPilihKursi(address root, List *L, address nodeJadwal);
 void HalamanKonfirmasiPemesanan(address nodeJadwal, Kursi kursiDipilih[], int jumlahDipilih);

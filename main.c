@@ -30,17 +30,14 @@ int main() {
     loadFilm(&L, films);
     LoadJadwal(root, L);
 
-    int loggedIn = 0; 
-    int idLogin = 0; 
-
-    HalamanAwal(&loggedIn, &idLogin);
+    HalamanAwal();
     if (loggedIn) {
         Akun* akunLogin = CariAkunById(idLogin);
         if (akunLogin != NULL) {
             if (akunLogin->role == 0) {
                 HalamanMenuAdmin(root, &L);
             } else if (akunLogin->role == 1) {
-                HalamanMenuUser(root, &L, &loggedIn, &idLogin);
+                HalamanMenuUser(root, &L);
             } else {
                 printf("Role tidak dikenali. Hubungi admin sistem.\n");
             }

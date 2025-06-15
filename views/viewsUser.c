@@ -1,6 +1,6 @@
 #include "header/viewsUser.h"
 
-void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin) {
+void HalamanMenuUser(address root, List *L) {
     StackMenu stackMenu;
     CreateStack(&stackMenu);
 
@@ -384,7 +384,7 @@ void HalamanKonfirmasiPemesanan(address nodeJadwal, Kursi kursiDipilih[], int ju
             jadwalInfo->kursi[baris][kolom] = 'X';
         }
 
-        AksiTransaksi(nodeJadwal, kursiDipilih, jumlahDipilih, 1);
+        AksiTransaksi(nodeJadwal, kursiDipilih, jumlahDipilih, idLogin);
 
     } else {
         printf("Pemesanan dibatalkan.\n");
