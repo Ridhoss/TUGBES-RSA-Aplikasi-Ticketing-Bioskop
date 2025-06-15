@@ -2,6 +2,7 @@
 #define ADTBioskop_h
 
 #include "../../library/boolean.h"
+#include "../../library/date.h"
 
 #include <stdio.h>
 #include <stdlib.h>

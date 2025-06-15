@@ -204,8 +204,6 @@ void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList fil
             address nodeJadwal = SearchJadwalByName(nodeTeater, &selectedDate, &jadwalTerpilih);
 
             HalamanPilihKursi(root, L, nodeJadwal);
-
-            system("pause");
         }
 
     } while (menu != 4);
@@ -221,7 +219,7 @@ void HalamanPilihKursi(address root, List *L, address nodeJadwal) {
     JadwalInfo* jadwalInfo = (JadwalInfo*)(nodeJadwal->info);
     FilmInfo* infoFilm = jadwalInfo->film;
 
-    printf("Jumlah Baris: %d, Kolom: %d\n", jadwalInfo->jumlahBaris, jadwalInfo->jumlahKolom); // debug
+    printf("Jumlah Baris: %d, Kolom: %d\n", jadwalInfo->jumlahBaris, jadwalInfo->jumlahKolom);
 
     printf("===================================================\n");
     printf("||           PILIH BIOSKOP DAN JADWAL            ||\n");
@@ -252,24 +250,114 @@ void HalamanPilihKursi(address root, List *L, address nodeJadwal) {
 
     printf("===================================================\n");
 
-    // Meminta input dari pengguna
-    Kursi pilih;
-    printf("Masukkan kursi (contoh 4C): ");
-    scanf("%d%c", &pilih.baris, &pilih.kolom);
+    // Input jumlah tiket
+    int jumlahTiket;
+    printf("Masukkan jumlah tiket yang ingin dipesan (maks 10): ");
+    scanf("%d", &jumlahTiket);
 
-    int i = pilih.baris - 1;
-    int j = pilih.kolom - 'A';
-
-    if (i < 0 || i >= jadwalInfo->jumlahBaris || 
-        j < 0 || j >= jadwalInfo->jumlahKolom) {
-        printf("Pilihan kursi tidak valid.\n");
+    if (jumlahTiket <= 0 || jumlahTiket > 10) {
+        printf("Jumlah tiket tidak valid (1-10).\n");
         return;
     }
 
-    if (jadwal->kursi[i][j] == '0') {
-        jadwal->kursi[i][j] = 'X';
-        printf("Kursi %d%c berhasil dipesan!\n", pilih.baris, pilih.kolom);
-    } else {
-        printf("Kursi %d%c sudah terisi.\n", pilih.baris, pilih.kolom);
+    Kursi kursiDipilih[10];
+    int jumlahDipilih = 0;
+
+    for (int k = 0; k < jumlahTiket; k++) {
+        Kursi pilih;
+        printf("Pilih kursi ke-%d (contoh 4C): ", k + 1);
+        scanf(" %d%c", &pilih.baris, &pilih.kolom);
+
+        int i = pilih.baris - 1;
+        int j = pilih.kolom - 'A';
+
+        if (i < 0 || i >= jadwalInfo->jumlahBaris || 
+            j < 0 || j >= jadwalInfo->jumlahKolom) {
+            printf("Kursi %d%c tidak valid. Pilih ulang.\n", pilih.baris, pilih.kolom);
+            k--;
+            continue;
+        }
+
+        // Cek duplikasi
+        int sudahDipilih = 0;
+        for (int x = 0; x < jumlahDipilih; x++) {
+            if (kursiDipilih[x].baris == pilih.baris && kursiDipilih[x].kolom == pilih.kolom) {
+                sudahDipilih = 1;
+                break;
+            }
+        }
+
+        if (sudahDipilih) {
+            printf("Kursi %d%c sudah Anda pilih sebelumnya.\n", pilih.baris, pilih.kolom);
+            k--;
+            continue;
+        }
+
+        if (jadwalInfo->kursi[i][j] == 'O') {
+            kursiDipilih[jumlahDipilih++] = pilih;
+            printf("Kursi %d%c dipilih.\n", pilih.baris, pilih.kolom);
+        } else {
+            printf("Kursi %d%c sudah terisi. Pilih kursi lain.\n", pilih.baris, pilih.kolom);
+            k--;
+        }
     }
+
+    printf("\nKursi yang Anda pilih:\n");
+    for (int i = 0; i < jumlahDipilih; i++) {
+        printf("- %d%c\n", kursiDipilih[i].baris, kursiDipilih[i].kolom);
+    }
+
+    HalamanKonfirmasiPemesanan(nodeJadwal, kursiDipilih, jumlahDipilih);
+
+}
+
+
+void HalamanKonfirmasiPemesanan(address nodeJadwal, Kursi kursiDipilih[], int jumlahDipilih) {
+    if (nodeJadwal == NULL) {
+        printf("Data jadwal tidak valid.\n");
+        return;
+    }
+
+    JadwalInfo* jadwalInfo = (JadwalInfo*)(nodeJadwal->info);
+    FilmInfo* film = jadwalInfo->film;
+    TeaterInfo* teater = (TeaterInfo*)nodeJadwal->pr->info;
+    BioskopInfo* bioskop = (BioskopInfo*)nodeJadwal->pr->pr->info;
+
+    printf("==========================================\n");
+    printf("        KONFIRMASI PEMESANAN TIKET        \n");
+    printf("==========================================\n");
+    printf("Film       : %s\n", film->judul);
+    printf("Bioskop    : %s\n", bioskop->nama);
+    printf("Teater     : %s\n", teater->nama);
+    printf("Tanggal    : %02d-%02d-%04d\n", jadwalInfo->tanggal.Tgl, jadwalInfo->tanggal.Bln, jadwalInfo->tanggal.Thn);
+    printf("Jam        : %02d:%02d\n", jadwalInfo->Start.jam, jadwalInfo->Start.menit);
+    printf("Harga/tiket: Rp%d\n", teater->harga);
+    printf("Jumlah     : %d tiket\n", jumlahDipilih);
+    printf("Total Bayar: Rp%d\n", jumlahDipilih * teater->harga);
+    printf("------------------------------------------\n");
+    printf("Kursi yang dipilih:\n");
+    for (int i = 0; i < jumlahDipilih; i++) {
+        printf("- %d%c\n", kursiDipilih[i].baris, kursiDipilih[i].kolom);
+    }
+
+    printf("==========================================\n");
+    printf("Lanjutkan pemesanan? (y/n): ");
+    char jawab;
+    scanf(" %c", &jawab);
+
+    if (jawab == 'y' || jawab == 'Y') {
+        for (int i = 0; i < jumlahDipilih; i++) {
+            int baris = kursiDipilih[i].baris - 1;
+            int kolom = kursiDipilih[i].kolom - 'A';
+            jadwalInfo->kursi[baris][kolom] = 'X';
+        }
+
+        AksiTransaksi(nodeJadwal, kursiDipilih, jumlahDipilih, 1);
+
+    } else {
+        printf("Pemesanan dibatalkan.\n");
+    }
+
+    printf("Tekan ENTER untuk kembali ke menu...\n");
+    getchar(); getchar();
 }

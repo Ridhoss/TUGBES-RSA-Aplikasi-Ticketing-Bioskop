@@ -12,9 +12,12 @@
 #include "../../models/header/ADTTeater.h"
 #include "../../models/header/ADTFilm.h"
 #include "../../models/header/ADTJadwal.h"
+#include "../../models/header/ADTPemesanan.h"
+
 
 void HalamanMenuUser(address root, List *L);
 void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList filmNode);
 void HalamanPilihKursi(address root, List *L, address nodeJadwal);
+void HalamanKonfirmasiPemesanan(address nodeJadwal, Kursi kursiDipilih[], int jumlahDipilih);
 
 #endif 
