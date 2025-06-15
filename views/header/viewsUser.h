@@ -13,7 +13,9 @@
 #include "../../models/header/ADTFilm.h"
 #include "../../models/header/ADTJadwal.h"
 #include "../../models/header/ADTStack.h"
+#include "../header/Auth.h"
 
-void HalamanMenuUser(address root, List *L);
+
+void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin);
 
 #endif 

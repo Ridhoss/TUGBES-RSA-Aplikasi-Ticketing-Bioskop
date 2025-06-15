@@ -1,6 +1,6 @@
 #include "header/viewsUser.h"
 
-void HalamanMenuUser(address root, List *L) {
+void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin) {
     StackMenu stackMenu;
     CreateStack(&stackMenu);
 
@@ -26,37 +26,25 @@ void HalamanMenuUser(address root, List *L) {
         }
     } while (!kotaNode);
 
-    Push(&stackMenu, "Menu Utama");
-
     int pilihan;
     do {
         printf("===================================================\n");
         KotaInfo* info = (KotaInfo*)(kotaNode->info);
-        printf("           Menu User - Kota : %s            \n", info->nama);
+        printf("           Menu User - Kota : %s       \n", info->nama);
         printf("===================================================\n");
         printf("||                                               ||\n");
         printf("||     1. Cari dan pilih film                    ||\n");
         printf("||     2. Lihat film upcoming                    ||\n");
         printf("||     3. Cari jadwal film                       ||\n");
         printf("||     4. Lihat daftar pesanan                   ||\n");
-        printf("||     0. Kembali                                ||\n");
-        printf("||     5. Keluar                                 ||\n");
+        printf("||     5. Logout                                 ||\n");
         printf("||                                               ||\n");
-        printf("|| Pilihan menu (1-5, atau 0 untuk kembali):     ||\n");
+        printf("|| Pilihan menu (1-5):                           ||\n");
         printf("===================================================\n");
         printf(">> ");
         scanf("%d", &pilihan);
         
         switch (pilihan) {
-            case 0:
-            if (IsEmptyStack(stackMenu) || strcmp(Top(stackMenu), "Menu Utama") == 0) {
-                printf("Anda sudah di menu utama.\n");
-            } else {
-                Pop(&stackMenu); 
-                printf("Kembali ke menu sebelumnya: %s\n", Top(stackMenu));
-            }
-            break;
-
         case 1: {
             Push(&stackMenu, "Cari dan Pilih Film");
             printf("\n=== Film yang tersedia di %s ===\n", info->nama);
@@ -90,21 +78,22 @@ void HalamanMenuUser(address root, List *L) {
 
         case 5: {
             char konfirmasi[5];
-            printf("Apakah Anda yakin ingin keluar? (y/n): ");
+            printf("Apakah Anda yakin ingin logout? (y/n): ");
             scanf("%s", konfirmasi);
             if (strcmp(konfirmasi, "y") == 0 || strcmp(konfirmasi, "Y") == 0) {
-                printf("Terima kasih telah menggunakan aplikasi.\n");
-                return; // keluar dari fungsi
+                printf("Logout berhasil. Kembali ke halaman login.\n");
+                *loggedIn = 0;
+                HalamanAwal(loggedIn, idLogin); 
+                return;
             } else {
                 printf("Kembali ke menu.\n");
-                pilihan = -1; // agar tidak keluar dari loop
+                pilihan = -1;
             }
+            
             break;
         }
-
         default:
             printf("Pilihan tidak valid!\n");
     }
-
-} while (pilihan != 5);
+} while (loggedIn);
 }
