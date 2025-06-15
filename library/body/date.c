@@ -1,18 +1,12 @@
-/* File        : date.c */
-/* Deskripsi   : Unit untuk keperluan ADT Date */
-
-/***************************/
-/*  BODY PRIMITIF DATE     */
-/***************************/
-
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 #include "../date.h"
 
 
-/*********** Operasi Primitif ************/
-/* Constructor Membentuk sebuah DATE, dengan nilai default adalah 01/01/1900 */
+// Deskripsi: Membuat tanggal default (1 Januari 1900)
+// I.S.: Variabel D belum diisi tanggal
+// F.S.: Variabel D berisi tanggal 01/01/1900
 void CreateDate (date * D){
   SetTgl(1, D);
   SetBln(1, D);
@@ -35,7 +29,6 @@ int GetThn (date D){
 	return(D.Thn);
 }
 
-
 /****** Pengubah komponen ******/
 /* Memberi nilai untuk Tgl */
 void SetTgl (int NewTgl, date * D){
@@ -52,9 +45,9 @@ void SetThn (int NewThn, date * D){
 	(* D).Thn = NewThn;
 }
 
-
-/****** Kelompok Interaksi dengan I/O device, BACA/TULIS ******/
-/* Membentuk DATE dari iTgl, iBln dan iThn yang dibaca dari keyboard */
+// Deskripsi: Mengisi tanggal berdasarkan input parameter hari, bulan, dan tahun
+// I.S.: Variabel D kosong atau berisi tanggal lama
+// F.S.: D diisi dengan tanggal itgl/ibln/ithn. Jika tidak valid, tampil pesan error
 void ReadDate (int itgl, int ibln, int ithn, date * D){
 	SetTgl (itgl, &(* D));
 	SetBln (ibln, &(* D));
@@ -65,7 +58,9 @@ void ReadDate (int itgl, int ibln, int ithn, date * D){
 	}
 }
 
-/* Memeriksa apakah suatu tanggal valid, yaitu dengan memperhatikan batas akhir per bulan */
+// Deskripsi: Mengecek apakah tanggal valid (misal: 31 Februari tidak valid)
+// I.S.: Tanggal D memiliki nilai
+// F.S.: Mengembalikan true jika valid, false jika tidak
 boolean isValidDate(date D){
 	if ((GetThn(D) < 1900)||(GetThn(D) > 30000)||(GetBln(D) < 1) ||(GetBln(D) > 12)||(GetTgl(D) < 1)||(GetTgl(D) > getEndDate(D)))
 		return (false);
@@ -73,22 +68,25 @@ boolean isValidDate(date D){
 		return (true);
 }
 
-/* Print nilai D dengan format dd/mm/yyyy */
+// Deskripsi: Menampilkan tanggal dalam format dd/mm/yyyy
+// I.S.: Tanggal D berisi nilai tertentu
+// F.S.: Tanggal ditampilkan di layar
 void PrintObjDate(date D){
 	printf ("%d/%d/%d\n", GetTgl(D), GetBln(D), GetThn(D));
 }
 
-/****** Operator Relasional ******/
-/* Memeriksa apakah suatu tanggal adalah kabisat; Dipakai untuk bulan == 2 saja
-Harusnya kabisat adalah thn yang habis dibagi 4, atau habis dibagi 100 dan 400, tapi implementasinya seringkali hanya menggunakan 4 sebagai pembagi */
+// Deskripsi: Mengecek apakah tahun pada tanggal D adalah tahun kabisat
+// I.S.: Tahun sudah diketahui
+// F.S.: Mengembalikan true jika kabisat, false jika bukan
 boolean isKabisat(date D) {
     int tahun = D.Thn;
     return (tahun % 4 == 0 && tahun % 100 != 0) || (tahun % 400 == 0);
 }
 
-/***** Predikat lain *******/
 
-/* Memberikan tanggal terakhir dari sebuah bulan */
+// Deskripsi: Memberikan tanggal terakhir dari sebuah bulan 
+// I.S.: Tanggal D sudah diketahui
+// F.S.: Mengembalikan nilai 28-31 tergantung bulan dan kabisat
 int getEndDate (date D){
 	int bulan = GetBln(D);
 	int tanggal = GetTgl(D);
@@ -121,11 +119,9 @@ int getEndDate (date D){
 	return 0;
 }
 
-
-/* Menampilkan tanggal sebelumnya dari sebuah Date
-	I.S = Tanggal tertentu diketahui
-	F.S = Tanggal sebelumnya diketahui
-	Hal yang perlu diketahui : Batas akhir tiap bulan dan jika jan, thn-1 */
+// Deskripsi: Menampilkan tanggal sebelumnya dari sebuah Date
+// I.S = Tanggal tertentu diketahui
+// F.S = Tanggal sebelumnya diketahui
 date DateBefore (date D){
 	int tgl = GetTgl(D);
 	int bln = GetBln(D);
@@ -151,10 +147,9 @@ date DateBefore (date D){
 	return(hasilTanggal);
 }
 
-/* Menampilkan tanggal berikutnya dari sebuah Date
-	I.S = Tanggal tertentu diketahui
-	F.S = Tanggal berikutnya diketahui
-	Hal yang perlu diketahui : Batas akhir tiap bulan dan jika des, thn+1 */
+// Deskripsi: Menampilkan tanggal berikutnya dari sebuah Date
+// I.S = Tanggal tertentu diketahui
+// F.S = Tanggal berikutnya diketahui
 date NextDate (date D){
 	int tgl = GetTgl(D);
 	int bln = GetBln(D);
@@ -178,10 +173,10 @@ date NextDate (date D){
 	return(hasilTanggal);
 }
 
-/* Menampilkan selisih dua tanggal
-	I.S = 2 buah Tanggal tertentu diketahui
-	F.S = Tampil selisih dua buah tanggal
-	Asumsi : 1 tahun = 365 hari */
+// Deskripsi: Menampilkan selisih dua tanggal
+// I.S = 2 buah Tanggal tertentu diketahui
+// F.S = Tampil selisih dua buah tanggal
+// Asumsi : 1 tahun = 365 hari 
 int DifferenceDate(date D1, date D2) {
     struct tm tm1 = {0}, tm2 = {0};
     tm1.tm_mday = D1.Tgl;
@@ -199,7 +194,9 @@ int DifferenceDate(date D1, date D2) {
     return (int)(diff / (60 * 60 * 24));
 }
 
-
+// Deskripsi: Mengambil tanggal hari ini dari sistem dan menyimpannya ke D
+// I.S.: Variabel D kosong 
+// F.S.: D berisi tanggal hari ini (tanggal saat program dijalankan)
 void GetToday(date *D){
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
@@ -224,6 +221,9 @@ date AddDays(date D, int n) {
     return hasil;
 }
 
+// Deskripsi: Mengembalikan nama hari (Senin, Selasa, dst.) dari tanggal D
+// I.S.: Tanggal D valid
+// F.S.: Mengembalikan string nama hari dari tanggal tersebut
 const char* NamaHari(date D) {
     struct tm waktu = {0};
     waktu.tm_mday = D.Tgl;
@@ -235,6 +235,9 @@ const char* NamaHari(date D) {
     return hari[waktu.tm_wday];
 }
 
+// Deskripsi: Menambahkan sejumlah hari ke tanggal D
+// I.S.: D adalah tanggal awal
+// F.S.: Tanggal D bertambah sejumlah hariTambahan
 date TambahHari(date D, int hariTambahan) {
     for (int i = 0; i < hariTambahan; i++) {
         D = NextDate(D);
@@ -243,17 +246,23 @@ date TambahHari(date D, int hariTambahan) {
     return D;
 }
 
-/* Mengecek apakah dua tanggal sama atau tidak */
+// Deskripsi: Mengecek apakah dua tanggal yang sama 
+// I.S.: Diketahui dua tanggal
+// F.S.: Mengembalikan true jika hari, bulan, dan tahun sama
 boolean isSameDate(date D1, date D2) {
     return (D1.Tgl == D2.Tgl && D1.Bln == D2.Bln && D1.Thn == D2.Thn);
 }
 
+// Deskripsi: Membandingkan dua tanggal
 int CompareDate(date d1, date d2) {
     if (d1.Thn != d2.Thn) return d1.Thn - d2.Thn;
     if (d1.Bln != d2.Bln) return d1.Bln - d2.Bln;
     return d1.Tgl - d2.Tgl;
 }
 
+// Deskripsi: Mengecek apakah tanggal D adalah hari ini atau setelah hari ini
+// I.S.: Tanggal D valid.
+// F.S.: Mengembalikan true jika D hari ini
 boolean IsDateLessToday(date D) {
     date today;
     GetToday(&today);
@@ -267,3 +276,23 @@ boolean IsDateLessToday(date D) {
     return D.Tgl >= today.Tgl;
 }
 
+// Deskripsi: Mengembalikan hari keberapa dalam seminggu (0 = Minggu, 6 = Sabtu)
+// I.S.: Tanggal d valid
+// F.S.: Mengembalikan indeks hari dalam minggu
+int GetHariDalamMinggu(date d) {
+    struct tm waktu = {0};
+    waktu.tm_year = d.Thn - 1900;
+    waktu.tm_mon = d.Bln - 1;
+    waktu.tm_mday = d.Tgl;
+
+    mktime(&waktu);
+    return waktu.tm_wday;
+}
+
+// Deskripsi: Mengecek apakah tanggal d jatuh pada hari weekend
+// I.S.: Tanggal d valid.
+// F.S.: Mengembalikan true jika Sabtu atau Minggu, false jika hari biasa
+boolean IsWeekend(date d) {
+    int hari = GetHariDalamMinggu(d);
+    return (hari == 0 || hari == 6);
+}
