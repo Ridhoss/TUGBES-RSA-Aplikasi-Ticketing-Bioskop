@@ -14,7 +14,7 @@ void HalamanMenuAdmin(address root, List *L) {
         printf("||     1. Manipulasi Kota                        ||\n");
         printf("||     2. Manipulasi Bioskop                     ||\n");
         printf("||     3. Manipulasi Film                        ||\n");
-        printf("||     4. -                                      ||\n");
+        printf("||     4. Lihat History Transaksi                ||\n");
         printf("||     5. -                                      ||\n");
         printf("||     6. Logout                                 ||\n");
         printf("||                                               ||\n");
@@ -40,6 +40,7 @@ void HalamanMenuAdmin(address root, List *L) {
                 break;
             }
             case '4': {
+                HalamanHistoryTransaksi(L);
 
                 break;
             }
@@ -1062,4 +1063,62 @@ void HalamanManipulasiFilm(List *L) {
             break;
         }
     } while (pilihan != 6);
+}
+
+
+
+void HalamanHistoryTransaksi(List *L) {
+    printf("===================================================\n");
+    printf("============== Menu History Transaksi =============\n");
+    printf("===================================================\n");
+
+    date tanggalCari;
+    int pilPrint;
+    int runningPrint = 1;
+
+    Stack stackTransaksi;
+    CreateStack(&stackTransaksi);
+
+    while (runningPrint)
+    {
+        printf("1. Lihat Seluruh History Transaksi\n");
+        printf("2. Lihat History Berdasarkan Tanggal\n");
+        printf("3. Lihat History Berdasarkan Bioskop\n");
+        printf("4. Kembali\n");
+        printf("Pilih: ");
+        scanf("%d", &pilPrint);
+        while (getchar() != '\n');
+
+        switch (pilPrint) {
+            case 1: {
+                IsiStackTransaksiById(&stackTransaksi, -1);
+                PrintStackTransaksi(stackTransaksi, *L);
+                DelAll(&stackTransaksi);  
+
+                break;
+            }
+            case 2: {
+                printf("Masukkan tanggal (dd/mm/yyyy): ");
+                scanf("%d/%d/%d", &tanggalCari.Tgl, &tanggalCari.Bln, &tanggalCari.Thn);
+                IsiStackTransaksiByDate(&stackTransaksi, -1, tanggalCari);
+                PrintStackTransaksi(stackTransaksi, *L);
+                DelAll(&stackTransaksi);
+
+                break;
+            }
+            case 3: {
+
+                break;
+            }
+            case 4: {
+                runningPrint = 0;
+
+                break;
+            }
+            default:
+                printf("Pilihan tidak valid, silahkan coba lagi\n");
+
+                break;
+        }
+    }
 }

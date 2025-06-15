@@ -43,7 +43,7 @@ void HalamanMenuUser(address root, List *L) {
         printf("||     1. Cari dan pilih film                    ||\n");
         printf("||     2. Lihat film upcoming                    ||\n");
         printf("||     3. Cari jadwal film                       ||\n");
-        printf("||     4. Lihat daftar pesanan                   ||\n");
+        printf("||     4. Lihat History Transaksi                ||\n");
         printf("||     5. Logout                                 ||\n");
         printf("||                                               ||\n");
         printf("|| Pilihan menu (1-5):                           ||\n");
@@ -190,7 +190,7 @@ void HalamanMenuUser(address root, List *L) {
             }
             case 4: { 
                 printf("===================================================\n");
-                printf("============== Menu History Pemesanan =============\n");
+                printf("============== Menu History Transaksi =============\n");
                 printf("===================================================\n");
 
                 date tanggalCari;
@@ -211,7 +211,7 @@ void HalamanMenuUser(address root, List *L) {
 
                     switch (pilPrint) {
                         case 1: {
-                            IsiStackTransaksi(&stackTransaksi, idLogin);
+                            IsiStackTransaksiById(&stackTransaksi, idLogin);
                             PrintStackTransaksi(stackTransaksi, *L);
                             DelAll(&stackTransaksi);  
 

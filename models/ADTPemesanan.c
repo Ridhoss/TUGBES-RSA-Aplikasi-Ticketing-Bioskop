@@ -44,9 +44,7 @@ void LoadKursiTerisi(JadwalInfo* jadwal) {
 
 
 
-
-
-void IsiStackTransaksi(Stack *S, int idUser) {
+void IsiStackTransaksiById(Stack *S, int idUser) {
     FILE* file = fopen("database/transaksi.txt", "r");
     if (file == NULL) {
         printf("Gagal membuka file transaksi.txt\n");
@@ -60,7 +58,7 @@ void IsiStackTransaksi(Stack *S, int idUser) {
                     &trx.id, &trx.idUser, &trx.idFilm, &trx.tanggal.Tgl, &trx.tanggal.Bln, &trx.tanggal.Thn,
                     &trx.jumlahTiket, &trx.harga, &trx.totalHarga) == 9) {
 
-            if (trx.idUser == idUser) {
+            if (trx.idUser == idUser || idUser == -1) {
                 Transaksi* salinan = (Transaksi*)malloc(sizeof(Transaksi));
                 if (salinan != NULL) {
                     *salinan = trx;
@@ -87,7 +85,7 @@ void IsiStackTransaksiByDate(Stack *S, int idUser, date tanggalTrans) {
                     &trx.id, &trx.idUser, &trx.idFilm, &trx.tanggal.Tgl, &trx.tanggal.Bln, &trx.tanggal.Thn,
                     &trx.jumlahTiket, &trx.harga, &trx.totalHarga) == 9) {
 
-            if (trx.idUser == idUser && isSameDate(trx.tanggal, tanggalTrans)) {
+            if ((trx.idUser == idUser || idUser == -1) && isSameDate(trx.tanggal, tanggalTrans)) {
                 Transaksi* salinan = (Transaksi*)malloc(sizeof(Transaksi));
                 if (salinan != NULL) {
                     *salinan = trx;

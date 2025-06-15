@@ -34,7 +34,7 @@ void SimpanTransaksiKeFile(Transaksi trx);
 void SimpanDetailTransaksiKeFile(DetailTransaksi detail);
 void LoadKursiTerisi(JadwalInfo* jadwal);
 
-void IsiStackTransaksi(Stack *S, int idUser);
+void IsiStackTransaksiById(Stack *S, int idUser);
 void IsiStackTransaksiByDate(Stack *S, int idUser, date tanggalTrans);
 void PrintStackTransaksi(Stack S, List filmList);
 void AmbilDetailTransaksi(List *L, int idTransaksi);
