@@ -8,6 +8,9 @@
 #include <string.h>
 
 #include "ADTTree.h"
+#include "ADTBioskop.h"
+#include "ADTTeater.h"
+#include "ADTJadwal.h"
 
 
 typedef struct {

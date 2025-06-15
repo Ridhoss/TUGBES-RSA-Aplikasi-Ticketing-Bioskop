@@ -9,7 +9,9 @@
 #include <string.h>
 
 #include "ADTTree.h"
+#include "ADTList.h"
 #include "ADTKota.h"
+#include "ADTTeater.h"
 
 typedef struct {
     int id;
@@ -21,6 +23,7 @@ int SearchBioskopFile(const BioskopInfo* bioskop);
 void EditBioskopKeFile(const BioskopInfo* bioskop, const BioskopInfo* bioskopLama);
 void HapusBioskopKeFile(const BioskopInfo* bioskopLama);
 void KosongkanFileBioskop();
+void HapusSemuaBioskopDariFileByKota(address kota);
 void LoadBioskop(address root);
 int AmbilIdBioskopTerakhir();
 

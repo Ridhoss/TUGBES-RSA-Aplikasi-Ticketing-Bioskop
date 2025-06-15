@@ -236,6 +236,17 @@ void HalamanPilihKursi(address root, List *L, address nodeJadwal) {
     printf("Jam        : %02d:%02d\n", jadwalInfo->Start.jam, jadwalInfo->Start.menit);
     printf("===================================================\n");
 
+    // Input jumlah tiket
+    int jumlahTiket;
+    printf("Masukkan jumlah tiket yang ingin dipesan (maks 10): ");
+    scanf("%d", &jumlahTiket);
+
+    if (jumlahTiket <= 0 || jumlahTiket > 10) {
+        printf("Jumlah tiket tidak valid (1-10).\n");
+        return;
+    }
+
+
     printf("Tampilan Kursi (O = kosong, X = terisi)\n\n");
 
     printf("    ");
@@ -254,23 +265,14 @@ void HalamanPilihKursi(address root, List *L, address nodeJadwal) {
 
     printf("===================================================\n");
 
-    // Input jumlah tiket
-    int jumlahTiket;
-    printf("Masukkan jumlah tiket yang ingin dipesan (maks 10): ");
-    scanf("%d", &jumlahTiket);
-
-    if (jumlahTiket <= 0 || jumlahTiket > 10) {
-        printf("Jumlah tiket tidak valid (1-10).\n");
-        return;
-    }
 
     Kursi kursiDipilih[10];
     int jumlahDipilih = 0;
 
     for (int k = 0; k < jumlahTiket; k++) {
         Kursi pilih;
-        printf("Pilih kursi ke-%d (contoh 4C): ", k + 1);
-        scanf(" %d%c", &pilih.baris, &pilih.kolom);
+        printf("Pilih kursi ke-%d (contoh A1): ", k + 1);
+        scanf(" %c%d", &pilih.kolom, &pilih.baris);
 
         int i = pilih.baris - 1;
         int j = pilih.kolom - 'A';

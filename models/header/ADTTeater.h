@@ -8,7 +8,10 @@
 #include <string.h>
 
 #include "ADTTree.h"
+#include "ADTList.h"
 #include "ADTBioskop.h"
+#include "ADTJadwal.h"
+
 
 typedef struct {
     int id;
@@ -22,6 +25,7 @@ int SearchTeaterFile(const TeaterInfo* teater);
 void EditTeaterKeFile(const TeaterInfo* teater, const TeaterInfo* teaterLama);
 void HapusTeaterKeFile(const TeaterInfo* teaterLama);
 void KosongkanFileTeater();
+void HapusSemuaTeaterDariFileByBioskop(address bioskop);
 void LoadTeater(address root);
 int AmbilIdTeaterTerakhir();
 

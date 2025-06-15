@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include "ADTTree.h"
+#include "ADTList.h"
 #include "ADTTeater.h"
 #include "ADTFilm.h"
 
@@ -34,6 +35,7 @@ int SearchJadwalFile(const JadwalInfo* jadwal);
 void EditJadwalKeFile(const JadwalInfo* jadwal, const JadwalInfo* jadwalLama);
 void HapusJadwalKeFile(const JadwalInfo* jadwalLama);
 void KosongkanFileJadwal();
+void HapusSemuaJadwalDariFileByTeater(address teater);
 void LoadJadwal(address root, List ListFilm);
 int AmbilIdJadwalTerakhir();
 
