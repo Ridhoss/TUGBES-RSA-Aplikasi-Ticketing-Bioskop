@@ -2,6 +2,7 @@
 #define TIMING_h
 
 #include "boolean.h"
+#include "date.h"
 #include <time.h>
 
 
@@ -17,6 +18,9 @@ typedef struct {
 void InisialisasiWaktu(TimeInfo *T);
 void SetTime(TimeInfo *T, int jam, int menit);
 boolean isValidTime(int jam, int menit);
+
+void GetTime(TimeInfo *T);
+boolean isDateTimeValid(date tanggalInput, TimeInfo waktuInput);
 
 int ConvertMenit(TimeInfo T);
 TimeInfo ConvertTime(int totalMenit);
