@@ -1,10 +1,14 @@
 #include "header/viewsUser.h"
 
-void HalamanMenuUser(address root, List *L) {
+void HalamanMenuUser(address root, List *L, int *loggedIn, int *idLogin) {
+    StackMenu stackMenu;
+    CreateStack(&stackMenu);
+
     int idKotaDipilih;
     char namaKota[100], namaFilm[100];
     address kotaNode;
     List tampilFilm;
+
     
     printf("===================================================\n");
     printf("||          SELAMAT DATANG DI BIOSKOP            ||\n");
@@ -26,20 +30,20 @@ void HalamanMenuUser(address root, List *L) {
     do {
         printf("===================================================\n");
         KotaInfo* info = (KotaInfo*)(kotaNode->info);
-        printf("           Menu User - Kota : %s            \n", info->nama);
+        printf("           Menu User - Kota : %s       \n", info->nama);
         printf("===================================================\n");
         printf("||                                               ||\n");
         printf("||     1. Cari dan pilih film                    ||\n");
         printf("||     2. Lihat film upcoming                    ||\n");
         printf("||     3. Cari jadwal film                       ||\n");
         printf("||     4. Lihat daftar pesanan                   ||\n");
-        printf("||     5. Keluar                                 ||\n");
+        printf("||     5. Logout                                 ||\n");
         printf("||                                               ||\n");
-        printf("|| Silakan pilih menu (1-5):                     ||\n");
+        printf("|| Pilihan menu (1-5):                           ||\n");
         printf("===================================================\n");
         printf(">> ");
         scanf("%d", &pilihan);
-
+        
         switch (pilihan) {
             case 1: {
                 KotaInfo* info = (KotaInfo*)(kotaNode->info);
@@ -82,7 +86,7 @@ void HalamanMenuUser(address root, List *L) {
             default:
                 printf("Pilihan tidak valid!\n");
         }
-    } while (pilihan != 5);
+    } while (loggedIn);
 }
 
 void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList filmNode) {
