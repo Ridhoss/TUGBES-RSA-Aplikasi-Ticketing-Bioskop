@@ -212,7 +212,7 @@ void HalamanMenuUser(address root, List *L) {
                     switch (pilPrint) {
                         case 1: {
                             IsiStackTransaksiById(&stackTransaksi, idLogin);
-                            PrintStackTransaksi(stackTransaksi, *L);
+                            PrintStackTransaksi(stackTransaksi, *L, root);
                             DelAll(&stackTransaksi);  
 
                             break;
@@ -221,7 +221,7 @@ void HalamanMenuUser(address root, List *L) {
                             printf("Masukkan tanggal (dd/mm/yyyy): ");
                             scanf("%d/%d/%d", &tanggalCari.Tgl, &tanggalCari.Bln, &tanggalCari.Thn);
                             IsiStackTransaksiByDate(&stackTransaksi, idLogin, tanggalCari);
-                            PrintStackTransaksi(stackTransaksi, *L);
+                            PrintStackTransaksi(stackTransaksi, *L, root);
                             DelAll(&stackTransaksi);
 
                             break;

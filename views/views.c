@@ -40,7 +40,7 @@ void HalamanMenuAdmin(address root, List *L) {
                 break;
             }
             case '4': {
-                HalamanHistoryTransaksi(L);
+                HalamanHistoryTransaksi(root, L);
 
                 break;
             }
@@ -1067,7 +1067,7 @@ void HalamanManipulasiFilm(List *L) {
 
 
 
-void HalamanHistoryTransaksi(List *L) {
+void HalamanHistoryTransaksi(address root, List *L) {
     printf("===================================================\n");
     printf("============== Menu History Transaksi =============\n");
     printf("===================================================\n");
@@ -1075,6 +1075,7 @@ void HalamanHistoryTransaksi(List *L) {
     date tanggalCari;
     int pilPrint;
     int runningPrint = 1;
+    char namaKota[100], namaBioskop[100];
 
     Stack stackTransaksi;
     CreateStack(&stackTransaksi);
@@ -1092,7 +1093,7 @@ void HalamanHistoryTransaksi(List *L) {
         switch (pilPrint) {
             case 1: {
                 IsiStackTransaksiById(&stackTransaksi, -1);
-                PrintStackTransaksi(stackTransaksi, *L);
+                PrintStackTransaksi(stackTransaksi, *L, root);
                 DelAll(&stackTransaksi);  
 
                 break;
@@ -1101,12 +1102,28 @@ void HalamanHistoryTransaksi(List *L) {
                 printf("Masukkan tanggal (dd/mm/yyyy): ");
                 scanf("%d/%d/%d", &tanggalCari.Tgl, &tanggalCari.Bln, &tanggalCari.Thn);
                 IsiStackTransaksiByDate(&stackTransaksi, -1, tanggalCari);
-                PrintStackTransaksi(stackTransaksi, *L);
+                PrintStackTransaksi(stackTransaksi, *L, root);
                 DelAll(&stackTransaksi);
 
                 break;
             }
             case 3: {
+                printf("===================================================\n");
+                PrintKota(root, 0);
+                printf("Pilih Kota: ");
+                InputString(namaKota);
+                address nodeKota = SearchKotaByName(root, namaKota);
+
+                printf("===================================================\n");
+                PrintBioskop(nodeKota, 0);
+                printf("Pilih Bioskop: ");
+                InputString(namaBioskop);
+                address nodeBioskop = SearchBioskopByName(nodeKota, namaBioskop);
+
+                BioskopInfo* bioskop = (BioskopInfo*)nodeBioskop->info;
+                IsiStackTransaksiByBioskop(&stackTransaksi, bioskop->id);
+                PrintStackTransaksi(stackTransaksi, *L, root);
+                DelAll(&stackTransaksi);
 
                 break;
             }

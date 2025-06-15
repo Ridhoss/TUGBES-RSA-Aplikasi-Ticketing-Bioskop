@@ -3,8 +3,8 @@
 void SimpanTransaksiKeFile(Transaksi trx) {
     FILE* file = fopen("database/transaksi.txt", "a");
     if (file != NULL) {
-        fprintf(file, "%d|%d|%d|%d/%d/%d|%d|%d|%d\n",
-            trx.id, trx.idUser, trx.idFilm, trx.tanggal.Tgl, trx.tanggal.Bln, trx.tanggal.Thn,
+        fprintf(file, "%d|%d|%d|%d|%d/%d/%d|%d|%d|%d\n",
+            trx.id, trx.idUser, trx.idFilm, trx.idBioskop, trx.tanggal.Tgl, trx.tanggal.Bln, trx.tanggal.Thn,
             trx.jumlahTiket, trx.harga, trx.totalHarga);
         fclose(file);
     } else {
@@ -44,6 +44,7 @@ void LoadKursiTerisi(JadwalInfo* jadwal) {
 
 
 
+
 void IsiStackTransaksiById(Stack *S, int idUser) {
     FILE* file = fopen("database/transaksi.txt", "r");
     if (file == NULL) {
@@ -54,9 +55,9 @@ void IsiStackTransaksiById(Stack *S, int idUser) {
     char buffer[128];
     while (fgets(buffer, sizeof(buffer), file)) {
         Transaksi trx;
-        if (sscanf(buffer, "%d|%d|%d|%d/%d/%d|%d|%d|%d", 
-                    &trx.id, &trx.idUser, &trx.idFilm, &trx.tanggal.Tgl, &trx.tanggal.Bln, &trx.tanggal.Thn,
-                    &trx.jumlahTiket, &trx.harga, &trx.totalHarga) == 9) {
+        if (sscanf(buffer, "%d|%d|%d|%d|%d/%d/%d|%d|%d|%d", 
+                    &trx.id, &trx.idUser, &trx.idFilm, &trx.idBioskop, &trx.tanggal.Tgl, &trx.tanggal.Bln, &trx.tanggal.Thn,
+                    &trx.jumlahTiket, &trx.harga, &trx.totalHarga) == 10) {
 
             if (trx.idUser == idUser || idUser == -1) {
                 Transaksi* salinan = (Transaksi*)malloc(sizeof(Transaksi));
@@ -81,9 +82,9 @@ void IsiStackTransaksiByDate(Stack *S, int idUser, date tanggalTrans) {
     char buffer[128];
     while (fgets(buffer, sizeof(buffer), file)) {
         Transaksi trx;
-        if (sscanf(buffer, "%d|%d|%d|%d/%d/%d|%d|%d|%d", 
-                    &trx.id, &trx.idUser, &trx.idFilm, &trx.tanggal.Tgl, &trx.tanggal.Bln, &trx.tanggal.Thn,
-                    &trx.jumlahTiket, &trx.harga, &trx.totalHarga) == 9) {
+        if (sscanf(buffer, "%d|%d|%d|%d|%d/%d/%d|%d|%d|%d", 
+                    &trx.id, &trx.idUser, &trx.idFilm, &trx.idBioskop, &trx.tanggal.Tgl, &trx.tanggal.Bln, &trx.tanggal.Thn,
+                    &trx.jumlahTiket, &trx.harga, &trx.totalHarga) == 10) {
 
             if ((trx.idUser == idUser || idUser == -1) && isSameDate(trx.tanggal, tanggalTrans)) {
                 Transaksi* salinan = (Transaksi*)malloc(sizeof(Transaksi));
@@ -98,7 +99,36 @@ void IsiStackTransaksiByDate(Stack *S, int idUser, date tanggalTrans) {
     fclose(file);
 }
 
-void PrintStackTransaksi(Stack S, List filmList) {
+void IsiStackTransaksiByBioskop(Stack* S, int idBioskop) {
+    FILE* file = fopen("database/transaksi.txt", "r");
+    if (file == NULL) {
+        printf("Gagal membuka file transaksi.txt\n");
+        return;
+    }
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        Transaksi trx;
+
+        if (sscanf(buffer, "%d|%d|%d|%d|%d/%d/%d|%d|%d|%d", 
+            &trx.id, &trx.idUser, &trx.idFilm, &trx.idBioskop,
+            &trx.tanggal.Tgl, &trx.tanggal.Bln, &trx.tanggal.Thn,
+            &trx.jumlahTiket, &trx.harga, &trx.totalHarga) == 10) {
+            
+            if (trx.idBioskop == idBioskop) {
+                Transaksi* salinan = (Transaksi*)malloc(sizeof(Transaksi));
+                if (salinan != NULL) {
+                    *salinan = trx;
+                    Push(S, (infotype)salinan);
+                }
+            }
+        }
+    }
+
+    fclose(file);
+}
+
+void PrintStackTransaksi(Stack S, List filmList, address root) {
     if (IsEmptyStack(S)) {
         printf("Belum ada transaksi.\n");
         return;
@@ -117,9 +147,14 @@ void PrintStackTransaksi(Stack S, List filmList) {
         addressList film = cariFilm(filmList, trx->idFilm);
         FilmInfo* infoFilm = (FilmInfo*)(film->info);
 
+        address nodeKota = CariKotaDariIdBioskop(root, trx->idBioskop);
+        address nodeBioskop = SearchBioskopById(nodeKota, &trx->idBioskop);
+        BioskopInfo* infoBioskop = (BioskopInfo*)(nodeBioskop->info);
+
         printf("Transaksi #%d\n", i++);
         printf("ID Transaksi : %d\n", trx->id);
         printf("Film         : %s\n", infoFilm->judul);
+        printf("Bioskop      : %s\n", infoBioskop->nama);
         printf("Tanggal      : %d/%d/%d\n", trx->tanggal.Tgl, trx->tanggal.Bln, trx->tanggal.Thn);
         printf("Jumlah Tiket : %d\n", trx->jumlahTiket);
         printf("Harga Tiket  : %d\n", trx->harga);
@@ -194,6 +229,16 @@ void AksiTransaksi(address jadwalNode, Kursi kursiDipilih[], int jumlahDipilih, 
         return;
     }
 
+    int idBioskop = -1;
+    if (jadwalNode->pr && jadwalNode->pr->pr && jadwalNode->pr->pr->type == BIOSKOP) {
+        BioskopInfo* bioskop = (BioskopInfo*)jadwalNode->pr->pr->info;
+        idBioskop = bioskop->id;
+    } else {
+        printf("Gagal mengambil data bioskop.\n");
+        return;
+    }
+
+
     date today;
     GetToday(&today);
     int idBaru = BuatIdTransaksiBaru(idUser, today);
@@ -207,6 +252,7 @@ void AksiTransaksi(address jadwalNode, Kursi kursiDipilih[], int jumlahDipilih, 
     trx.id = idBaru;
     trx.idUser = idUser;
     trx.idFilm = jadwal->film->idFilm;
+    trx.idBioskop = idBioskop;
     trx.tanggal = today;
     trx.jumlahTiket = jumlahDipilih;
     trx.harga = hargaTiket;
