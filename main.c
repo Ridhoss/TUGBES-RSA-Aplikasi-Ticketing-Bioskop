@@ -48,8 +48,5 @@ int main() {
             printf("Akun tidak ditemukan.\n");
         }
     }
-
-
-
     return 0;
 }

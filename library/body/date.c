@@ -253,3 +253,16 @@ int CompareDate(date d1, date d2) {
     if (d1.Bln != d2.Bln) return d1.Bln - d2.Bln;
     return d1.Tgl - d2.Tgl;
 }
+
+boolean IsDateLessToday(date D) {
+    date today;
+    GetToday(&today);
+
+    if (D.Thn > today.Thn) return true;
+    if (D.Thn < today.Thn) return false;
+
+    if (D.Bln > today.Bln) return true;
+    if (D.Bln < today.Bln) return false;
+
+    return D.Tgl >= today.Tgl;
+}
