@@ -216,15 +216,16 @@ void HalamanMenuUser(address root, List *L) {
 
                                         Transaksi* transaksiTerpilih = SearchTransaksiById(idTrans);
                                         if (transaksiTerpilih != NULL) {
-                                            if(strcmp(transaksiTerpilih->status, "PROCESSED") != 0){
+                                            if (strcmp(transaksiTerpilih->status, "ACTIVE") == 0) {
                                                 UpdateStatusTransaksiById(idTrans, "PROCESSED");
                                                 EnQueueFile(&QueueETicket, transaksiTerpilih);
                                                 printf("E-ticket dengan ID %d berhasil diajukan.\n", idTrans);
-                                                free(transaksiTerpilih); 
-                                            } else if (strcmp(transaksiTerpilih->status, "USED") != 0) {
-                                                printf("E-Ticket sudah di konfirmasi!\n");
-                                            } else {
+                                            } else if (strcmp(transaksiTerpilih->status, "PROCESSED") == 0) {
                                                 printf("E-Ticket sedang dalam proses!\n");
+                                            } else if (strcmp(transaksiTerpilih->status, "USED") == 0) {
+                                                printf("E-Ticket sudah dikonfirmasi!\n");
+                                            } else {
+                                                printf("Status tidak dikenali.\n");
                                             }
                                         } else {
                                             printf("Transaksi dengan ID %d tidak ditemukan.\n", idTrans);

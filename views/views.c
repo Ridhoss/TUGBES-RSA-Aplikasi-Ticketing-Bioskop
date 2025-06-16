@@ -15,7 +15,7 @@ void HalamanMenuAdmin(address root, List *L) {
         printf("||     2. Manipulasi Bioskop                     ||\n");
         printf("||     3. Manipulasi Film                        ||\n");
         printf("||     4. Lihat History Transaksi                ||\n");
-        printf("||     5. Konfirmasi E-Ticket                    ||\n");
+        printf("||     5. Konfirmasi E-Ticket ( %d )              ||\n", TotalQueue(QueueETicket));
         printf("||     6. Logout                                 ||\n");
         printf("||                                               ||\n");
         printf("|| Silakan pilih menu (1-6):                     ||\n");
@@ -1156,5 +1156,42 @@ void HalamanKonfirmasiETicket(address root, List *L) {
     if (trx == NULL) {
         printf("Data transaksi tidak valid.\n");
         return;
+    }
+
+    Akun* users = CariAkunById(trx->idUser);
+    addressList film = cariFilm(*L, trx->idFilm);
+    FilmInfo* infoFilm = (FilmInfo*)(film->info);
+
+    address nodeKota = CariKotaDariIdBioskop(root, trx->idBioskop);
+    address nodeBioskop = SearchBioskopById(nodeKota, &trx->idBioskop);
+    BioskopInfo* infoBioskop = (BioskopInfo*)(nodeBioskop->info);
+
+    List kursi;
+    AmbilDetailTransaksi(&kursi, trx->id);
+    TimeInfo jamStart, jamEnd;
+
+    printf("ID Transaksi   : %d\n", trx->id);
+    printf("Username       : %s\n", users->username);
+    printf("Film           : %s\n", infoFilm->judul);
+    printf("Bioskop        : %s\n", infoBioskop->nama);
+    printf("Jam Tayang     : %02d:%02d - %02d:%02d\n", jamStart.jam, jamStart.menit,  jamEnd.jam, jamEnd.menit);
+    printf("Jumlah Tiket   : %d\n", trx->jumlahTiket);
+    printf("Total Harga    : %d\n", trx->totalHarga);
+    printf("Status         : %s\n", trx->status);
+    printf("Tanggal        : %02d/%02d/%04d\n", trx->tanggal.Tgl, trx->tanggal.Bln, trx->tanggal.Thn);
+    printf("---------------------------------------------------\n");
+    printf("1. Konfirmasi E-Ticket\n");
+    printf("2. Batalkan / Kembali\n");
+    printf("Pilihan: ");
+
+    int pilihan;
+    scanf("%d", &pilihan);
+
+    if (pilihan == 1) {
+        UpdateStatusTransaksiById(trx->id, "USED");
+        DeQueueWithFile(&QueueETicket);
+        printf("E-ticket ID %d telah dikonfirmasi.\n", trx->id);
+    } else {
+        printf("Tidak ada perubahan. Kembali ke menu admin.\n");
     }
 }
