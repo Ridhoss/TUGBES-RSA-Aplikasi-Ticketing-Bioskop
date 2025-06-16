@@ -226,10 +226,9 @@ void PrintStackTransaksi(Stack S, List filmList, address root) {
         printf("Transaksi #%d\n", i++);
         printf("ID Transaksi     : %d\n", trx->id);
         printf("Status Pemesanan : %s\n", trx->status);
-        printf("Nama             : %s\n", users->username);
+        printf("Username         : %s\n", users->username);
         printf("Film             : %s\n", infoFilm->judul);
-        printf("Jam Mulai        : %02d:%02d\n", jamStart.jam, jamStart.menit);
-        printf("Jam Selesai      : %02d:%02d\n", jamEnd.jam, jamEnd.menit);
+        printf("Jam Tayang       : %02d:%02d - %02d:%02d\n", jamStart.jam, jamStart.menit,  jamEnd.jam, jamEnd.menit);
         printf("Bioskop          : %s\n", infoBioskop->nama);
         printf("Tanggal          : %d/%d/%d\n", trx->tanggal.Tgl, trx->tanggal.Bln, trx->tanggal.Thn);
         printf("Jumlah Tiket     : %d\n", trx->jumlahTiket);
@@ -294,7 +293,7 @@ Transaksi* SearchTransaksiById(int idTransaksi) {
         if (sscanf(buffer, "%d|%d|%d|%d|%d/%d/%d|%d|%d|%d|%s",
                    &trx.id, &trx.idUser, &trx.idFilm, &trx.idBioskop,
                    &trx.tanggal.Tgl, &trx.tanggal.Bln, &trx.tanggal.Thn,
-                   &trx.jumlahTiket, &trx.harga, &trx.totalHarga, trx.status) == 11) {
+                   &trx.jumlahTiket, &trx.harga, &trx.totalHarga, &trx.status) == 11) {
 
             if (trx.id == idTransaksi) {
                 Transaksi* hasil = (Transaksi*)malloc(sizeof(Transaksi));
@@ -326,7 +325,7 @@ void UpdateStatusTransaksiById(int id, const char* statusBaru) {
         if (sscanf(buffer, "%d|%d|%d|%d|%d/%d/%d|%d|%d|%d|%s",
                    &trx.id, &trx.idUser, &trx.idFilm, &trx.idBioskop,
                    &trx.tanggal.Tgl, &trx.tanggal.Bln, &trx.tanggal.Thn,
-                   &trx.jumlahTiket, &trx.harga, &trx.totalHarga, trx.status) == 11) {
+                   &trx.jumlahTiket, &trx.harga, &trx.totalHarga, &trx.status) == 11) {
 
             if (trx.id == id) {
                 strcpy(trx.status, statusBaru); // Ubah status

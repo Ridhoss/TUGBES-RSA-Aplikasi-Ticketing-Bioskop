@@ -17,6 +17,7 @@ extern Queue QueueETicket;
 
 void EnQueueFile(Queue* Q, Transaksi* data);
 void LoadQueueFromFile(Queue* Q);
+void DeQueueWithFile(Queue* Q);
 
 
 void CreateQueue(Queue *S);
