@@ -15,7 +15,7 @@ void HalamanMenuAdmin(address root, List *L) {
         printf("||     2. Manipulasi Bioskop                     ||\n");
         printf("||     3. Manipulasi Film                        ||\n");
         printf("||     4. Lihat History Transaksi                ||\n");
-        printf("||     5. -                                      ||\n");
+        printf("||     5. Konfirmasi E-Ticket                    ||\n");
         printf("||     6. Logout                                 ||\n");
         printf("||                                               ||\n");
         printf("|| Silakan pilih menu (1-6):                     ||\n");
@@ -45,6 +45,7 @@ void HalamanMenuAdmin(address root, List *L) {
                 break;
             }
             case '5': {
+                HalamanKonfirmasiETicket(root, L);
 
                 break;
             }
@@ -1137,5 +1138,23 @@ void HalamanHistoryTransaksi(address root, List *L) {
 
                 break;
         }
+    }
+}
+
+
+void HalamanKonfirmasiETicket(address root, List *L) {
+    printf("===================================================\n");
+    printf("============== Konfirmasi E-Ticket (%d) ===========\n", TotalQueue(QueueETicket));
+    printf("===================================================\n");
+
+    if (IsEmptyQueue(QueueETicket)) {
+        printf("Tidak ada e-ticket yang menunggu konfirmasi.\n");
+        return;
+    }
+
+    Transaksi* trx = (Transaksi*) InfoTop(QueueETicket);
+    if (trx == NULL) {
+        printf("Data transaksi tidak valid.\n");
+        return;
     }
 }

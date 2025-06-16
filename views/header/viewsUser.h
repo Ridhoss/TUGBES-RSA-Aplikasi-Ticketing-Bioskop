@@ -12,6 +12,7 @@
 #include "../../models/header/ADTTeater.h"
 #include "../../models/header/ADTFilm.h"
 #include "../../models/header/ADTJadwal.h"
+#include "../../models/header/ADTQueue.h"
 #include "../../models/header/ADTPemesanan.h"
 #include "../../models/header/ADTStack.h"
 #include "Auth.h"

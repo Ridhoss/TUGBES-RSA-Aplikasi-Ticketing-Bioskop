@@ -1,9 +1,6 @@
 #include "header/viewsUser.h"
 
 void HalamanMenuUser(address root, List *L) {
-    // StackMenu stackMenu;
-    // CreateStack(&stackMenu);
-    // Push(&stackMenu, "Menu Utama");
 
     date selectedDate;
     GetToday(&selectedDate);
@@ -43,7 +40,7 @@ void HalamanMenuUser(address root, List *L) {
         printf("||     1. Cari dan pilih film                    ||\n");
         printf("||     2. Lihat film upcoming                    ||\n");
         printf("||     3. Cari jadwal film                       ||\n");
-        printf("||     4. Lihat History Transaksi                ||\n");
+        printf("||     4. Lihat Pemesanan & History Transaksi    ||\n");
         printf("||     5. Logout                                 ||\n");
         printf("||                                               ||\n");
         printf("|| Pilihan menu (1-5):                           ||\n");
@@ -54,8 +51,6 @@ void HalamanMenuUser(address root, List *L) {
         
         switch (pilihan) {
             case 1: {
-                // Push(&stackMenu, "Cari dan pilih film");
-
                 KotaInfo* info = (KotaInfo*)(kotaNode->info);
                 printf("===================================================\n");
                 printf("         Film yang tersedia di %s      \n", info->nama);
@@ -64,8 +59,6 @@ void HalamanMenuUser(address root, List *L) {
                 if (ListEmpty(tampilFilm)) {
                     printf("Tidak ada film yang sedang tayang di kota ini.\n");
 
-                    // Pop(&stackMenu);
-
                     break;
                 } else {
                     printFilm(tampilFilm);
@@ -79,20 +72,14 @@ void HalamanMenuUser(address root, List *L) {
                 if (filmTerpilih == NULL) {
                     printf("Film tidak ditemukan.\n");
 
-                    // Pop(&stackMenu);
-
                     break;
                 }
 
                 HalamanPilihJadwal(root, L, kotaNode, filmTerpilih, selectedDate);
 
-                // Pop(&stackMenu);
-
                 break;
             }
             case 2:{
-                // Push(&stackMenu, "Lihat film upcoming");
-                
                 KotaInfo* info = (KotaInfo*)(kotaNode->info);
                 printf("===================================================\n");
                 printf("         Film yang upcoming di %s      \n", info->nama);
@@ -101,8 +88,6 @@ void HalamanMenuUser(address root, List *L) {
                 if (ListEmpty(tampilFilm)) {
                     printf("Tidak ada film yang upcoming di kota ini.\n");
                     
-                    // Pop(&stackMenu);
-
                     break;
                 } else {
                     printFilm(tampilFilm);
@@ -116,8 +101,6 @@ void HalamanMenuUser(address root, List *L) {
                 if (filmTerpilih == NULL) {
                     printf("Film tidak ditemukan.\n");
 
-                    // Pop(&stackMenu);
-
                     break;
                 }
 
@@ -125,8 +108,6 @@ void HalamanMenuUser(address root, List *L) {
                 date tanggalTayang = CariTanggalTayangPertama(kotaNode, infoFilm);
 
                 HalamanPilihJadwal(root, L, kotaNode, filmTerpilih, tanggalTayang);
-
-                // Pop(&stackMenu);
 
                 break;
             }
@@ -178,7 +159,7 @@ void HalamanMenuUser(address root, List *L) {
                 addressList filmTerpilih = cariFilmByJudul(*L, namaFilm);
                 if (filmTerpilih == NULL) {
                     printf("Film tidak ditemukan.\n");
-                    // Pop(&stackMenu);
+
                     break;
                 }
 
@@ -214,6 +195,55 @@ void HalamanMenuUser(address root, List *L) {
                         case 1: {
                             IsiStackPesananAktif(&stackTransaksi, idLogin, root);
                             PrintStackTransaksi(stackTransaksi, *L, root);
+
+                            int pilPes;
+                            int runningPes = 1;
+                            int idTrans;
+
+                            while (runningPes)
+                            {
+                                printf("1. Use E-Ticket\n");
+                                printf("2. Kembali\n");
+                                printf("Pilih: ");
+                                scanf("%d", &pilPes);
+                                while (getchar() != '\n');
+                                printf("===================================================\n");
+
+                                switch (pilPes) {
+                                    case 1: {
+                                        printf("Masukan ID Transaksi: ");
+                                        scanf("%d", &idTrans);
+
+                                        Transaksi* transaksiTerpilih = SearchTransaksiById(idTrans);
+                                        if (transaksiTerpilih != NULL) {
+                                            if(strcmp(transaksiTerpilih->status, "PROCESSED") != 0){
+                                                UpdateStatusTransaksiById(idTrans, "PROCESSED");
+                                                EnQueueFile(&QueueETicket, transaksiTerpilih);
+                                                printf("E-ticket dengan ID %d berhasil diajukan.\n", idTrans);
+                                                free(transaksiTerpilih); 
+                                            } else if (strcmp(transaksiTerpilih->status, "USED") != 0) {
+                                                printf("E-Ticket sudah di konfirmasi!\n");
+                                            } else {
+                                                printf("E-Ticket sedang dalam proses!\n");
+                                            }
+                                        } else {
+                                            printf("Transaksi dengan ID %d tidak ditemukan.\n", idTrans);
+                                        }
+
+                                        break;
+                                    }
+                                    case 2: {
+                                        runningPes = 0;
+
+                                        break;
+                                    }
+                                    default:
+                                        printf("Pilihan tidak valid, silahkan coba lagi\n");
+
+                                        break;
+                                }
+                            }
+
                             DelAll(&stackTransaksi);  
 
                             break;
