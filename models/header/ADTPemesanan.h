@@ -11,9 +11,10 @@
 #include "ADTTree.h"
 #include "ADTJadwal.h"
 #include "ADTStack.h"
+#include "ADTQueue.h"
+#include "ADTAkun.h"
 
-
-typedef struct {
+typedef struct transaksi {
     int id;
     int idUser;
     int idFilm;
@@ -22,9 +23,10 @@ typedef struct {
     int jumlahTiket;
     int harga;
     int totalHarga;
+    char status[100];
 } Transaksi;
 
-typedef struct {
+typedef struct detailTransaksi {
     int idTransaksi;
     int idJadwal;
     int baris;
@@ -41,6 +43,8 @@ void IsiStackTransaksiByBioskop(Stack* S, int idBioskop);
 void IsiStackPesananAktif(Stack *S, int idUser, address root);
 void PrintStackTransaksi(Stack S, List filmList, address root);
 void AmbilDetailTransaksi(List *L, int idTransaksi);
+Transaksi* SearchTransaksiById(int idTransaksi);
+void UpdateStatusTransaksiById(int id, const char* statusBaru);
 
 
 void AksiTransaksi(address jadwalNode, Kursi kursiDipilih[], int jumlahDipilih, int idUser);

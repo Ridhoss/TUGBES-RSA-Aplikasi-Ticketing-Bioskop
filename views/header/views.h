@@ -23,6 +23,7 @@ void HalamanManipulasiTeater(address root, List *L, address nodeKota);
 void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address nodeBioskop);
 void HalamanManipulasiFilm(List *L);
 void HalamanHistoryTransaksi(address root, List *L);
+void HalamanKonfirmasiETicket(address root, List *L);
 
 
 

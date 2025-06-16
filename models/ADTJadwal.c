@@ -631,13 +631,19 @@ void AmbilJadwalTeaterKeList(address nodeTeater, List* L) {
     if (nodeTeater == NULL || nodeTeater->fs == NULL) return;
 
     address nodeJadwal = nodeTeater->fs;
+    date tanggalHariIni;
+    GetToday(&tanggalHariIni);
 
     while (nodeJadwal != NULL) {
         JadwalInfo* jadwal = (JadwalInfo*) nodeJadwal->info;
-        JadwalInfo* salinan = (JadwalInfo*) malloc(sizeof(JadwalInfo));
-        *salinan = *jadwal;
 
-        InsLast(L, (infotype) salinan);
+        if (!IsDateLessToday(jadwal->tanggal)) {
+            JadwalInfo* salinan = (JadwalInfo*) malloc(sizeof(JadwalInfo));
+            *salinan = *jadwal;
+
+            InsLast(L, (infotype) salinan);
+        }
+
         nodeJadwal = nodeJadwal->nb;
     }
 }

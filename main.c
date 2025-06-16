@@ -12,6 +12,9 @@
 #include "views/header/Auth.h"
 
 int main() {
+    CreateQueue(&QueueETicket);
+    LoadQueueFromFile(&QueueETicket);
+    
     char* rootStr = (char*) malloc(strlen("Head") + 1);
     strcpy(rootStr, "Head");
     address root = CreateTree((infotype)rootStr, ROOT);
