@@ -352,6 +352,27 @@ address SearchKotaById(address root, const int* idKota) {
     return Search(root, (infotype)&target, CompareKotaId, KOTA);
 }
 
+address CariKotaDariIdBioskop(address root, int idBioskop) {
+    if (root == NULL) return NULL;
+
+    if (root->type == KOTA) {
+        address hasil = SearchBioskopById(root, &idBioskop);
+        if (hasil != NULL) {
+            return root;
+        }
+    }
+
+    address child = root->fs;
+    while (child != NULL) {
+        address result = CariKotaDariIdBioskop(child, idBioskop);
+        if (result != NULL) return result;
+        child = child->nb;
+    }
+
+    return NULL;
+}
+
+
 // Deskripsi : Prosedur untuk mencetak daftar kota
 // IS : menerima address node dan level untuk indentasi
 // FS : mencetak daftar kota yang ada pada tree

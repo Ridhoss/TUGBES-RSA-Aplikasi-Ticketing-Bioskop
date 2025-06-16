@@ -41,6 +41,7 @@ int CompareKota(infotype a, infotype b);
 int CompareKotaId(infotype a, infotype b);
 address SearchKotaByName(address root, const char* namaKota);
 address SearchKotaById(address root, const int* idKota);
+address CariKotaDariIdBioskop(address root, int idBioskop);
 
 void PrintKota(address node, int level);
 

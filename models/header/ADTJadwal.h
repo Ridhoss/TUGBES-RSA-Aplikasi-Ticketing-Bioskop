@@ -54,6 +54,7 @@ int CompareJadwal(infotype a, infotype b);
 int CompareJadwalId(infotype a, infotype b);
 address SearchJadwalByName(address teater, const date* tanggal, const TimeInfo* start);
 address SearchJadwalById(address teater, const int* idJadwal);
+address CariJadwalByIdGlobal(address root, int idJadwal);
 
 void PrintJadwal(address node, int level);
 

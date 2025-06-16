@@ -17,6 +17,7 @@ typedef struct {
     int id;
     int idUser;
     int idFilm;
+    int idBioskop;
     date tanggal;
     int jumlahTiket;
     int harga;
@@ -36,7 +37,9 @@ void LoadKursiTerisi(JadwalInfo* jadwal);
 
 void IsiStackTransaksiById(Stack *S, int idUser);
 void IsiStackTransaksiByDate(Stack *S, int idUser, date tanggalTrans);
-void PrintStackTransaksi(Stack S, List filmList);
+void IsiStackTransaksiByBioskop(Stack* S, int idBioskop);
+void IsiStackPesananAktif(Stack *S, int idUser, address root);
+void PrintStackTransaksi(Stack S, List filmList, address root);
 void AmbilDetailTransaksi(List *L, int idTransaksi);
 
 
