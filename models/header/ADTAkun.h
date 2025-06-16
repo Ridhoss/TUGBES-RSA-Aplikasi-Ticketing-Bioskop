@@ -25,8 +25,4 @@ void DaftarAkun(int role);
 int Login(const char *username, const char *password, Akun *akun, int total_akun, int *idLogin);
 //* Function CariAkun
 Akun* CariAkunById(int idLogin);
-//* Procedure logout
-void Logout(int *con);
-//* Clear Account
-void Clear(int *idLogin, char *username, char *password, char *phone, char *alamat, int *saldo, int *role);
 #endif

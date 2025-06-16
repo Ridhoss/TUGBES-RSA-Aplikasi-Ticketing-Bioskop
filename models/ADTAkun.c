@@ -3,7 +3,9 @@
 
 const char *users = "database/users.txt";
 
-
+// Deskripsi: Fungsi ini membaca data akun dari file teks (users) dan menyimpannya ke dalam array akun.
+// I.S.: File users ada di direktori, dan parameter akun dialokasikan.
+// F.S.: akun terisi dengan data dari file, dan fungsi mengembalikan jumlah akun yang berhasil dibaca.
 int BacaFileAkun(Akun *akun){
     FILE *file = fopen(users, "r");
     if (file == NULL) return 0;
@@ -28,6 +30,9 @@ int BacaFileAkun(Akun *akun){
     return index;
 }
 
+// Deskripsi: Fungsi ini mengecek apakah username yang diberikan sudah ada di file users.
+// I.S.: Parameter username diberikan, file users tersedia atau belum ada.
+// F.S.: Mengembalikan 1 jika username ada (duplikat) dan 0 jika username tidak ada. 
 int CekDuplikat(const char *username) {
     FILE *file = fopen(users, "r");
     if (file == NULL) return 0; // file belum ada, jadi username belum ada
@@ -45,6 +50,9 @@ int CekDuplikat(const char *username) {
     return 0;
 }
 
+// Deskripsi: Fungsi ini membaca file users dan mengembalikan ID terakhir yang ditemukan.
+// I.S.: File users tersedia atau tidak
+// F.S.: fungsi mengembalikan ID tertinggi yang ditemukan di file users
 int get_last_id() {
     FILE *file = fopen(users, "r");
     if (file == NULL) return 0;
@@ -62,6 +70,9 @@ int get_last_id() {
     return last_id;
 }
 
+// Deskripsi: Procedure ini melakukan proses registrasi akun baru, memastikan username tidak duplikat, lalu menyimpan data akun ke file users.
+// I.S.: Parameter role diterima
+// F.S.: Data akun tersimpan di file users jika username tidak duplikat dan file berhasil dibuka.
 void DaftarAkun(int role) {
 
     Akun akun;
@@ -96,6 +107,9 @@ void DaftarAkun(int role) {
     printf("Registrasi berhasil!\n");
 }
 
+// Deskripsi: Fungsi ini memverifikasi apakah kombinasi username dan password cocok dengan salah satu akun dalam array, lalu mengembalikan ID akun yang berhasil login.
+// I.S.: Semua parameter terisi dan data akun tersedia.
+// F.S.: Jika login berhasil, *idLogin berisi ID akun dan fungsi return 1. Jika gagal, return 0.   
 int Login(const char *username, const char *password, Akun *akun, int total_akun, int *idLogin){
     for (int i = 0; i < total_akun; i++)
     {
@@ -108,6 +122,9 @@ int Login(const char *username, const char *password, Akun *akun, int total_akun
     return 0;
 }
 
+// Deskripsi: Fungsi ini mencari dan mengembalikan pointer ke data akun dengan id yang cocok dari file users.
+// I.S.: File users tersedia dan idLogin diberikan.
+// F.S.: Mengembalikan pointer ke elemen akun[i] jika ditemukan, atau NULL jika tidak ditemukan.
 Akun* CariAkunById(int idLogin) {
     static Akun akun[100];
     int totalAkun = BacaFileAkun(akun);
@@ -119,18 +136,4 @@ Akun* CariAkunById(int idLogin) {
     }
 
     return NULL;
-}
-
-void Logout(int *con){
-    *con = 0;
-}
-
-void Clear(int *idLogin, char *username, char *password, char *phone, char *alamat, int *saldo, int *role){
-    strcpy(username,"");
-    strcpy(password,"");
-    strcpy(phone,"");
-    strcpy(alamat,"");
-    *saldo = 0;
-    *role = 0;
-    *idLogin = 0;
 }
