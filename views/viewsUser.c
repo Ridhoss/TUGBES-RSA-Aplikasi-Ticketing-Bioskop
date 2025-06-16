@@ -202,22 +202,30 @@ void HalamanMenuUser(address root, List *L) {
 
                 while (runningPrint)
                 {
-                    printf("1. Lihat Seluruh History Pemesanan\n");
-                    printf("2. Lihat History Berdasarkan Tanggal\n");
-                    printf("3. Kembali\n");
+                    printf("1. Lihat Pesanan\n");
+                    printf("2. Lihat Seluruh History Transaksi\n");
+                    printf("3. Lihat History Berdasarkan Tanggal\n");
+                    printf("4. Kembali\n");
                     printf("Pilih: ");
                     scanf("%d", &pilPrint);
                     while (getchar() != '\n');
 
                     switch (pilPrint) {
                         case 1: {
-                            IsiStackTransaksiById(&stackTransaksi, idLogin);
+                            IsiStackPesananAktif(&stackTransaksi, idLogin, root);
                             PrintStackTransaksi(stackTransaksi, *L, root);
                             DelAll(&stackTransaksi);  
 
                             break;
                         }
                         case 2: {
+                            IsiStackTransaksiById(&stackTransaksi, idLogin);
+                            PrintStackTransaksi(stackTransaksi, *L, root);
+                            DelAll(&stackTransaksi);  
+
+                            break;
+                        }
+                        case 3: {
                             printf("Masukkan tanggal (dd/mm/yyyy): ");
                             scanf("%d/%d/%d", &tanggalCari.Tgl, &tanggalCari.Bln, &tanggalCari.Thn);
                             IsiStackTransaksiByDate(&stackTransaksi, idLogin, tanggalCari);
@@ -226,7 +234,7 @@ void HalamanMenuUser(address root, List *L) {
 
                             break;
                         }
-                        case 3: {
+                        case 4: {
                             runningPrint = 0;
 
                             break;

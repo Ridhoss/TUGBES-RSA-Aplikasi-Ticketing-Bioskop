@@ -42,7 +42,7 @@ int SearchJadwalFile(const JadwalInfo* jadwal) {
         date tanggal;
 
         int readData = sscanf(
-            buffer, "%d|%d|%d|%d|%d/%d/%d|%d:%d|%d:%d|%d|",
+            buffer, "%d|%d|%d|%d|%d/%d/%d|%02d:%02d|%02d:%02d|%d|",
             &id, &idKota, &idBioskop, &idTeater,
             &tanggal.Tgl, &tanggal.Bln, &tanggal.Thn,
             &start.jam, &start.menit,
@@ -84,7 +84,7 @@ void EditJadwalKeFile(const JadwalInfo* jadwal, const JadwalInfo* jadwalLama) {
         date tanggal;
 
         sscanf(
-            buffer, "%d|%d|%d|%d|%d/%d/%d|%d:%d|%d:%d|%d|",
+            buffer, "%d|%d|%d|%d|%d/%d/%d|%02d:%02d|%02d:%02d|%d|",
             &id, &idKota, &idBioskop, &idTeater,
             &tanggal.Tgl, &tanggal.Bln, &tanggal.Thn,
             &start.jam, &start.menit,
@@ -141,7 +141,7 @@ void HapusJadwalKeFile(const JadwalInfo* jadwalLama) {
         date tanggal;
 
         sscanf(
-            buffer, "%d|%d|%d|%d|%d/%d/%d|%d:%d|%d:%d|%d|",
+            buffer, "%d|%d|%d|%d|%d/%d/%d|%02d:%02d|%02d:%02d|%d|",
             &id, &idKota, &idBioskop, &idTeater,
             &tanggal.Tgl, &tanggal.Bln, &tanggal.Thn,
             &start.jam, &start.menit,
@@ -204,7 +204,7 @@ void HapusSemuaJadwalDariFileByTeater(address teater) {
         date tanggal;
 
         sscanf(
-            buffer, "%d|%d|%d|%d|%d/%d/%d|%d:%d|%d:%d|%d|",
+            buffer, "%d|%d|%d|%d|%d/%d/%d%02d:%02d|%02d:%02d|%d|",
             &id, &idKota, &idBioskop, &idTeater,
             &tanggal.Tgl, &tanggal.Bln, &tanggal.Thn,
             &start.jam, &start.menit,
@@ -249,7 +249,7 @@ void LoadJadwal(address root, List ListFilm) {
         date tanggal;
 
         int readData = sscanf(
-            buffer, "%d|%d|%d|%d|%d/%d/%d|%d:%d|%d:%d|%d|",
+            buffer, "%d|%d|%d|%d|%d/%d/%d|%02d:%02d|%02d:%02d|%d|",
             &id, &idKota, &idBioskop, &idTeater,
             &tanggal.Tgl, &tanggal.Bln, &tanggal.Thn,
             &start.jam, &start.menit,
@@ -552,6 +552,31 @@ address SearchJadwalById(address teater, const int* idJadwal) {
 
     return Search(teater, (infotype)&target, CompareJadwalId, JADWAL);
 }
+
+address CariJadwalByIdGlobal(address root, int idJadwal) {
+    address nodeKota = root->fs;
+    while (nodeKota != NULL) {
+        address nodeBioskop = nodeKota->fs;
+        while (nodeBioskop != NULL) {
+            address nodeTeater = nodeBioskop->fs;
+            while (nodeTeater != NULL) {
+                address nodeJadwal = nodeTeater->fs;
+                    while (nodeJadwal != NULL) {
+                        JadwalInfo* jadwal = (JadwalInfo*)nodeJadwal->info;
+                        if (jadwal->id == idJadwal) {
+                            return nodeJadwal;
+                        }
+                        nodeJadwal = nodeJadwal->nb;
+                    }
+                nodeTeater = nodeTeater->nb;
+            }
+            nodeBioskop = nodeBioskop->nb;
+        }
+        nodeKota = nodeKota->nb;
+    }
+    return NULL;
+}
+
 
 // Deskripsi : Prosedur untuk mencetak daftar jadwal
 // IS : menerima address teater dan level untuk indentasi

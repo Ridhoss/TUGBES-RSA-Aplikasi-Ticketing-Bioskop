@@ -128,6 +128,61 @@ void IsiStackTransaksiByBioskop(Stack* S, int idBioskop) {
     fclose(file);
 }
 
+void IsiStackPesananAktif(Stack *S, int idUser, address root) {
+    FILE *file = fopen("database/transaksi.txt", "r");
+    if (file == NULL) {
+        printf("Gagal membuka file transaksi.txt\n");
+        return;
+    }
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        Transaksi trx;
+        if (sscanf(buffer, "%d|%d|%d|%d|%d/%d/%d|%d|%d|%d",
+                    &trx.id, &trx.idUser, &trx.idFilm, &trx.idBioskop,
+                    &trx.tanggal.Tgl, &trx.tanggal.Bln, &trx.tanggal.Thn,
+                    &trx.jumlahTiket, &trx.harga, &trx.totalHarga) == 10) {
+
+            if (trx.idUser == idUser) {
+                List listDetail;
+                AmbilDetailTransaksi(&listDetail, trx.id);
+
+                boolean aktif = false;
+
+                addressList p = listDetail.First;
+                while (p != NULL && !aktif) {
+                    DetailTransaksi *dt = (DetailTransaksi *)p->info;
+                    address nodeJadwal = CariJadwalByIdGlobal(root, dt->idJadwal);
+
+                    if (nodeJadwal != NULL) {
+                        JadwalInfo *jadwal = (JadwalInfo *)nodeJadwal->info;
+
+                        if (isDateTimeValid(jadwal->tanggal, jadwal->Start)) {
+                            aktif = true;
+                        }
+                        
+                    }
+
+                    p = p->next;
+                }
+
+                DelAll(&listDetail);
+
+                if (aktif) {
+                    Transaksi *salinan = (Transaksi *)malloc(sizeof(Transaksi));
+                    if (salinan != NULL) {
+                        *salinan = trx;
+                        Push(S, (infotype)salinan);
+                    }
+                }
+            }
+        }
+    }
+
+    fclose(file);
+}
+
+
 void PrintStackTransaksi(Stack S, List filmList, address root) {
     if (IsEmptyStack(S)) {
         printf("Belum ada transaksi.\n");
@@ -151,17 +206,30 @@ void PrintStackTransaksi(Stack S, List filmList, address root) {
         address nodeBioskop = SearchBioskopById(nodeKota, &trx->idBioskop);
         BioskopInfo* infoBioskop = (BioskopInfo*)(nodeBioskop->info);
 
+        List kursi;
+        AmbilDetailTransaksi(&kursi, trx->id);
+        TimeInfo jamStart, jamEnd;
+
+        if (kursi.First != NULL) {
+            DetailTransaksi* d = (DetailTransaksi*)kursi.First->info;
+            address nodeJadwal = CariJadwalByIdGlobal(root, d->idJadwal);
+            if (nodeJadwal != NULL) {
+                JadwalInfo* jadwal = (JadwalInfo*)nodeJadwal->info;
+                jamStart = jadwal->Start;
+                jamEnd = jadwal->End;
+            }
+        }
+
         printf("Transaksi #%d\n", i++);
         printf("ID Transaksi : %d\n", trx->id);
         printf("Film         : %s\n", infoFilm->judul);
+        printf("Jam Mulai    : %02d:%02d\n", jamStart.jam, jamStart.menit);
+        printf("Jam Selesai  : %02d:%02d\n", jamEnd.jam, jamEnd.menit);
         printf("Bioskop      : %s\n", infoBioskop->nama);
         printf("Tanggal      : %d/%d/%d\n", trx->tanggal.Tgl, trx->tanggal.Bln, trx->tanggal.Thn);
         printf("Jumlah Tiket : %d\n", trx->jumlahTiket);
         printf("Harga Tiket  : %d\n", trx->harga);
         printf("Total Bayar  : %d\n", trx->totalHarga);
-
-        List kursi;
-        AmbilDetailTransaksi(&kursi, trx->id);
 
         printf("Daftar Kursi : ");
         if (kursi.First == NULL) {

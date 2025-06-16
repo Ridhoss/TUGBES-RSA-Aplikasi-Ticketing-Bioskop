@@ -215,6 +215,9 @@ void GetFilmByKota(address KotaNode, List *ListFilmKota) {
     List listJadwal;
     AmbilSeluruhJadwalKotaKeList(KotaNode, &listJadwal);
 
+    date today;
+    GetToday(&today);
+
     addressList p = listJadwal.First;
     while (p != NULL) {
         address nodeJadwal = (address)p->info;
@@ -222,7 +225,7 @@ void GetFilmByKota(address KotaNode, List *ListFilmKota) {
         if (nodeJadwal != NULL && nodeJadwal->info != NULL) {
             JadwalInfo* jadwal = (JadwalInfo*) nodeJadwal->info;
 
-            if (jadwal->film != NULL && !ApakahFilmSudahAda(*ListFilmKota, jadwal->film)) {
+            if (jadwal->film != NULL && !ApakahFilmSudahAda(*ListFilmKota, jadwal->film) && !IsDateLessToday(jadwal->tanggal)) {
                 FilmInfo* salinanFilm = (FilmInfo*) malloc(sizeof(FilmInfo));
                 if (salinanFilm != NULL) {
                     *salinanFilm = *(jadwal->film);
