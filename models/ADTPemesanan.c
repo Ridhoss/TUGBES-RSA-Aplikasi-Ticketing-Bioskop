@@ -1,5 +1,8 @@
 #include "header/ADTPemesanan.h"
 
+
+// manipulation file file
+
 void SimpanTransaksiKeFile(Transaksi trx) {
     FILE* file = fopen("database/transaksi.txt", "a");
     if (file != NULL) {
@@ -44,6 +47,9 @@ void LoadKursiTerisi(JadwalInfo* jadwal) {
 
 
 
+
+
+// stack, list and file
 
 void IsiStackTransaksiById(Stack *S, int idUser) {
     FILE* file = fopen("database/transaksi.txt", "r");
@@ -179,7 +185,6 @@ void IsiStackPesananAktif(Stack *S, int idUser, address root) {
 
     fclose(file);
 }
-
 
 void PrintStackTransaksi(Stack S, List filmList, address root) {
     if (IsEmptyStack(S)) {
@@ -352,7 +357,7 @@ void UpdateStatusTransaksiById(int id, const char* statusBaru) {
 
 
 
-
+// modul utama
 
 void AksiTransaksi(address jadwalNode, Kursi kursiDipilih[], int jumlahDipilih, int idUser) {
     if (jadwalNode == NULL || jadwalNode->info == NULL) return;
