@@ -3,13 +3,17 @@
 #include <stdlib.h>
 #include "../timing.h" 
 
-
+// Deskripsi: Fungsi ini membantu memastikan waktu dimulai dari titik nol sebelum digunakan lebih lanjut.
+// I.S.: T berisi nilai acak atau belum diatur.
+// F.S.: T memiliki nilai jam = 0 dan menit = 0.
 void InisialisasiWaktu(TimeInfo *T) {
     T->jam = 0;
     T->menit = 0;
 }
 
-// Mengisi waktu T dengan jam dan menit jika valid
+// Deskripsi: Fungsi ini mengatur waktu pada TimeInfo jika valid, atau menginisialisasi ke 00:00 jika tidak valid.
+// I.S: belum tentu memiliki nilai waktu yang valid.
+// F.S: berisi waktu yang diatur sesuai parameter jika valid, atau diatur ke 00:00 jika tidak valid.
 void SetTime(TimeInfo *T, int jam, int menit) {
     if (isValidTime(jam, menit)) {
         T->jam = jam;
@@ -90,7 +94,9 @@ TimeInfo DifferenceTime(TimeInfo A, TimeInfo B) {
     return ConvertTime(selisih);
 }
 
-// Fungsi untuk membandingkan dua waktu
+// Deskripsi: Fungsi untuk membandingkan dua waktu (A dan B) dan mengembalikan hasil perbandingan dalam bentuk int.
+// I.S.: Dua waktu A dan B terdefinisi.
+// F.S : Mengembalikan nilai -1, 1, atau 0
 int CompareTime(TimeInfo A, TimeInfo B) {
     int a = ConvertMenit(A);
     int b = ConvertMenit(B);
@@ -109,7 +115,9 @@ boolean CekBetweenTime(TimeInfo start, TimeInfo end, TimeInfo new) {
     return (n < s || n > e); 
 }
 
-// Fungsi untuk mengonversi TimeInfo menjadi string
+// Deskripsi: Fungsi ini mengubah data waktu TimeInfo menjadi format string
+// I.S.: Waktu T dan memori buffer telah dialokasikan.
+// F.S.: buffer berisi string dalam format "x jam y menit" sesuai nilai T.
 void TimeString(TimeInfo T, char *buffer) {
     sprintf(buffer, "%d jam %d menit", T.jam, T.menit); 
 }
@@ -121,6 +129,9 @@ void PrintTime(TimeInfo T) {
     printf("%02d:%02d\n", T.jam, T.menit);
 }
 
+// Deskripsi: Fungsi untuk mengecek apakah waktu sudah melewati tengah malam
+// I.S.: start dan durasi terdefinisi
+// F.S: Mengembalikan true jika hasil penjumlahan waktu melewati tengah malam (end.jam >= 24), false jika tidak.
 boolean ApakahLewatTengahMalam(TimeInfo start, TimeInfo durasi) {
     TimeInfo end = TambahWaktu(start, durasi);
     return (end.jam >= 24);
