@@ -179,9 +179,10 @@ void HalamanMenuUser(address root, List *L) {
                 printf("Apakah Anda yakin ingin logout? (y/n): ");
                 scanf("%s", konfirmasi);
                 if (strcmp(konfirmasi, "y") == 0 || strcmp(konfirmasi, "Y") == 0) {
-                    printf("Logout berhasil.\n");
-                    Logout(&loggedIn);
+                    // Logout(&loggedIn);
+                    loggedIn = 0;
                     idLogin = -1;
+                    printf("Logout berhasil.\n");
                     HalamanAwal(&root, L);  
                     return;
                 } else {

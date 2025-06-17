@@ -55,9 +55,10 @@ void HalamanMenuAdmin(address root, List *L) {
                 scanf("%s", konfirmasi);
 
                 if (strcmp(konfirmasi, "y") == 0 || strcmp(konfirmasi, "Y") == 0) {
-                    printf("Logout berhasil.\n");
-                    Logout(&loggedIn); 
+                    // Logout(&loggedIn); 
+                    loggedIn = 0;
                     idLogin = -1;
+                    printf("Logout berhasil.\n");
                     HalamanAwal(&root, L);
                     return;
                 } else {
@@ -128,14 +129,25 @@ void HalamanManipulasiKota(address root, List *L) {
                 address dataLama = SearchKotaByName(root, namaKota);
 
                 if (dataLama != NULL) {
-                    printf("Masukkan nama kota baru: ");
-                    InputString(dataBaru.nama);
+                        char pilihan;
+                        printf("Apakah ingin mengganti nama kota? (y/n): ");
+                        scanf(" %c", &pilihan);
 
-                    while(SearchKotaByName(root, dataBaru.nama) != NULL) {
-                        printf("Kota dengan nama '%s' sudah ada\n", dataBaru.nama);
-                        printf("Masukan nama kota baru: ");
-                        InputString(dataBaru.nama);
-                    }
+                        if (pilihan == 'y' || pilihan == 'Y') {
+                            printf("Masukkan nama kota baru: ");
+                            InputString(dataBaru.nama);
+
+                            while (SearchKotaByName(root, dataBaru.nama) != NULL) {
+                                printf("Kota dengan nama '%s' sudah ada.\n", dataBaru.nama);
+
+                                printf("Masukkan nama kota baru: ");
+                                InputString(dataBaru.nama);
+                            }
+                        } else {
+                            printf("Penginputan dibatalkan.\n");
+                            return;
+                        }
+                    
 
                     UbahKota(dataLama, dataBaru);
                 } else {
@@ -265,13 +277,21 @@ void HalamanManipulasiBioskop(address root, List *L) {
                 address nodeBioskop = SearchBioskopByName(nodeKota, namaBioskop);
 
                 if (nodeBioskop != NULL) {
-                    printf("Masukkan nama bioskop baru: ");
-                    InputString(dataBaru.nama);
+                    char pilihan;
+                    printf("Apakah ingin mengganti nama bioskop? (y/n): ");
+                    scanf(" %c", &pilihan);
 
-                    while(SearchBioskopByName(nodeKota, dataBaru.nama) != NULL) {
-                        printf("Bioskop dengan nama '%s' sudah ada\n", dataBaru.nama);
-                        printf("Masukan nama bioskop baru: ");
+                    if (pilihan == 'y' || pilihan == 'Y') {
+                        printf("Masukkan nama bioskop baru: ");
                         InputString(dataBaru.nama);
+
+                        while(SearchBioskopByName(nodeKota, dataBaru.nama) != NULL) {
+                            printf("Bioskop dengan nama '%s' sudah ada\n", dataBaru.nama);
+                            printf("Masukan nama bioskop baru: ");
+                            InputString(dataBaru.nama);
+                        }
+                    } else {
+                        strcpy(dataBaru.nama, ((BioskopInfo*)nodeBioskop->info)->nama);
                     }
 
                     UbahBioskop(nodeBioskop, dataBaru);
@@ -391,8 +411,20 @@ void HalamanManipulasiTeater(address root, List *L, address nodeKota) {
                 printf("Masukan Nama Teater : ");
                 InputString(teaterBaru.nama);
 
-                printf("Masukan Jumlah Kursi di Teater : ");
-                scanf("%d", &teaterBaru.jumlahKursi);
+                while(SearchTeaterByName(nodeBioskop, teaterBaru.nama) != NULL) {
+                    printf("Teater dengan nama '%s' sudah ada\n", teaterBaru.nama);
+                    printf("Masukan nama Teater baru: ");
+                    InputString(teaterBaru.nama);
+                }
+
+                do {
+                    printf("Masukan Jumlah Kursi di Teater (max 400) : ");
+                    scanf("%d", &teaterBaru.jumlahKursi);
+
+                    if (teaterBaru.jumlahKursi > 400 || teaterBaru.jumlahKursi <= 0) {
+                        printf("Jumlah kursi tidak valid. Masukkan angka antara 1 sampai 400.\n");
+                    }
+                } while (teaterBaru.jumlahKursi > 400 || teaterBaru.jumlahKursi <= 0);
 
                 printf("Masukan Harga Tiket Teater : ");
                 scanf("%d", &teaterBaru.harga);
@@ -414,16 +446,38 @@ void HalamanManipulasiTeater(address root, List *L, address nodeKota) {
                     break;
                 }
 
-                printf("Masukkan Nama Teater Baru: ");
-                InputString(teaterBaru.nama);
+                if(nodeTeater != NULL){
+                    char pilihan;
+                    printf("Apakah ingin mengganti nama teater? (y/n): ");
+                    scanf(" %c", &pilihan);
 
-                printf("Masukkan Jumlah Kursi Baru: ");
-                scanf("%d", &teaterBaru.jumlahKursi);
+                    if (pilihan == 'y' || pilihan == 'Y') {
+                        printf("Masukkan Nama Teater Baru: ");
+                        InputString(teaterBaru.nama);
 
-                printf("Masukan Harga Tiket Teater : ");
-                scanf("%d", &teaterBaru.harga);
+                        while(SearchTeaterByName(nodeBioskop, teaterBaru.nama) != NULL) {
+                            printf("Teater dengan nama '%s' sudah ada\n", teaterBaru.nama);
+                            printf("Masukan nama Teater baru: ");
+                            InputString(teaterBaru.nama);
+                        }
+                    } else {
+                        strcpy(teaterBaru.nama, ((TeaterInfo*)nodeTeater->info)->nama);
+                    }
 
-                UbahTeater(nodeTeater, teaterBaru);
+                    do {
+                        printf("Masukan Jumlah Kursi baru di Teater (max 400) : ");
+                        scanf("%d", &teaterBaru.jumlahKursi);
+
+                        if (teaterBaru.jumlahKursi > 400 || teaterBaru.jumlahKursi <= 0) {
+                            printf("Jumlah kursi tidak valid. Masukkan angka antara 1 sampai 400.\n");
+                        }
+                    } while (teaterBaru.jumlahKursi > 400 || teaterBaru.jumlahKursi <= 0);
+
+                    printf("Masukan Harga Tiket Teater : ");
+                    scanf("%d", &teaterBaru.harga);
+
+                    UbahTeater(nodeTeater, teaterBaru);
+                }
 
                 break;
             }
