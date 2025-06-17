@@ -1086,7 +1086,8 @@ void HalamanHistoryTransaksi(address root, List *L) {
         printf("1. Lihat Seluruh History Transaksi\n");
         printf("2. Lihat History Berdasarkan Tanggal\n");
         printf("3. Lihat History Berdasarkan Bioskop\n");
-        printf("4. Kembali\n");
+        printf("4. Lihat Total Pembelian Tiket\n");
+        printf("5. Kembali\n");
         printf("Pilih: ");
         scanf("%d", &pilPrint);
         while (getchar() != '\n');
@@ -1126,9 +1127,20 @@ void HalamanHistoryTransaksi(address root, List *L) {
                 PrintStackTransaksi(stackTransaksi, *L, root);
                 DelAll(&stackTransaksi);
 
+
                 break;
             }
             case 4: {
+                List ListLaporan;
+                CreateList(&ListLaporan);
+                AmbilSemuaBioskopKeList(root, &ListLaporan);
+                TampilkanLaporanPenjualan(root, ListLaporan);
+                
+                DelAll(&ListLaporan);
+
+                break;
+            }
+            case 5: {
                 runningPrint = 0;
 
                 break;
@@ -1193,5 +1205,45 @@ void HalamanKonfirmasiETicket(address root, List *L) {
         printf("E-ticket ID %d telah dikonfirmasi.\n", trx->id);
     } else {
         printf("Tidak ada perubahan. Kembali ke menu admin.\n");
+    }
+}
+
+void TampilkanLaporanPenjualan(address root, List L) {
+    if (root == NULL || ListEmpty(L)) {
+        printf("Data tidak tersedia.\n");
+        return;
+    }
+
+    printf("===================================================\n");
+    printf("================ Laporan Penjualan ================\n");
+    printf("===================================================\n");
+
+
+    for (address nodeKota = root->fs; nodeKota != NULL; nodeKota = nodeKota->nb) {
+        KotaInfo* kota = (KotaInfo*)nodeKota->info;
+        int totalKota = 0;
+
+        printf("Kota: %s\n", kota->nama);
+
+        for (addressList P = L.First; P != NULL; P = P->next) {
+            BioskopInfo* b = (BioskopInfo*) P->info;
+            address nodeBioskop = SearchBioskopById(nodeKota, &b->id);
+
+            if (nodeBioskop != NULL && nodeBioskop->pr == nodeKota) {
+                int jumlahTiket = 0;
+                int total = HitungPenjualanBioskop(b->id, &jumlahTiket);
+                totalKota += total;
+
+                printf("  - %s\n", b->nama);
+                printf("    Tiket Terjual  : %d\n", jumlahTiket);
+                printf("    Total Pendapatan: Rp. %d\n", total);
+                printf("---------------------------------------------------\n");
+            }
+        }
+
+        printf("Total Pendapatan Kota %s: Rp. %d\n", kota->nama, totalKota);
+        printf("===================================================\n");
+        printf("===================================================\n");
+
     }
 }
