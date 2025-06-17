@@ -9,6 +9,9 @@
 
 const char *films = "database/film.txt";
 
+// Deskripsi: Untuk mengalokasikan memori film
+// I.S.: menerima data film
+// F.S.: mengembalikan pointer ke hasil alokasi FilmInfo
 FilmInfo* alokasiFilm(FilmInfo data) {
     FilmInfo* f = (FilmInfo*)malloc(sizeof(FilmInfo));
     if (f != NULL) {
@@ -17,10 +20,16 @@ FilmInfo* alokasiFilm(FilmInfo data) {
     return f;
 }
 
+// Deskripsi: Untuk menghapus alokasi memori film
+// I.S.: memori film telah dialokasikan
+// F.S.: memori dihapus dengan free()
 void dealokasiFilm(FilmInfo* f) {
     free(f);
 }
 
+// Deskripsi: Untuk membaca dan memuat data film dari file
+// I.S.: file tersedia
+// F.S.: L terisi semua data FilmInfo dari file.
 void loadFilm(List* L, const char* filename) {
     printf("Trying to open: %s\n", filename);
     FILE* file = fopen(filename, "r");
@@ -57,8 +66,9 @@ void loadFilm(List* L, const char* filename) {
     fclose(file);
 }
 
-
-// Tambah film ke list
+// Deskripsi: Menambahkan  film ke dalam list
+// I.S.: List telah didefinisikan
+// F.S.: Film ditambahkan ke List
 void TambahFilm(List* L, FilmInfo filmBaru) {
     FilmInfo* node = alokasiFilm(filmBaru);
     if (node == NULL) {
@@ -70,14 +80,18 @@ void TambahFilm(List* L, FilmInfo filmBaru) {
     printf("Film '%s' berhasil ditambahkan ke list.\n", filmBaru.judul);
 }
 
+// Deskripsi: Menambahkan film baru yang ditambahkan ke List
+// I.S.: List Film tersedia
+// F.S.: Film ditambahkan ke akhir list
 void TambahFilmBaru(List* L, FilmInfo filmBaru) {
     filmBaru.idFilm = get_last_film_id(films) + 1;
     TambahFilm(L, filmBaru);
     simpanKeFile(*L, films);
 }
 
-
-// Edit film
+// Deskripsi: Mengedit data film yang sudah ada
+// I.S.: filmLama tersedia 
+// F.S.: Data film diperbarui 
 void editFilmByName(FilmInfo filmBaru, addressList filmLama) {
     if (filmLama == NULL) return;
 
@@ -100,8 +114,9 @@ void editFilmByName(FilmInfo filmBaru, addressList filmLama) {
         film->durasi.menit = filmBaru.durasi.menit;
 }
 
-
-// Hapus film berdasarkan id
+// Deskripsi: Menghapus film berdasarkan ID
+// I.S.: ID tersedia di list 
+// F.S.: film dengan ID tsb dihapus
 void hapusFilm(List* L, int id) {
     addressList filmNode = cariFilm(*L, id);
     if (filmNode != NULL) {
@@ -113,7 +128,9 @@ void hapusFilm(List* L, int id) {
     }
 }
 
-
+// Deskripsi: Menyimpan seluruh data film dari list ke file
+// I.S.: List film tersedia
+// F.S.: file berisi seluruh data film
 void simpanKeFile(List L, const char* filename) {
     FILE* file = fopen(filename, "w");
     if (!file) {
@@ -142,7 +159,9 @@ void simpanKeFile(List L, const char* filename) {
     fclose(file);
 }
 
-
+// Deskripsi: Mengambil ID film terbesar dari file
+// I.S.: file tersedia
+// F.S.: mengembalikan ID film terakhir yang ada di file
 int get_last_film_id(const char* filename) {
     FILE* file = fopen(filename, "r");
     if (file == NULL) return 0; 
@@ -162,7 +181,9 @@ int get_last_film_id(const char* filename) {
     return last_id;
 }
 
-// Cari film
+// Deskripsi: Mencari node film berdasarkan ID
+// I.S.: List berisi film
+// F.S.: node film dengan ID dikembalikan sesuai dengan yang dicari
 addressList cariFilm(List L, int id) {
     addressList P = L.First;
     while (P != NULL) {
@@ -175,6 +196,9 @@ addressList cariFilm(List L, int id) {
     return NULL;
 }
 
+// Deskripsi: Mencari node film berdasarkan judul.
+// I.S.: List terisi
+// F.S.: node film dengan judul yang dicari
 addressList cariFilmByJudul(List L, const char* title) {
     addressList P = L.First;
 
@@ -189,7 +213,9 @@ addressList cariFilmByJudul(List L, const char* title) {
     return NULL;
 }
 
-
+// Deskripsi: Menampilkan seluruh film dari list
+// I.S.: list film berisi data film
+// F.S.: semua film pada list ditampilkan ke layar
 void printFilm(List L) {
     addressList P = L.First;
     if (P == NULL) {
@@ -209,6 +235,9 @@ void printFilm(List L) {
     }
 }
 
+// Deskripsi: Mengisi list dengan film yang tayang di suatu kota
+// I.S.: kota memiliki node dan jadwal
+// F.S.: LIstFilmKota berisi film yang tayang
 void GetFilmByKota(address KotaNode, List *ListFilmKota) {
     CreateList(ListFilmKota);
 
@@ -240,6 +269,9 @@ void GetFilmByKota(address KotaNode, List *ListFilmKota) {
     DelAll(&listJadwal);
 }
 
+// Deskripsi: Mengecek apakah film sudah ada dalam list
+// I.S.: L berisi daftar film
+// F.S.: mengembalikan true jika film sudah ada dalam list
 boolean ApakahFilmSudahAda(List L, FilmInfo* target) {
     addressList P = L.First;
     while (P != NULL) {
@@ -252,6 +284,9 @@ boolean ApakahFilmSudahAda(List L, FilmInfo* target) {
     return false;
 }
 
+// Deskripsi: Mengambil daftar film yang belum tayang hari ini.
+// I.S.: kota memiliki data jadwal
+// F.S.: ListFilmKota berisi film yang belum tayang hari ini
 void GetFilmUpcoming(address KotaNode, List *ListFilmKota) {
     CreateList(ListFilmKota);
 
@@ -311,6 +346,10 @@ void GetFilmUpcoming(address KotaNode, List *ListFilmKota) {
     DelAll(&semuaFilm);
 }
 
+
+// Deskripsi: Mencari tanggal tayang pertama dari sebuah film.
+// I.S.: Kota memiliki data film & jadwal
+// F.S.: Dikembalikan tanggal tayang terawal (setelah hari ini)
 date CariTanggalTayangPertama(address kotaNode, FilmInfo* film) {
     List listJadwal;
     AmbilSeluruhJadwalKotaKeList(kotaNode, &listJadwal);
@@ -337,6 +376,9 @@ date CariTanggalTayangPertama(address kotaNode, FilmInfo* film) {
     return hasil;
 }
 
+// Deskripsi: Mengambil daftar film sesuai tanggal dan jam tayang
+// I.S.: Data kota dan waktu pencarian tersedia
+// F.S.: ListFilm berisi film yang tayang dalam range waktu tertentu
 void GetFilmByRangeWaktu(address kotaNode, date selectedDate, TimeInfo jamAwal, TimeInfo jamAkhir, List *ListFilm) {
     if (kotaNode == NULL || ListFilm == NULL) return;
 

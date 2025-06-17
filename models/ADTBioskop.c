@@ -425,7 +425,9 @@ void PrintBioskop(address node, int level) {
 
 // modul tambahan
 
-
+// Deskripsi: Procedure untuk Mengambil semua data bioskop dari tree ke dalam sebuah list linear.
+// I.S.: root menunjuk ke tree kota-bioskop, L belum berisi data.
+// F.S.: List L berisi salinan semua data bioskop dari tree.
 void AmbilSemuaBioskopKeList(address root, List* L) {
     CreateList(L);
 
