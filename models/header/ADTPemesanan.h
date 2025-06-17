@@ -49,5 +49,6 @@ void UpdateStatusTransaksiById(int id, const char* statusBaru);
 
 void AksiTransaksi(address jadwalNode, Kursi kursiDipilih[], int jumlahDipilih, int idUser);
 int BuatIdTransaksiBaru(int idUser, date today);
+int HitungPenjualanBioskop(int idBioskop, int* jumlahTiket);
 
 #endif 

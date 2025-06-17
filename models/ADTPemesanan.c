@@ -450,3 +450,33 @@ int BuatIdTransaksiBaru(int idUser, date today) {
     sprintf(finalIdStr, "%d%02d%02d%02d%02d", idUser, today.Tgl, today.Bln, today.Thn % 100, increment + 1);
     return atoi(finalIdStr);
 }
+
+int HitungPenjualanBioskop(int idBioskop, int* jumlahTiket) {
+    FILE* file = fopen("database/transaksi.txt", "r");
+    if (file == NULL) {
+        printf("Gagal membuka file transaksi.\n");
+        *jumlahTiket = 0;
+        return 0;
+    }
+
+    char buffer[256];
+    int totalPendapatan = 0;
+    *jumlahTiket = 0;
+
+    while (fgets(buffer, sizeof(buffer), file)) {
+        int idTrans, idUser, idFilm, idBioskopTrans, jumlah, harga, total;
+        char tanggal[20], status[20];
+
+        sscanf(buffer, "%d|%d|%d|%d|%[^|]|%d|%d|%d|%s",
+               &idTrans, &idUser, &idFilm, &idBioskopTrans, tanggal, &jumlah, &harga, &total, status);
+
+        if (idBioskopTrans == idBioskop) {
+            *jumlahTiket += jumlah;
+            totalPendapatan += total;
+        }
+    }
+
+    fclose(file);
+    return totalPendapatan;
+}
+

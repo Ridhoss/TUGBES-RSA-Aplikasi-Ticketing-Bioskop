@@ -419,3 +419,32 @@ void PrintBioskop(address node, int level) {
 
     PrintChildrenOnly(node, level);
 }
+
+
+
+
+// modul tambahan
+
+
+void AmbilSemuaBioskopKeList(address root, List* L) {
+    CreateList(L);
+
+    if (root == NULL || root->fs == NULL) return;
+
+    address nodeKota = root->fs;
+    while (nodeKota != NULL) {
+        address nodeBioskop = nodeKota->fs;
+        while (nodeBioskop != NULL) {
+            BioskopInfo* bioskop = (BioskopInfo*) nodeBioskop->info;
+
+            BioskopInfo* salinan = (BioskopInfo*) malloc(sizeof(BioskopInfo));
+            *salinan = *bioskop;
+
+            InsLast(L, (infotype)salinan);
+
+            nodeBioskop = nodeBioskop->nb;
+        }
+
+        nodeKota = nodeKota->nb;
+    }
+}
