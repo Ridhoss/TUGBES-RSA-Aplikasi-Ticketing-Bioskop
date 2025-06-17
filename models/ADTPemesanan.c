@@ -1,5 +1,8 @@
 #include "header/ADTPemesanan.h"
 
+// Deskripsi: Procedure untuk menyimpan data transaksi ke dalam file teks transaksi.txt
+// I.S.: Data transaksi trx sudah tersedia
+// F.S.: Data transaksi trx ditulis ke dalam file transaksi.txt.
 void SimpanTransaksiKeFile(Transaksi trx) {
     FILE* file = fopen("database/transaksi.txt", "a");
     if (file != NULL) {
@@ -469,6 +472,9 @@ int BuatIdTransaksiBaru(int idUser, date today) {
     return atoi(finalIdStr);
 }
 
+// Deskripsi: Fungsi untuk menghitung total pendapatan dan jumlah tiket yang terjual dari sebuah bioskop tertentu berdasarkan ID bioskop yang diberikan
+// I.S.: File transaksi.txt sudah tersedia
+// F.S.: jumlahTiket berisi total tiket terjual untuk bioskop tersebut dan return value adalah total pendapatan.
 int HitungPenjualanBioskop(int idBioskop, int* jumlahTiket) {
     FILE* file = fopen("database/transaksi.txt", "r");
     if (file == NULL) {
