@@ -618,7 +618,7 @@ void InisialisasiKursi(JadwalInfo *jadwal, address teaterAddress) {
             if (index < jumlahKursi) {
                 jadwal->kursi[i][j] = 'O';
             } else {
-                jadwal->kursi[i][j] = 'X';
+                jadwal->kursi[i][j] = '1';
             }
         }
     }
