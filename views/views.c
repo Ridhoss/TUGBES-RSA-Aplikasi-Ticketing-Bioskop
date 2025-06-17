@@ -58,7 +58,7 @@ void HalamanMenuAdmin(address root, List *L) {
                     printf("Logout berhasil.\n");
                     Logout(&loggedIn); 
                     idLogin = -1;
-                    HalamanAwal();
+                    HalamanAwal(&root, L);
                     return;
                 } else {
                     printf("Kembali ke menu.\n");
