@@ -580,7 +580,6 @@ void HalamanKonfirmasiPemesanan(address nodeJadwal, Kursi kursiDipilih[], int ju
         for (int i = 0; i < jumlahDipilih; i++) {
             int baris = kursiDipilih[i].baris - 1;
             int kolom = kursiDipilih[i].kolom - 'A';
-            jadwalInfo->kursi[baris][kolom] = 'X';
         }
 
         AksiTransaksi(nodeJadwal, kursiDipilih, jumlahDipilih, idLogin);
