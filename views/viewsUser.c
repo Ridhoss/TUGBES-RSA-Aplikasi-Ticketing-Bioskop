@@ -170,111 +170,7 @@ void HalamanMenuUser(address root, List *L) {
                 break;
             }
             case 4: { 
-                printf("===================================================\n");
-                printf("============== Menu History Transaksi =============\n");
-                printf("===================================================\n");
-
-                date tanggalCari;
-                int pilPrint;
-                int runningPrint = 1;
-
-                Stack stackTransaksi;
-                CreateStack(&stackTransaksi);
-
-                while (runningPrint)
-                {
-                    printf("1. Lihat Pesanan\n");
-                    printf("2. Lihat Seluruh History Transaksi\n");
-                    printf("3. Lihat History Berdasarkan Tanggal\n");
-                    printf("4. Kembali\n");
-                    printf("Pilih: ");
-                    scanf("%d", &pilPrint);
-                    while (getchar() != '\n');
-
-                    switch (pilPrint) {
-                        case 1: {
-                            IsiStackPesananAktif(&stackTransaksi, idLogin, root);
-                            PrintStackTransaksi(stackTransaksi, *L, root);
-
-                            int pilPes;
-                            int runningPes = 1;
-                            int idTrans;
-
-                            while (runningPes)
-                            {
-                                printf("1. Use E-Ticket\n");
-                                printf("2. Kembali\n");
-                                printf("Pilih: ");
-                                scanf("%d", &pilPes);
-                                while (getchar() != '\n');
-                                printf("===================================================\n");
-
-                                switch (pilPes) {
-                                    case 1: {
-                                        printf("Masukan ID Transaksi: ");
-                                        scanf("%d", &idTrans);
-
-                                        Transaksi* transaksiTerpilih = SearchTransaksiById(idTrans);
-                                        if (transaksiTerpilih != NULL) {
-                                            if(strcmp(transaksiTerpilih->status, "PROCESSED") != 0){
-                                                UpdateStatusTransaksiById(idTrans, "PROCESSED");
-                                                EnQueueFile(&QueueETicket, transaksiTerpilih);
-                                                printf("E-ticket dengan ID %d berhasil diajukan.\n", idTrans);
-                                                free(transaksiTerpilih); 
-                                            } else if (strcmp(transaksiTerpilih->status, "USED") != 0) {
-                                                printf("E-Ticket sudah di konfirmasi!\n");
-                                            } else {
-                                                printf("E-Ticket sedang dalam proses!\n");
-                                            }
-                                        } else {
-                                            printf("Transaksi dengan ID %d tidak ditemukan.\n", idTrans);
-                                        }
-
-                                        break;
-                                    }
-                                    case 2: {
-                                        runningPes = 0;
-
-                                        break;
-                                    }
-                                    default:
-                                        printf("Pilihan tidak valid, silahkan coba lagi\n");
-
-                                        break;
-                                }
-                            }
-
-                            DelAll(&stackTransaksi);  
-
-                            break;
-                        }
-                        case 2: {
-                            IsiStackTransaksiById(&stackTransaksi, idLogin);
-                            PrintStackTransaksi(stackTransaksi, *L, root);
-                            DelAll(&stackTransaksi);  
-
-                            break;
-                        }
-                        case 3: {
-                            printf("Masukkan tanggal (dd/mm/yyyy): ");
-                            scanf("%d/%d/%d", &tanggalCari.Tgl, &tanggalCari.Bln, &tanggalCari.Thn);
-                            IsiStackTransaksiByDate(&stackTransaksi, idLogin, tanggalCari);
-                            PrintStackTransaksi(stackTransaksi, *L, root);
-                            DelAll(&stackTransaksi);
-
-                            break;
-                        }
-                        case 4: {
-                            runningPrint = 0;
-
-                            break;
-                        }
-                        default:
-                            printf("Pilihan tidak valid, silahkan coba lagi\n");
-
-                            break;
-                    }
-                }
+                TampilanMenuHistoryTransaksi(root, L);
 
                 break;
             }
@@ -285,8 +181,8 @@ void HalamanMenuUser(address root, List *L) {
                 if (strcmp(konfirmasi, "y") == 0 || strcmp(konfirmasi, "Y") == 0) {
                     printf("Logout berhasil.\n");
                     Logout(&loggedIn);
-                    idLogin = -1;   
-                    HalamanAwal();  
+                    idLogin = -1;
+                    HalamanAwal(&root, L);  
                     return;
                 } else {
                     printf("Kembali ke menu.\n");
@@ -297,6 +193,115 @@ void HalamanMenuUser(address root, List *L) {
                 printf("Pilihan tidak valid!\n");
         }
     } while (loggedIn);
+}
+
+void TampilanMenuHistoryTransaksi(address root, List *L) {
+    printf("===================================================\n");
+    printf("============== Menu History Transaksi =============\n");
+    printf("===================================================\n");
+
+    date tanggalCari;
+    int pilPrint;
+    int runningPrint = 1;
+
+    Stack stackTransaksi;
+    CreateStack(&stackTransaksi);
+
+    while (runningPrint)
+    {
+        printf("1. Lihat Pesanan\n");
+        printf("2. Lihat Seluruh History Transaksi\n");
+        printf("3. Lihat History Berdasarkan Tanggal\n");
+        printf("4. Kembali\n");
+        printf("Pilih: ");
+        scanf("%d", &pilPrint);
+        while (getchar() != '\n');
+
+        switch (pilPrint) {
+            case 1: {
+                IsiStackPesananAktif(&stackTransaksi, idLogin, root);
+                PrintStackTransaksi(stackTransaksi, *L, root);
+
+                int pilPes;
+                int runningPes = 1;
+                int idTrans;
+
+                while (runningPes)
+                {
+                    printf("1. Use E-Ticket\n");
+                    printf("2. Kembali\n");
+                    printf("Pilih: ");
+                    scanf("%d", &pilPes);
+                    while (getchar() != '\n');
+                    printf("===================================================\n");
+
+                    switch (pilPes) {
+                        case 1: {
+                            printf("Masukan ID Transaksi: ");
+                            scanf("%d", &idTrans);
+
+                            Transaksi* transaksiTerpilih = SearchTransaksiById(idTrans);
+                            if (transaksiTerpilih != NULL) {
+                                if (strcmp(transaksiTerpilih->status, "ACTIVE") == 0) {
+                                    UpdateStatusTransaksiById(idTrans, "PROCESSED");
+                                    EnQueueFile(&QueueETicket, transaksiTerpilih);
+                                    printf("E-ticket dengan ID %d berhasil diajukan.\n", idTrans);
+                                } else if (strcmp(transaksiTerpilih->status, "PROCESSED") == 0) {
+                                    printf("E-Ticket sedang dalam proses!\n");
+                                } else if (strcmp(transaksiTerpilih->status, "USED") == 0) {
+                                    printf("E-Ticket sudah dikonfirmasi!\n");
+                                } else {
+                                    printf("Status tidak dikenali.\n");
+                                }
+                            } else {
+                                printf("Transaksi dengan ID %d tidak ditemukan.\n", idTrans);
+                            }
+
+                            break;
+                        }
+                        case 2: {
+                            runningPes = 0;
+
+                            break;
+                        }
+                        default:
+                            printf("Pilihan tidak valid, silahkan coba lagi\n");
+
+                            break;
+                    }
+                }
+
+                DelAll(&stackTransaksi);  
+
+                break;
+            }
+            case 2: {
+                IsiStackTransaksiById(&stackTransaksi, idLogin);
+                PrintStackTransaksi(stackTransaksi, *L, root);
+                DelAll(&stackTransaksi);  
+
+                break;
+            }
+            case 3: {
+                printf("Masukkan tanggal (dd/mm/yyyy): ");
+                scanf("%d/%d/%d", &tanggalCari.Tgl, &tanggalCari.Bln, &tanggalCari.Thn);
+                IsiStackTransaksiByDate(&stackTransaksi, idLogin, tanggalCari);
+                PrintStackTransaksi(stackTransaksi, *L, root);
+                DelAll(&stackTransaksi);
+
+                break;
+            }
+            case 4: {
+                runningPrint = 0;
+
+                break;
+            }
+            default:
+                printf("Pilihan tidak valid, silahkan coba lagi\n");
+
+                break;
+        }
+    }
 }
 
 void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList filmNode, date tanggalAwal) {
@@ -575,7 +580,6 @@ void HalamanKonfirmasiPemesanan(address nodeJadwal, Kursi kursiDipilih[], int ju
         for (int i = 0; i < jumlahDipilih; i++) {
             int baris = kursiDipilih[i].baris - 1;
             int kolom = kursiDipilih[i].kolom - 'A';
-            jadwalInfo->kursi[baris][kolom] = 'X';
         }
 
         AksiTransaksi(nodeJadwal, kursiDipilih, jumlahDipilih, idLogin);

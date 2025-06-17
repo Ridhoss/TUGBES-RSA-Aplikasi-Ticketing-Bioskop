@@ -553,6 +553,9 @@ address SearchJadwalById(address teater, const int* idJadwal) {
     return Search(teater, (infotype)&target, CompareJadwalId, JADWAL);
 }
 
+// Deskripsi : Fungsi untuk mencari Jadwal berdasarkan id
+// IS : menerima address root dan namaJadwal sebagai string
+// FS : mengembalikan address dari node yang sesuai, atau NULL jika tidak ditemukan
 address CariJadwalByIdGlobal(address root, int idJadwal) {
     address nodeKota = root->fs;
     while (nodeKota != NULL) {
@@ -576,7 +579,6 @@ address CariJadwalByIdGlobal(address root, int idJadwal) {
     }
     return NULL;
 }
-
 
 // Deskripsi : Prosedur untuk mencetak daftar jadwal
 // IS : menerima address teater dan level untuk indentasi
@@ -754,7 +756,7 @@ void TampilkanListJadwal(List L) {
 }
 
 // Deskripsi : mengambil jadwal teater dari tree dijadikan linkedlist berdasarkan kota
-// IS : menerima node teater dan list
+// IS : menerima node kota dan list
 // FS : List jadwal terisi dengan jadwal yang ada di teater yang dikirim
 void AmbilSeluruhJadwalKotaKeList(address kota, List* hasil) {
     CreateList(hasil);
@@ -778,6 +780,9 @@ void AmbilSeluruhJadwalKotaKeList(address kota, List* hasil) {
     }
 }
 
+// Deskripsi : mengambil jadwal teater dari tree dijadikan linkedlist berdasarkan kota dan film tertentu
+// IS : menerima node kota, film dan list
+// FS : List jadwal terisi dengan jadwal yang ada di teater yang dikirim
 void AmbilSeluruhJadwalKotaKeListByFilm(address kota, addressList film, List* hasil) {
     CreateList(hasil);
 

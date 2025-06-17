@@ -1,8 +1,5 @@
 #include "header/ADTPemesanan.h"
 
-// Deskripsi: Procedure untuk menyimpan data transaksi ke dalam file teks transaksi.txt
-// I.S.: Data transaksi trx sudah tersedia
-// F.S.: Data transaksi trx ditulis ke dalam file transaksi.txt.
 void SimpanTransaksiKeFile(Transaksi trx) {
     FILE* file = fopen("database/transaksi.txt", "a");
     if (file != NULL) {
@@ -246,10 +243,9 @@ void PrintStackTransaksi(Stack S, List filmList, address root) {
         printf("Transaksi #%d\n", i++);
         printf("ID Transaksi     : %d\n", trx->id);
         printf("Status Pemesanan : %s\n", trx->status);
-        printf("Nama             : %s\n", users->username);
+        printf("Username         : %s\n", users->username);
         printf("Film             : %s\n", infoFilm->judul);
-        printf("Jam Mulai        : %02d:%02d\n", jamStart.jam, jamStart.menit);
-        printf("Jam Selesai      : %02d:%02d\n", jamEnd.jam, jamEnd.menit);
+        printf("Jam Tayang       : %02d:%02d - %02d:%02d\n", jamStart.jam, jamStart.menit,  jamEnd.jam, jamEnd.menit);
         printf("Bioskop          : %s\n", infoBioskop->nama);
         printf("Tanggal          : %d/%d/%d\n", trx->tanggal.Tgl, trx->tanggal.Bln, trx->tanggal.Thn);
         printf("Jumlah Tiket     : %d\n", trx->jumlahTiket);
@@ -320,7 +316,7 @@ Transaksi* SearchTransaksiById(int idTransaksi) {
         if (sscanf(buffer, "%d|%d|%d|%d|%d/%d/%d|%d|%d|%d|%s",
                    &trx.id, &trx.idUser, &trx.idFilm, &trx.idBioskop,
                    &trx.tanggal.Tgl, &trx.tanggal.Bln, &trx.tanggal.Thn,
-                   &trx.jumlahTiket, &trx.harga, &trx.totalHarga, trx.status) == 11) {
+                   &trx.jumlahTiket, &trx.harga, &trx.totalHarga, &trx.status) == 11) {
 
             if (trx.id == idTransaksi) {
                 Transaksi* hasil = (Transaksi*)malloc(sizeof(Transaksi));
@@ -355,7 +351,7 @@ void UpdateStatusTransaksiById(int id, const char* statusBaru) {
         if (sscanf(buffer, "%d|%d|%d|%d|%d/%d/%d|%d|%d|%d|%s",
                    &trx.id, &trx.idUser, &trx.idFilm, &trx.idBioskop,
                    &trx.tanggal.Tgl, &trx.tanggal.Bln, &trx.tanggal.Thn,
-                   &trx.jumlahTiket, &trx.harga, &trx.totalHarga, trx.status) == 11) {
+                   &trx.jumlahTiket, &trx.harga, &trx.totalHarga, &trx.status) == 11) {
 
             if (trx.id == id) {
                 strcpy(trx.status, statusBaru); // Ubah status
@@ -472,3 +468,33 @@ int BuatIdTransaksiBaru(int idUser, date today) {
     sprintf(finalIdStr, "%d%02d%02d%02d%02d", idUser, today.Tgl, today.Bln, today.Thn % 100, increment + 1);
     return atoi(finalIdStr);
 }
+
+int HitungPenjualanBioskop(int idBioskop, int* jumlahTiket) {
+    FILE* file = fopen("database/transaksi.txt", "r");
+    if (file == NULL) {
+        printf("Gagal membuka file transaksi.\n");
+        *jumlahTiket = 0;
+        return 0;
+    }
+
+    char buffer[256];
+    int totalPendapatan = 0;
+    *jumlahTiket = 0;
+
+    while (fgets(buffer, sizeof(buffer), file)) {
+        int idTrans, idUser, idFilm, idBioskopTrans, jumlah, harga, total;
+        char tanggal[20], status[20];
+
+        sscanf(buffer, "%d|%d|%d|%d|%[^|]|%d|%d|%d|%s",
+               &idTrans, &idUser, &idFilm, &idBioskopTrans, tanggal, &jumlah, &harga, &total, status);
+
+        if (idBioskopTrans == idBioskop) {
+            *jumlahTiket += jumlah;
+            totalPendapatan += total;
+        }
+    }
+
+    fclose(file);
+    return totalPendapatan;
+}
+

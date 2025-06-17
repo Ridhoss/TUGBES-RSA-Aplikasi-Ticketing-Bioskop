@@ -45,4 +45,8 @@ address SearchBioskopById(address root, const int* idBioskop);
 
 void PrintBioskop(address node, int level);
 
+// modul tambahan
+
+void AmbilSemuaBioskopKeList(address root, List* L);
+
 #endif

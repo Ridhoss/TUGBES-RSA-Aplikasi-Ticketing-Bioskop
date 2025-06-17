@@ -19,6 +19,8 @@ int main() {
     strcpy(rootStr, "Head");
     address root = CreateTree((infotype)rootStr, ROOT);
 
+
+
     if (root == NULL) {
         printf("Gagal membuat tree.\n");
         return 0;
@@ -33,26 +35,7 @@ int main() {
     loadFilm(&L, films);
     LoadJadwal(root, L);
 
-    HalamanAwal();
-    if (loggedIn) {
-        Akun* akunLogin = CariAkunById(idLogin);
-        if (akunLogin != NULL) {
-            if (akunLogin->role == 0) {
-                HalamanMenuAdmin(root, &L);
-            } else if (akunLogin->role == 1) {
-                HalamanMenuUser(root, &L);
-            } else {
-                printf("Role tidak dikenali. Hubungi admin sistem.\n");
-            }
-        } else {
-            printf("Akun tidak ditemukan.\n");
-        }
-    }
-
-
-    DeleteAll(root);
-    DelAll(&L);
-    free(rootStr);
+    HalamanAwal(&root, &L);
 
     return 0;
 }

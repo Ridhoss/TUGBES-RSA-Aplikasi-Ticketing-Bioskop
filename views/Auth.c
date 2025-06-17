@@ -83,7 +83,7 @@ void HalamanLogin(){
     }
 }
 
-void HalamanAwal() {
+void HalamanAwal(address *root, List *L) {
     int masuk = 0;
 
     for (;;) {
@@ -103,7 +103,21 @@ void HalamanAwal() {
 
         if (masuk == 1) {
             HalamanLogin();
-            if (loggedIn) break;
+
+            if (loggedIn) {
+                Akun* akunLogin = CariAkunById(idLogin);
+                if (akunLogin != NULL) {
+                    if (akunLogin->role == 0) {
+                        HalamanMenuAdmin(*root, L);
+                    } else if (akunLogin->role == 1) {
+                        HalamanMenuUser(*root, L);
+                    } else {
+                        printf("Role tidak dikenali. Hubungi admin sistem.\n");
+                    }
+                } else {
+                    printf("Akun tidak ditemukan.\n");
+                }
+            }
 
         } else if (masuk == 2) {
             int role = 1;
@@ -112,10 +126,14 @@ void HalamanAwal() {
         } else if (masuk == 3) {
             printf("Anda Berhasil Keluar Dari Aplikasi\n");
 
-            return;
+            DeleteAll(*root);
+            DelAll(L);
 
+            exit(0);
+            
         } else {
             printf("Error 404. Input Tidak Diketahui\n");
         }
+        
     }
 }

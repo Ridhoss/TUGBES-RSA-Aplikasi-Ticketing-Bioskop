@@ -24,6 +24,7 @@ void HalamanManipulasiJadwal(address root, List *L, address nodeKota, address no
 void HalamanManipulasiFilm(List *L);
 void HalamanHistoryTransaksi(address root, List *L);
 void HalamanKonfirmasiETicket(address root, List *L);
+void TampilkanLaporanPenjualan(address root, List L);
 
 
 
