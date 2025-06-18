@@ -1,7 +1,2 @@
-1|bandung|
-2|jakarta|
-3|surabaya|
-4|tanggerang|
-5|malang|
-6|cimahi|
-7|jayapura|
+1|Bandung|
+2|Jakarta|

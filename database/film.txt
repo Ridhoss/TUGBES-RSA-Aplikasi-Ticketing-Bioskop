@@ -2,3 +2,19 @@
 2|emoji|ridho|comedi|1|30
 3|Jumbo|alif|bagusss wowww|1|40
 4|Minecraft the movie|sasa|film adaptasi game|1|41
+5|Inception|Nolan|Mimpi dalam mimpi|2|28
+6|Interstellar|Nolan|Perjalanan antar galaksi|2|49
+7|The Dark Knight|Emma|Pahlawan malam di Gotham|2|32
+8|Spirited Away|Suzuki|Petualangan dunia roh|2|5
+9|Coco|Rivera|Musik dan keluarga di akhirat|1|45
+10|Avengers: Endgame|Kevin|Pertarungan akhir Avengers|3|1
+11|Up|Jonas|Petualangan di rumah balon|1|36
+12|Finding Nemo|Gale|Ikan kecil hilang|1|40
+13|Frozen|Peter|Kekuatan es yang luar biasa|1|42
+14|Toy Story|Lasseter|Mainan yang hidup|1|21
+15|WALL-E|Stanton|Robot pencinta bumi|1|38
+16|Inside Out|Del|Emosi dalam kepala anak|1|35
+17|The Lion King|Don|Raja hutan kecil|1|29
+18|Big Hero 6|Roy|Anak jenius dan robot lembut|1|43
+19|Zootopia|Clark|Kota hewan penuh misteri|1|50
+20|Encanto|Yvett|Keluarga dengan kekuatan ajaib|1|39
