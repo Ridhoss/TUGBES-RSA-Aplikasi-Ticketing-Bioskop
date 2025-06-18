@@ -54,7 +54,7 @@ void HalamanMenuUser(address root, List *L) {
                 KotaInfo* info = (KotaInfo*)(kotaNode->info);
                 printf("===================================================\n");
                 printf("         Film yang tersedia di %s      \n", info->nama);
-                GetFilmByKota(kotaNode, &tampilFilm);
+                GetFilmByKotaOnlyHariIni(kotaNode, &tampilFilm);
 
                 if (ListEmpty(tampilFilm)) {
                     printf("Tidak ada film yang sedang tayang di kota ini.\n");

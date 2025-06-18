@@ -1,7 +1,18 @@
 1|1|CGV BEC|
-3|1|XXI Ciwalk|
-4|1|CGV Pasir Kaliki|
-5|1|XXI Botanica|
-6|2|cgv|
-7|1|8|
-8|1|XXI Citilink|
+2|1|XXI CIWALK|
+5|2|CGV Grand Indonesia|
+6|2|XXI Kota Kasablanka|
+7|2|Cinepolis Plaza Semanggi|
+8|3|Pakuwon Mall Surabaya|
+9|3|CGV Marvel City Surabaya|
+10|3|Cineplois Royal Plaza|
+11|4|XXI Living World Alam Sutera|
+12|4|CGV Tangcity Mall|
+13|4|Cinepolis Supermal Karawaci|
+14|5|XXI Malang Town Square|
+15|5|CGV MX Mall Malang|
+16|5|Cinepolis Dieng Plaxa|
+17|7|CGV Cimahi Mall|
+18|7|XXI Borma Cimahi|
+19|6|XXI Mall Jayapura|
+20|6|CGV Jayapura City Square|

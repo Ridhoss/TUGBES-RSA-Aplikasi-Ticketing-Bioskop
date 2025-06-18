@@ -269,6 +269,37 @@ void GetFilmByKota(address KotaNode, List *ListFilmKota) {
     DelAll(&listJadwal);
 }
 
+void GetFilmByKotaOnlyHariIni(address KotaNode, List *ListFilmKota) {
+    CreateList(ListFilmKota);
+
+    List listJadwal;
+    AmbilSeluruhJadwalKotaKeList(KotaNode, &listJadwal);
+
+    date today;
+    GetToday(&today);
+
+    addressList p = listJadwal.First;
+    while (p != NULL) {
+        address nodeJadwal = (address)p->info;
+
+        if (nodeJadwal != NULL && nodeJadwal->info != NULL) {
+            JadwalInfo* jadwal = (JadwalInfo*) nodeJadwal->info;
+
+            if (jadwal->film != NULL && !ApakahFilmSudahAda(*ListFilmKota, jadwal->film) && isSameDate(jadwal->tanggal, today)) {
+                FilmInfo* salinanFilm = (FilmInfo*) malloc(sizeof(FilmInfo));
+                if (salinanFilm != NULL) {
+                    *salinanFilm = *(jadwal->film);
+                    InsLast(ListFilmKota, (infotype)salinanFilm);
+                }
+            }
+        }
+
+        p = p->next;
+    }
+
+    DelAll(&listJadwal);
+}
+
 // Deskripsi: Mengecek apakah film sudah ada dalam list
 // I.S.: L berisi daftar film
 // F.S.: mengembalikan true jika film sudah ada dalam list
