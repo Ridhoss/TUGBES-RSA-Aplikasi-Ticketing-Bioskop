@@ -1,7 +1,5 @@
 1|1|CGV BEC|
 2|1|XXI CIWALK|
-3|1|CGV Pasir Kaliki|
-4|1|XXI Botanica|
 5|2|CGV Grand Indonesia|
 6|2|XXI Kota Kasablanka|
 7|2|Cinepolis Plaza Semanggi|
