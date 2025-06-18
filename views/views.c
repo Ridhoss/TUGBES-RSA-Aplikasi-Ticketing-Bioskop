@@ -1170,11 +1170,23 @@ void HalamanHistoryTransaksi(address root, List *L) {
                 InputString(namaKota);
                 address nodeKota = SearchKotaByName(root, namaKota);
 
+                if (nodeKota == NULL) {
+                    printf("Kota %s tidak ditemukan.\n", namaKota);
+                    printf("===================================================\n");
+                    break;
+                }
+
                 printf("===================================================\n");
                 PrintBioskop(nodeKota, 0);
                 printf("Pilih Bioskop: ");
                 InputString(namaBioskop);
                 address nodeBioskop = SearchBioskopByName(nodeKota, namaBioskop);
+
+                if (nodeBioskop == NULL) {
+                    printf("Bioskop %s tidak ditemukan.\n", namaKota);
+                    printf("===================================================\n");
+                    break;
+                }
 
                 BioskopInfo* bioskop = (BioskopInfo*)nodeBioskop->info;
                 IsiStackTransaksiByBioskop(&stackTransaksi, bioskop->id);

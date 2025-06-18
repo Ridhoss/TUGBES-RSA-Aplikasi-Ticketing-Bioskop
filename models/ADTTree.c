@@ -3,6 +3,7 @@
 #include "header/ADTBioskop.h"
 #include "header/ADTTeater.h" 
 #include "header/ADTJadwal.h" 
+#include "header/ADTPemesanan.h" 
 
 static int currentId = 1;
 
@@ -190,7 +191,9 @@ void PrintChildrenOnly(address node, int level) {
             printf("- id: %d Bioskop: %s\n", info->id, info->nama);
         } else if (child->type == TEATER) {
             TeaterInfo* info = (TeaterInfo*) child->info;
-            printf("- id: %d Teater: %s || Jumlah Kursi: %d || Harga: %d\n", info->id, info->nama, info->jumlahKursi, info->harga);
+            char hargaChar[100];
+            formatRibuan(info->harga, hargaChar);
+            printf("- id: %d Teater: %s || Jumlah Kursi: %d || Harga: Rp.%s\n", info->id, info->nama, info->jumlahKursi, hargaChar);
         } else if (child->type == JADWAL) {
             JadwalInfo* info = (JadwalInfo*) child->info;
             printf("- id: %d Jadwal Pukul: %d:%d || Tanggal: %d/%d/%d || Film: %s\n", info->id, info->Start.jam, info->Start.menit, info->tanggal.Tgl, info->tanggal.Bln, info->tanggal.Thn, info->film->judul);
