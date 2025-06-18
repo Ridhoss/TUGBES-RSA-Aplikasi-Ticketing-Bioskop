@@ -1247,16 +1247,29 @@ void HalamanKonfirmasiETicket(address root, List *L) {
     List kursi;
     AmbilDetailTransaksi(&kursi, trx->id);
     TimeInfo jamStart, jamEnd;
+    date tanggalNonton;
 
-    printf("ID Transaksi   : %d\n", trx->id);
-    printf("Username       : %s\n", users->username);
-    printf("Film           : %s\n", infoFilm->judul);
-    printf("Bioskop        : %s\n", infoBioskop->nama);
-    printf("Jam Tayang     : %02d:%02d - %02d:%02d\n", jamStart.jam, jamStart.menit,  jamEnd.jam, jamEnd.menit);
-    printf("Jumlah Tiket   : %d\n", trx->jumlahTiket);
-    printf("Total Harga    : %d\n", trx->totalHarga);
-    printf("Status         : %s\n", trx->status);
-    printf("Tanggal        : %02d/%02d/%04d\n", trx->tanggal.Tgl, trx->tanggal.Bln, trx->tanggal.Thn);
+    if (kursi.First != NULL) {
+        DetailTransaksi* d = (DetailTransaksi*)kursi.First->info;
+        address nodeJadwal = CariJadwalByIdGlobal(root, d->idJadwal);
+        if (nodeJadwal != NULL) {
+            JadwalInfo* jadwal = (JadwalInfo*)nodeJadwal->info;
+            jamStart = jadwal->Start;
+            jamEnd = jadwal->End;
+            tanggalNonton = jadwal->tanggal;
+        }
+    }
+
+    printf("ID Transaksi      : %d\n", trx->id);
+    printf("Tanggal Transaksi : %02d/%02d/%04d\n", trx->tanggal.Tgl, trx->tanggal.Bln, trx->tanggal.Thn);
+    printf("Username          : %s\n", users->username);
+    printf("Film              : %s\n", infoFilm->judul);
+    printf("Bioskop           : %s\n", infoBioskop->nama);
+    printf("Tanggal Nonton    : %02d/%02d/%04d\n", tanggalNonton.Tgl, tanggalNonton.Bln, tanggalNonton.Thn);
+    printf("Jam Tayang        : %02d:%02d - %02d:%02d\n", jamStart.jam, jamStart.menit, jamEnd.jam, jamEnd.menit);
+    printf("Jumlah Tiket      : %d\n", trx->jumlahTiket);
+    printf("Total Harga       : %d\n", trx->totalHarga);
+    printf("Status            : %s\n", trx->status);
     printf("---------------------------------------------------\n");
     printf("1. Konfirmasi E-Ticket\n");
     printf("2. Batalkan / Kembali\n");
