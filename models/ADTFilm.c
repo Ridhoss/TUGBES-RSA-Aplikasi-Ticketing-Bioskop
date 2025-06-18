@@ -296,56 +296,72 @@ void GetFilmUpcoming(address KotaNode, List *ListFilmKota) {
     date today;
     GetToday(&today);
 
-    List filmSudahTayangHariIni;
-    CreateList(&filmSudahTayangHariIni);
+    TimeInfo now;
+    GetTime(&now);
 
-    List semuaFilm;
-    CreateList(&semuaFilm);
+    List filmMasihAkanTayang;
+    CreateList(&filmMasihAkanTayang);
+
+    List filmSudahPernahTayang;
+    CreateList(&filmSudahPernahTayang);
 
     addressList p = listJadwal.First;
     while (p != NULL) {
         address nodeJadwal = (address)p->info;
         if (nodeJadwal != NULL && nodeJadwal->info != NULL) {
-            JadwalInfo* jadwal = (JadwalInfo*) nodeJadwal->info;
+            JadwalInfo* jadwal = (JadwalInfo*)nodeJadwal->info;
             if (jadwal->film != NULL) {
+                boolean sudahTayang = false;
+                boolean akanTayang = false;
 
-                if (!ApakahFilmSudahAda(semuaFilm, jadwal->film)) {
-                    FilmInfo* salinan = (FilmInfo*) malloc(sizeof(FilmInfo));
-                    *salinan = *(jadwal->film);
-                    InsLast(&semuaFilm, (infotype)salinan);
+                // Cek status jadwal
+                if (IsDateLessToday(jadwal->tanggal)) {
+                    sudahTayang = true;
+                } else if (isSameDate(jadwal->tanggal, today)) {
+                    if (CompareTime(jadwal->Start, now) <= 0) {
+                        sudahTayang = true;
+                    } else {
+                        akanTayang = true;
+                    }
+                } else {
+                    akanTayang = true;
                 }
 
-                if (jadwal->tanggal.Tgl == today.Tgl &&
-                    jadwal->tanggal.Bln == today.Bln &&
-                    jadwal->tanggal.Thn == today.Thn) {
-                    
-                    if (!ApakahFilmSudahAda(filmSudahTayangHariIni, jadwal->film)) {
-                        FilmInfo* salinan2 = (FilmInfo*) malloc(sizeof(FilmInfo));
-                        *salinan2 = *(jadwal->film);
-                        InsLast(&filmSudahTayangHariIni, (infotype)salinan2);
-                    }
+                if (sudahTayang && !ApakahFilmSudahAda(filmSudahPernahTayang, jadwal->film)) {
+                    FilmInfo* salinan = (FilmInfo*)malloc(sizeof(FilmInfo));
+                    *salinan = *(jadwal->film);
+                    InsLast(&filmSudahPernahTayang, (infotype)salinan);
+                }
+
+                if (akanTayang && !ApakahFilmSudahAda(filmMasihAkanTayang, jadwal->film)) {
+                    FilmInfo* salinan = (FilmInfo*)malloc(sizeof(FilmInfo));
+                    *salinan = *(jadwal->film);
+                    InsLast(&filmMasihAkanTayang, (infotype)salinan);
                 }
             }
         }
+
         p = p->next;
     }
 
-    addressList f = semuaFilm.First;
+    // Masukkan ke ListFilmKota hanya film yang belum pernah tayang sama sekali
+    addressList f = filmMasihAkanTayang.First;
     while (f != NULL) {
         FilmInfo* film = (FilmInfo*)f->info;
-        if (!ApakahFilmSudahAda(filmSudahTayangHariIni, film)) {
-            FilmInfo* salinan3 = (FilmInfo*) malloc(sizeof(FilmInfo));
-            *salinan3 = *film;
-            InsLast(ListFilmKota, (infotype)salinan3);
+
+        if (!ApakahFilmSudahAda(filmSudahPernahTayang, film)) {
+            FilmInfo* salinan = (FilmInfo*)malloc(sizeof(FilmInfo));
+            *salinan = *film;
+            InsLast(ListFilmKota, (infotype)salinan);
         }
+
         f = f->next;
     }
 
     DelAll(&listJadwal);
-    DelAll(&filmSudahTayangHariIni);
-    DelAll(&semuaFilm);
+    DelAll(&filmSudahPernahTayang);
+    DelAll(&filmMasihAkanTayang);
 }
-
 
 // Deskripsi: Mencari tanggal tayang pertama dari sebuah film.
 // I.S.: Kota memiliki data film & jadwal

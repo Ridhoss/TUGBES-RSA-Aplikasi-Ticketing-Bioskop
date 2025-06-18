@@ -229,6 +229,7 @@ void PrintStackTransaksi(Stack S, List filmList, address root) {
         List kursi;
         AmbilDetailTransaksi(&kursi, trx->id);
         TimeInfo jamStart, jamEnd;
+        date tanggalNonton;
 
         Akun* users = CariAkunById(trx->idUser);
 
@@ -239,21 +240,27 @@ void PrintStackTransaksi(Stack S, List filmList, address root) {
                 JadwalInfo* jadwal = (JadwalInfo*)nodeJadwal->info;
                 jamStart = jadwal->Start;
                 jamEnd = jadwal->End;
+                tanggalNonton = jadwal->tanggal;
             }
         }
 
+        char hargaTiketChar[100], totalBayarChar[100];
+
+        formatRibuan(trx->harga, hargaTiketChar);
+        formatRibuan(trx->totalHarga, totalBayarChar);
 
         printf("Transaksi #%d\n", i++);
-        printf("ID Transaksi     : %d\n", trx->id);
-        printf("Status Pemesanan : %s\n", trx->status);
-        printf("Username         : %s\n", users->username);
-        printf("Film             : %s\n", infoFilm->judul);
-        printf("Jam Tayang       : %02d:%02d - %02d:%02d\n", jamStart.jam, jamStart.menit,  jamEnd.jam, jamEnd.menit);
-        printf("Bioskop          : %s\n", infoBioskop->nama);
-        printf("Tanggal          : %d/%d/%d\n", trx->tanggal.Tgl, trx->tanggal.Bln, trx->tanggal.Thn);
-        printf("Jumlah Tiket     : %d\n", trx->jumlahTiket);
-        printf("Harga Tiket      : %d\n", trx->harga);
-        printf("Total Bayar      : %d\n", trx->totalHarga);
+        printf("ID Transaksi      : %d\n", trx->id);
+        printf("Tanggal Transaksi : %d/%d/%d\n", trx->tanggal.Tgl, trx->tanggal.Bln, trx->tanggal.Thn);
+        printf("Status Pemesanan  : %s\n", trx->status);
+        printf("Username          : %s\n", users->username);
+        printf("Film              : %s\n", infoFilm->judul);
+        printf("Jam Tayang        : %02d:%02d - %02d:%02d\n", jamStart.jam, jamStart.menit,  jamEnd.jam, jamEnd.menit);
+        printf("Bioskop           : %s\n", infoBioskop->nama);
+        printf("Tanggal Nonton    : %d/%d/%d\n", tanggalNonton.Tgl, tanggalNonton.Bln, tanggalNonton.Thn);
+        printf("Jumlah Tiket      : %d\n", trx->jumlahTiket);
+        printf("Harga Tiket       : Rp.%s\n", hargaTiketChar);
+        printf("Total Bayar       : Rp.%s\n", totalBayarChar);
 
         printf("Daftar Kursi : ");
         if (kursi.First == NULL) {
@@ -504,3 +511,21 @@ int HitungPenjualanBioskop(int idBioskop, int* jumlahTiket) {
     return totalPendapatan;
 }
 
+// Deskripsi : 
+// I.S :
+// F.S : 
+void formatRibuan(int angka, char *output) {
+    char angkas[20];
+    sprintf(angkas, "%d", angka);
+    int len = strlen(angkas);
+    int sisa = len % 3;
+
+    int pos = 0;
+    for (int i = 0; i < len; i++) {
+        if (i > 0 && (i - sisa) % 3 == 0) {
+            output[pos++] = '.';
+        }
+        output[pos++] = angkas[i];
+    }
+    output[pos] = '\0';
+}

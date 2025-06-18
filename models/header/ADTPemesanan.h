@@ -51,4 +51,6 @@ void AksiTransaksi(address jadwalNode, Kursi kursiDipilih[], int jumlahDipilih, 
 int BuatIdTransaksiBaru(int idUser, date today);
 int HitungPenjualanBioskop(int idBioskop, int* jumlahTiket);
 
+void formatRibuan(int angka, char *output);
+
 #endif 

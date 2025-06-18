@@ -363,9 +363,12 @@ void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList fil
                             if (IsWeekend(selectedDate)) {
                                 hargaTiket += 5000;
                             }
+                            char hargaTiketChar[100];
+                            formatRibuan(hargaTiket, hargaTiketChar);
+
                             printf("--------------------------------------------------\n");
                             printf("  Teater : %s\n", teater->nama);
-                            printf("  Harga  : Rp%d\n", hargaTiket);
+                            printf("  Harga  : Rp.%s\n", hargaTiketChar);
                             printf("    Jam  : ");
                             adaJadwalTeater = 1;
                         }
@@ -555,6 +558,10 @@ void HalamanKonfirmasiPemesanan(address nodeJadwal, Kursi kursiDipilih[], int ju
         hargaTiket += 5000;
     }
 
+    char hargaTiketChar[100], totalHargaChar[100];
+    formatRibuan(hargaTiket, hargaTiketChar);
+    formatRibuan(jumlahDipilih * hargaTiket, totalHargaChar);
+
     printf("==========================================\n");
     printf("        KONFIRMASI PEMESANAN TIKET        \n");
     printf("==========================================\n");
@@ -563,9 +570,9 @@ void HalamanKonfirmasiPemesanan(address nodeJadwal, Kursi kursiDipilih[], int ju
     printf("Teater     : %s\n", teater->nama);
     printf("Tanggal    : %02d-%02d-%04d\n", jadwalInfo->tanggal.Tgl, jadwalInfo->tanggal.Bln, jadwalInfo->tanggal.Thn);
     printf("Jam        : %02d:%02d\n", jadwalInfo->Start.jam, jadwalInfo->Start.menit);
-    printf("Harga/tiket: Rp%d\n", hargaTiket);
+    printf("Harga/tiket: Rp.%s\n", hargaTiketChar);
     printf("Jumlah     : %d tiket\n", jumlahDipilih);
-    printf("Total Bayar: Rp%d\n", jumlahDipilih * hargaTiket);
+    printf("Total Bayar: Rp.%s\n", totalHargaChar);
     printf("------------------------------------------\n");
     printf("Kursi yang dipilih:\n");
     for (int i = 0; i < jumlahDipilih; i++) {
