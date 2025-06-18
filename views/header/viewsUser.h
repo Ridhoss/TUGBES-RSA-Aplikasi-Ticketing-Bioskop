@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
 
 #include "../../models/header/ADTTree.h"
@@ -15,8 +14,8 @@
 #include "../../models/header/ADTQueue.h"
 #include "../../models/header/ADTPemesanan.h"
 #include "../../models/header/ADTStack.h"
+#include "../../library/errorHandle.h"
 #include "Auth.h"
-
 
 void HalamanMenuUser(address root, List *L);
 void TampilanMenuHistoryTransaksi(address root, List *L);

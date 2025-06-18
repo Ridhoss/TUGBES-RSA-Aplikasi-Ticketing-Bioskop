@@ -406,7 +406,7 @@ void HalamanPilihJadwal(address root, List *L, address kotaNode, addressList fil
         printf("3. Pilih Jadwal\n");
         printf("4. Kembali\n");
         printf("Pilihan Anda: ");
-        scanf("%d", &menu);
+        menu = InputAngkaValid(1, 4);
         getchar();
 
         if (menu == 1) {
@@ -489,14 +489,26 @@ void HalamanPilihKursi(address root, List *L, address nodeJadwal) {
 
     printf("===================================================\n");
 
-
     Kursi kursiDipilih[10];
     int jumlahDipilih = 0;
 
     for (int k = 0; k < jumlahTiket; k++) {
         Kursi pilih;
-        printf("Pilih kursi ke-%d (contoh A1): ", k + 1);
-        scanf(" %c%d", &pilih.kolom, &pilih.baris);
+        char input[10];
+
+        while (1) {
+            printf("Pilih kursi ke-%d (contoh A1): ", k + 1);
+            scanf("%s", input);
+
+            if (!isValidKursiFormat(input)) {
+                printf("Format tidak valid. Masukkan format seperti A1, B3, dst.\n");
+                continue;
+            }
+
+            pilih.kolom = toupper(input[0]);
+            pilih.baris = atoi(&input[1]);
+            break;
+        }
 
         int i = pilih.baris - 1;
         int j = pilih.kolom - 'A';
