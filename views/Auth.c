@@ -9,41 +9,36 @@ void HalamanRegister(Akun *akun, int role){
     char password_check[50];
 
     printf("== Registrasi Akun Baru ==\n");
-
-    // Username
-    printf("Masukkan Username: ");
-    scanf("%49s", akun->username);
-
-    // Password + konfirmasi
-    for (;;) {
-        printf("Masukkan Password: ");
-        scanf("%49s", akun->password);
-
-        printf("Konfirmasi Password: ");
-        scanf("%49s", password_check);
-
-        if (strcmp(akun->password, password_check) == 0) {
-            break;
+    
+    do {
+        printf("Masukkan Username: ");
+        scanf("%49s", akun->username);
+        if (!isValidUsername(akun->username)) {
+            printf("Username tidak boleh kosong dan tidak boleh mengandung simbol!\n");
         }
-        printf("Konfirmasi Password Salah! Silakan coba lagi.\n");
+    } while (!isValidUsername(akun->username));
+
+   
+    for (;;) {
+        do {
+            printf("Masukkan Password: ");
+            scanf("%49s", akun->password);
+            if (!isValidUsername(akun->password)) {
+            printf("Password tidak valid. Hanya huruf/angka, tidak kosong.\n");
+        }
+    } while (!isValidUsername(akun->password));
+    
+    printf("Konfirmasi Password: ");
+    scanf("%49s", password_check);
+    
+    if (strcmp(akun->password, password_check) == 0) {
+        break;
     }
+    printf("Konfirmasi Password Salah! Silakan coba lagi.\n");
+}
 
     // Phone
-    for (;;) {
-        int valid = 1;
-        printf("Masukkan Nomor Telepon: ");
-        scanf("%15s", akun->phone);
-
-        for (int i = 0; akun->phone[i] != '\0'; i++) {
-            if (!isdigit(akun->phone[i])) {
-                valid = 0;
-                break;
-            }
-        }
-
-        if (valid) break;
-        else printf("Nomor telepon hanya boleh berisi angka! Silakan masukkan ulang.\n");
-    }
+    InputNomorTelepon(akun->phone, 16);
 
     // Alamat, hanya input jika role bukan 2 (admin)
     if (role != 2) {
@@ -67,10 +62,21 @@ void HalamanLogin(){
     printf("||                     Masuk                     ||\n");
     printf("===================================================\n");
 
+   do {
     printf("Masukan Username: ");
-    scanf(" %s", username);
+    scanf(" %49s", username);
+    if (!isValidUsername(username)) {
+        printf("Username tidak boleh kosong dan tidak boleh mengandung spasi atau simbol!\n");
+    }
+} while (!isValidUsername(username));
+
+   do {
     printf("Masukan Password: ");
-    scanf(" %s", password);
+    scanf(" %49s", password);
+    if (!isValidUsername(password)) {
+        printf("Password tidak boleh kosong dan hanya boleh huruf/angka!\n");
+    }
+} while (!isValidUsername(password));
 
     loggedIn = Login(username, password, akun, total_akun, &idLogin);
     
@@ -99,7 +105,8 @@ void HalamanAwal(address *root, List *L) {
         printf("|| Silakan pilih menu (1-3):                     ||\n");
         printf("===================================================\n");
         printf(">> ");
-        scanf("%d",&masuk);
+        masuk = InputAngkaValid(1, 3);
+        // scanf("%d",&masuk);
 
         if (masuk == 1) {
             HalamanLogin();

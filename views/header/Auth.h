@@ -7,6 +7,7 @@
 #include "../../models/header/ADTAkun.h"
 #include "../../models/header/ADTList.h"
 #include "../../models/header/ADTTree.h"
+#include "../../library/errorHandle.h"
 
 #include "views.h"
 #include "viewsUser.h"
